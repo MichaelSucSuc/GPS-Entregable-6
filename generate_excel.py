@@ -4,10 +4,9 @@ from openpyxl.utils import get_column_letter
 
 def build_panviz_excel(filepath):
     wb = openpyxl.Workbook()
-    # Remove default sheet
-    wb.remove(wb.active)
+    wb.remove(wb.active) # Remove default sheet
 
-    # Styles
+    # Typography & Styles
     font_title = Font(name='Segoe UI', size=14, bold=True, color='1E293B')
     font_subtitle = Font(name='Segoe UI', size=10, italic=True, color='64748B')
     font_header = Font(name='Segoe UI', size=11, bold=True, color='FFFFFF')
@@ -41,860 +40,760 @@ def build_panviz_excel(filepath):
     fmt_number = '#,##0.00'
 
     # =========================================================================
-    # 1. HOJA: CUENTAS
+    # 1. HOJA: CUENTAS (Catálogo Contable)
     # =========================================================================
     ws = wb.create_sheet(title='Cuentas')
     ws.views.sheetView[0].showGridLines = True
 
     ws['A1'] = "ANDES SOFTWARE - PROYECTO PANVIZ"
     ws['A1'].font = font_title
-    ws['A2'] = "Catálogo Mínimo de Cuentas y Correspondencia con GnuCash (PCGE / GnuCash Chart)"
+    ws['A2'] = "Catálogo Mínimo de Cuentas Contables y Criterios de Clasificación (NIIF / PCGE)"
     ws['A2'].font = font_subtitle
 
-    headers_cuentas = ["Código PCGE", "Nombre de la Cuenta", "Elemento Contable", "Naturaleza", "Categoría GnuCash", "Cuenta en GnuCash"]
+    headers_cuentas = ["Código", "Nombre de la Cuenta", "Elemento", "Naturaleza", "Estado Financiero", "Criterio Técnico / Sustento Normativo"]
     for col_idx, h in enumerate(headers_cuentas, 1):
-        cell = ws.cell(row=4, column=col_idx, value=h)
-        cell.font = font_header
-        cell.fill = fill_navy
-        cell.alignment = align_header
-        cell.border = header_border
+        c = ws.cell(row=4, column=col_idx, value=h)
+        c.font = font_header
+        c.fill = fill_navy
+        c.alignment = align_header
+        c.border = box_border
 
-    catalogo = [
-        ("1041", "Bancos - Cuentas Corrientes", "Activo Corriente", "Deudora", "Asset:Current Assets:Bank", "Activos:Activo Corriente:Bancos:Cuenta Corriente"),
-        ("1212", "Cuentas por Cobrar Comerciales", "Activo Corriente", "Deudora", "Asset:Current Assets:Receivable", "Activos:Activo Corriente:Clientes:Facturas por Cobrar"),
-        ("3361", "Equipos de Cómputo e Informáticos", "Activo No Corriente", "Deudora", "Asset:Fixed Assets:Equipment", "Activos:Activo Fijo:Equipos Informáticos"),
-        ("4111", "Remuneraciones por Pagar", "Pasivo Corriente", "Acreedora", "Liability:Current Liabilities:Payroll", "Pasivos:Pasivo Corriente:Sueldos por Pagar"),
-        ("4212", "Cuentas por Pagar Comerciales - Proveedores", "Pasivo Corriente", "Acreedora", "Liability:Current Liabilities:Payable", "Pasivos:Pasivo Corriente:Proveedores:Equipos"),
-        ("4511", "Obligaciones Financieras - Préstamo Bancario", "Pasivo Corriente", "Acreedora", "Liability:Current Liabilities:Loan", "Pasivos:Pasivo Corriente:Préstamos Bancarios"),
-        ("4699", "Anticipos de Clientes (Ingresos Diferidos)", "Pasivo Corriente", "Acreedora", "Liability:Current Liabilities:Unearned", "Pasivos:Pasivo Corriente:Anticipos de Clientes"),
-        ("5011", "Capital Social - Aportes de Socios", "Patrimonio Neto", "Acreedora", "Equity:Paid-in Capital", "Patrimonio:Capital Social:Aportes"),
-        ("5911", "Resultado del Ejercicio (Utilidad Neta)", "Patrimonio Neto", "Acreedora", "Equity:Retained Earnings", "Patrimonio:Resultados Acumulados:Resultado del Mes"),
-        ("7041", "Ingresos por Servicios de Software", "Ingresos", "Acreedora", "Income:Sales", "Ingresos:Ventas:Desarrollo de Software"),
-        ("6941", "Costo de Servicio - Remuneraciones Desarrollo", "Costos", "Deudora", "Expense:Cost of Goods:Labor", "Gastos:Costo del Servicio:Remuneraciones Desarrollo"),
-        ("6942", "Costo de Servicio - Alojamiento en la Nube", "Costos", "Deudora", "Expense:Cost of Goods:Hosting", "Gastos:Costo del Servicio:Servicios de Nube"),
-        ("9411", "Gastos Administrativos Generales", "Gastos Operativos", "Deudora", "Expense:Administrative:General", "Gastos:Gastos Administrativos:Operativos Generales"),
-        ("9412", "Gastos Administrativos - Sueldos Devengados", "Gastos Operativos", "Deudora", "Expense:Administrative:Payroll", "Gastos:Gastos Administrativos:Remuneraciones"),
-        ("9711", "Gastos Financieros - Intereses de Préstamo", "Gastos Financieros", "Deudora", "Expense:Financial:Interest", "Gastos:Gastos Financieros:Intereses Bancarios")
+    cuentas_data = [
+        ("1041", "Cuentas Corrientes Bancarias", "Activo", "Deudora", "Situación Financiera", "Fondos de libre disponibilidad depositados en la institución financiera."),
+        ("1212", "Cuentas por Cobrar Comerciales - Clientes", "Activo", "Deudora", "Situación Financiera", "Derecho exigible derivado de entregable aceptado (Hito 1) con cobro a 45 días."),
+        ("3361", "Equipos para Procesamiento de Información", "Activo", "Deudora", "Situación Financiera", "Hardware informático operativo con vida útil mayor a un año (NIC 16)."),
+        ("4111", "Remuneraciones por Pagar", "Pasivo", "Acreedora", "Situación Financiera", "Obligación devengada con personal administrativo del mes pendiente de pago."),
+        ("4212", "Cuentas por Pagar Comerciales - Proveedores", "Pasivo", "Acreedora", "Situación Financiera", "Obligación con proveedor de hardware informático por saldo pendiente."),
+        ("4511", "Préstamos Bancarios a Corto Plazo", "Pasivo", "Acreedora", "Situación Financiera", "Obligación financiera con vencimiento a 6 meses para fondeo operativo."),
+        ("4699", "Anticipos de Clientes (Ingresos Diferidos)", "Pasivo", "Acreedora", "Situación Financiera", "Cobro adelantado por Hito 2; obligación de desempeño no satisfecha (NIIF 15)."),
+        ("5011", "Capital Social Aportado", "Patrimonio", "Acreedora", "Situación Financiera", "Aporte dinerario inicial de los socios para la constitución de la empresa."),
+        ("5911", "Utilidad Neta del Ejercicio", "Patrimonio", "Acreedora", "Situación Financiera", "Resultado acumulado neto obtenido de las operaciones del primer mes."),
+        ("7041", "Ingresos por Desarrollo de Software", "Ingreso", "Acreedora", "Resultados", "Ingreso ganado por entrega y aceptación formal del primer hito independiente."),
+        ("6941", "Costo del Servicio - Remuneraciones de Desarrollo", "Costo", "Deudora", "Resultados", "Mano de obra directa de programación devengada y pagada en el mes."),
+        ("6942", "Costo del Servicio - Servicios de Nube", "Costo", "Deudora", "Resultados", "Infraestructura cloud computing directamente consumida para el servicio."),
+        ("9411", "Gastos Administrativos - Operativos Generales", "Gasto", "Deudora", "Resultados", "Servicios y consumos generales de administración incurridos en el mes."),
+        ("9412", "Gastos Administrativos - Sueldos Devengados", "Gasto", "Deudora", "Resultados", "Costo laboral del personal administrativo devengado en el periodo."),
+        ("9711", "Gastos Financieros - Intereses Bancarios", "Gasto", "Deudora", "Resultados", "Costo financiero por intereses devengados del préstamo bancario recibido.")
     ]
 
-    for row_idx, data in enumerate(catalogo, 5):
-        fill = fill_light_blue if row_idx % 2 == 0 else PatternFill(fill_type=None)
-        for col_idx, val in enumerate(data, 1):
-            cell = ws.cell(row=row_idx, column=col_idx, value=val)
-            cell.font = font_regular
-            cell.fill = fill
-            cell.border = box_border
-            if col_idx in [1, 4]:
-                cell.alignment = align_center
-            else:
-                cell.alignment = align_left
+    for row_idx, r in enumerate(cuentas_data, 5):
+        for col_idx, val in enumerate(r, 1):
+            c = ws.cell(row=row_idx, column=col_idx, value=val)
+            c.font = font_regular
+            c.border = box_border
+            if col_idx in [1, 3, 4]:
+                c.alignment = align_center
 
     # =========================================================================
-    # 2. HOJA: DIARIO
+    # 2. HOJA: DIARIO (Libro Diario OP01 - OP11)
     # =========================================================================
     ws_d = wb.create_sheet(title='Diario')
     ws_d.views.sheetView[0].showGridLines = True
 
     ws_d['A1'] = "ANDES SOFTWARE - PROYECTO PANVIZ"
     ws_d['A1'].font = font_title
-    ws_d['A2'] = "Libro Diario General - Mes 1 (Noviembre 2026)"
+    ws_d['A2'] = "Libro Diario General - Operaciones del Primer Mes (OP01 - OP11)"
     ws_d['A2'].font = font_subtitle
 
-    headers_diario = ["Fecha", "N° Op.", "Código", "Cuenta Contable", "Glosa / Explicación de la Operación", "Debe (S/)", "Haber (S/)"]
+    headers_diario = ["ID", "Fecha", "Cód. Cuenta", "Denominación de la Cuenta", "Glosa / Explicación de la Operación", "Debe (S/)", "Haber (S/)"]
     for col_idx, h in enumerate(headers_diario, 1):
-        cell = ws_d.cell(row=4, column=col_idx, value=h)
-        cell.font = font_header
-        cell.fill = fill_navy
-        cell.alignment = align_header
-        cell.border = header_border
+        c = ws_d.cell(row=4, column=col_idx, value=h)
+        c.font = font_header
+        c.fill = fill_navy
+        c.alignment = align_header
+        c.border = box_border
 
-    # Entries: (Fecha, OP, Cod, Cuenta, Glosa, Debe, Haber)
-    diario_entries = [
-        ("02/11/2026", "OP01", "1041", "Bancos - Cuentas Corrientes", "Aporte inicial de los socios depositado en bancos", 40000.0, 0.0),
-        ("02/11/2026", "OP01", "5011", "Capital Social - Aportes de Socios", "Constitución de capital social según minuta", 0.0, 40000.0),
-        ("05/11/2026", "OP02", "3361", "Equipos de Cómputo e Informáticos", "Compra de equipos informáticos para el proyecto", 12000.0, 0.0),
-        ("05/11/2026", "OP02", "1041", "Bancos - Cuentas Corrientes", "Pago inicial del 66.7% con transferencia bancaria", 0.0, 8000.0),
-        ("05/11/2026", "OP02", "4212", "Cuentas por Pagar Comerciales - Proveedores", "Saldo pendiente de pago al proveedor de equipos", 0.0, 4000.0),
-        ("07/11/2026", "OP03", "1041", "Bancos - Cuentas Corrientes", "Desembolso de préstamo bancario a 6 meses", 10000.0, 0.0),
-        ("07/11/2026", "OP03", "4511", "Obligaciones Financieras - Préstamo Bancario", "Préstamo de capital de trabajo a corto plazo", 0.0, 10000.0),
-        ("10/11/2026", "OP04", "1041", "Bancos - Cuentas Corrientes", "Recepción de anticipo por módulo de alertas y reportes", 9000.0, 0.0),
-        ("10/11/2026", "OP04", "4699", "Anticipos de Clientes (Ingresos Diferidos)", "Pasivo por servicio futuro no devengado", 0.0, 9000.0),
-        ("15/11/2026", "OP05", "6941", "Costo de Servicio - Remuneraciones Desarrollo", "Remuneraciones técnicas devengadas del mes de desarrollo", 15000.0, 0.0),
-        ("15/11/2026", "OP05", "1041", "Bancos - Cuentas Corrientes", "Pago de planillas de desarrollo técnico desde bancos", 0.0, 15000.0),
-        ("18/11/2026", "OP06", "6942", "Costo de Servicio - Alojamiento en la Nube", "Servicios de nube consumidos en el desarrollo del hito", 2000.0, 0.0),
-        ("18/11/2026", "OP06", "1041", "Bancos - Cuentas Corrientes", "Pago de infraestructura cloud del mes desde bancos", 0.0, 2000.0),
-        ("20/11/2026", "OP07", "9411", "Gastos Administrativos Generales", "Gastos de gestión operativa y administración del mes", 3000.0, 0.0),
-        ("20/11/2026", "OP07", "1041", "Bancos - Cuentas Corrientes", "Cancelación de gastos operativos desde bancos", 0.0, 3000.0),
-        ("25/11/2026", "OP08", "1041", "Bancos - Cuentas Corrientes", "Cobro al contado de entrega del primer hito PANVIZ", 16000.0, 0.0),
-        ("25/11/2026", "OP08", "1212", "Cuentas por Cobrar Comerciales", "Saldo por cobrar por hito aceptado (a 45 días)", 8000.0, 0.0),
-        ("25/11/2026", "OP08", "7041", "Ingresos por Servicios de Software", "Reconocimiento de ingreso devengado por hito 1", 0.0, 24000.0),
-        ("27/11/2026", "OP09", "4212", "Cuentas por Pagar Comerciales - Proveedores", "Amortización de deuda con proveedor de hardware", 2000.0, 0.0),
-        ("27/11/2026", "OP09", "1041", "Bancos - Cuentas Corrientes", "Pago bancario a proveedor de equipos", 0.0, 2000.0),
-        ("30/11/2026", "OP10", "9412", "Gastos Administrativos - Sueldos Devengados", "Sueldos administrativos del mes devengados", 1500.0, 0.0),
-        ("30/11/2026", "OP10", "4111", "Remuneraciones por Pagar", "Obligación laboral pendiente de pago al cierre", 0.0, 1500.0),
-        ("30/11/2026", "OP11", "9711", "Gastos Financieros - Intereses de Préstamo", "Intereses devengados por préstamo bancario", 500.0, 0.0),
-        ("30/11/2026", "OP11", "1041", "Bancos - Cuentas Corrientes", "Pago de intereses financieros desde bancos", 0.0, 500.0)
+    asientos = [
+        ("OP01", "02/11/2026", "1041", "Cuentas Corrientes Bancarias", "Aporte de capital inicial de los socios en cuenta corriente", 40000.00, 0.0),
+        ("OP01", "02/11/2026", "5011", "Capital Social Aportado", "Aporte de capital inicial de los socios en cuenta corriente", 0.0, 40000.00),
+        ("OP02", "04/11/2026", "3361", "Equipos para Procesamiento de Información", "Compra de equipos informáticos (S/ 12,000 total)", 12000.00, 0.0),
+        ("OP02", "04/11/2026", "1041", "Cuentas Corrientes Bancarias", "Pago inicial en efectivo con fondos de bancos", 0.0, 8000.00),
+        ("OP02", "04/11/2026", "4212", "Cuentas por Pagar Comerciales - Proveedores", "Saldo pendiente a pagar a proveedor de equipos", 0.0, 4000.00),
+        ("OP03", "06/11/2026", "1041", "Cuentas Corrientes Bancarias", "Desembolso de préstamo bancario a 6 meses", 10000.00, 0.0),
+        ("OP03", "06/11/2026", "4511", "Préstamos Bancarios a Corto Plazo", "Obligación por préstamo bancario recibido", 0.0, 10000.00),
+        ("OP04", "09/11/2026", "1041", "Cuentas Corrientes Bancarias", "Recepción de anticipo por módulo hito 2 salud pública", 9000.00, 0.0),
+        ("OP04", "09/11/2026", "4699", "Anticipos de Clientes (Ingresos Diferidos)", "Pasivo por obligación de desempeño pendiente (NIIF 15)", 0.0, 9000.00),
+        ("OP05", "13/11/2026", "6941", "Costo del Servicio - Remuneraciones de Desarrollo", "Pago de remuneraciones del mes al equipo de software", 15000.00, 0.0),
+        ("OP05", "13/11/2026", "1041", "Cuentas Corrientes Bancarias", "Salida de fondos de cuenta bancaria", 0.0, 15000.00),
+        ("OP06", "16/11/2026", "6942", "Costo del Servicio - Servicios de Nube", "Servicios de nube consumidos y pagados en el mes", 2000.00, 0.0),
+        ("OP06", "16/11/2026", "1041", "Cuentas Corrientes Bancarias", "Salida de bancos por pago de nube cloud", 0.0, 2000.00),
+        ("OP07", "19/11/2026", "9411", "Gastos Administrativos - Operativos Generales", "Pago de gastos administrativos operativos del mes", 3000.00, 0.0),
+        ("OP07", "19/11/2026", "1041", "Cuentas Corrientes Bancarias", "Salida de bancos por gastos operativos", 0.0, 3000.00),
+        ("OP08", "23/11/2026", "1041", "Cuentas Corrientes Bancarias", "Cobro inmediato al contado por hito 1 aceptado", 16000.00, 0.0),
+        ("OP08", "23/11/2026", "1212", "Cuentas por Cobrar Comerciales - Clientes", "Cuenta por cobrar comercial por hito 1 a 45 días", 8000.00, 0.0),
+        ("OP08", "23/11/2026", "7041", "Ingresos por Desarrollo de Software", "Reconocimiento de ingreso por hito 1 entregado y aceptado", 0.0, 24000.00),
+        ("OP09", "25/11/2026", "4212", "Cuentas por Pagar Comerciales - Proveedores", "Amortización de deuda con proveedor de equipos", 2000.00, 0.0),
+        ("OP09", "25/11/2026", "1041", "Cuentas Corrientes Bancarias", "Salida de bancos para pago a proveedor", 0.0, 2000.00),
+        ("OP10", "28/11/2026", "9412", "Gastos Administrativos - Sueldos Devengados", "Reconocimiento de sueldo administrativo devengado", 1500.00, 0.0),
+        ("OP10", "28/11/2026", "4111", "Remuneraciones por Pagar", "Obligación de pago a personal administrativo al cierre", 0.0, 1500.00),
+        ("OP11", "30/11/2026", "9711", "Gastos Financieros - Intereses Bancarios", "Pago de intereses financieros devengados del préstamo", 500.00, 0.0),
+        ("OP11", "30/11/2026", "1041", "Cuentas Corrientes Bancarias", "Salida de bancos por pago de intereses", 0.0, 500.00)
     ]
 
-    start_row = 5
-    for idx, row_data in enumerate(diario_entries):
-        curr_row = start_row + idx
-        for col_idx, val in enumerate(row_data, 1):
-            cell = ws_d.cell(row=curr_row, column=col_idx, value=val)
-            cell.font = font_regular
-            cell.border = box_border
+    for row_idx, r in enumerate(asientos, 5):
+        for col_idx, val in enumerate(r, 1):
+            c = ws_d.cell(row=row_idx, column=col_idx, value=val)
+            c.font = font_regular
+            c.border = box_border
             if col_idx in [1, 2, 3]:
-                cell.alignment = align_center
-            elif col_idx in [4, 5]:
-                cell.alignment = align_left
+                c.alignment = align_center
             elif col_idx in [6, 7]:
-                cell.alignment = align_right
-                cell.number_format = fmt_currency
+                c.alignment = align_right
+                c.number_format = fmt_currency
 
-    end_row = start_row + len(diario_entries) - 1
-    tot_row = end_row + 1
+    tot_row = len(asientos) + 5
+    ws_d.cell(row=tot_row, column=5, value="TOTALES DEL LIBRO DIARIO:").font = font_bold
+    ws_d.cell(row=tot_row, column=5).alignment = align_right
 
-    ws_d.cell(row=tot_row, column=4, value="SUMAS TOTALES").font = font_bold
-    ws_d.cell(row=tot_row, column=4).alignment = align_right
-    ws_d.cell(row=tot_row, column=4).border = total_border
+    c_debe = ws_d.cell(row=tot_row, column=6, value=f"=SUM(F5:F{tot_row-1})")
+    c_debe.font = font_bold
+    c_debe.alignment = align_right
+    c_debe.number_format = fmt_currency
+    c_debe.border = total_border
 
-    cell_tot_d = ws_d.cell(row=tot_row, column=6, value=f"=SUM(F{start_row}:F{end_row})")
-    cell_tot_d.font = font_bold
-    cell_tot_d.number_format = fmt_currency
-    cell_tot_d.alignment = align_right
-    cell_tot_d.border = total_border
+    c_haber = ws_d.cell(row=tot_row, column=7, value=f"=SUM(G5:G{tot_row-1})")
+    c_haber.font = font_bold
+    c_haber.alignment = align_right
+    c_haber.number_format = fmt_currency
+    c_haber.border = total_border
 
-    cell_tot_h = ws_d.cell(row=tot_row, column=7, value=f"=SUM(G{start_row}:G{end_row})")
-    cell_tot_h.font = font_bold
-    cell_tot_h.number_format = fmt_currency
-    cell_tot_h.alignment = align_right
-    cell_tot_h.border = total_border
-
-    # Control de partida doble
     ctrl_row = tot_row + 2
-    ws_d.cell(row=ctrl_row, column=4, value="CONTROL PARTIDA DOBLE (DEBE - HABER = 0):").font = font_bold
-    ws_d.cell(row=ctrl_row, column=4).alignment = align_right
-    cell_ctrl = ws_d.cell(row=ctrl_row, column=6, value=f"=F{tot_row}-G{tot_row}")
-    cell_ctrl.font = font_bold
-    cell_ctrl.number_format = fmt_currency
-    cell_ctrl.alignment = align_center
-    cell_ctrl.fill = fill_success
+    ws_d.cell(row=ctrl_row, column=5, value="CONTROL DE PARTIDA DOBLE (DEBE - HABER = 0):").font = font_bold
+    ws_d.cell(row=ctrl_row, column=5).alignment = align_right
+    c_dif = ws_d.cell(row=ctrl_row, column=6, value=f"=F{tot_row}-G{tot_row}")
+    c_dif.font = font_bold
+    c_dif.alignment = align_right
+    c_dif.number_format = fmt_currency
 
-    cell_status = ws_d.cell(row=ctrl_row, column=7, value=f'=IF(F{tot_row}=G{tot_row}, "BALANCEADO Y CONFORME", "DESCUADRE")')
-    cell_status.font = font_success
-    cell_status.alignment = align_center
-    cell_status.fill = fill_success
+    c_st = ws_d.cell(row=ctrl_row, column=7, value=f'=IF(F{tot_row}=G{tot_row}, "CUADRADO EXACTO", "DESCUADRADO")')
+    c_st.font = font_success
+    c_st.fill = fill_success
+    c_st.alignment = align_center
 
     # =========================================================================
-    # 3. HOJA: MAYOR
+    # 3. HOJA: MAYOR (Libro Mayor con fórmulas SUMAR.SI)
     # =========================================================================
     ws_m = wb.create_sheet(title='Mayor')
     ws_m.views.sheetView[0].showGridLines = True
 
     ws_m['A1'] = "ANDES SOFTWARE - PROYECTO PANVIZ"
     ws_m['A1'].font = font_title
-    ws_m['A2'] = "Libro Mayor de Cuentas (Fórmulas dinámicas hacia Diario)"
+    ws_m['A2'] = "Libro Mayor General - Agrupación por Cuentas T y Determinación de Saldos"
     ws_m['A2'].font = font_subtitle
 
-    headers_mayor = ["Código", "Cuenta Mayor", "Total Debe (Cargos)", "Total Haber (Abonos)", "Saldo Deudor", "Saldo Acreedor"]
+    headers_mayor = ["Cód.", "Denominación de la Cuenta", "Elemento", "Total Cargos / Debe (S/)", "Total Abonos / Haber (S/)", "Saldo Deudor (S/)", "Saldo Acreedor (S/)"]
     for col_idx, h in enumerate(headers_mayor, 1):
-        cell = ws_m.cell(row=4, column=col_idx, value=h)
-        cell.font = font_header
-        cell.fill = fill_navy
-        cell.alignment = align_header
-        cell.border = header_border
+        c = ws_m.cell(row=4, column=col_idx, value=h)
+        c.font = font_header
+        c.fill = fill_navy
+        c.alignment = align_header
+        c.border = box_border
 
-    cuentas_mayor_list = [
-        ("1041", "Bancos - Cuentas Corrientes"),
-        ("1212", "Cuentas por Cobrar Comerciales"),
-        ("3361", "Equipos de Cómputo e Informáticos"),
-        ("4111", "Remuneraciones por Pagar"),
-        ("4212", "Cuentas por Pagar Comerciales - Proveedores"),
-        ("4511", "Obligaciones Financieras - Préstamo Bancario"),
-        ("4699", "Anticipos de Clientes (Ingresos Diferidos)"),
-        ("5011", "Capital Social - Aportes de Socios"),
-        ("7041", "Ingresos por Servicios de Software"),
-        ("6941", "Costo de Servicio - Remuneraciones Desarrollo"),
-        ("6942", "Costo de Servicio - Alojamiento en la Nube"),
-        ("9411", "Gastos Administrativos Generales"),
-        ("9412", "Gastos Administrativos - Sueldos Devengados"),
-        ("9711", "Gastos Financieros - Intereses de Préstamo")
+    cuentas_mayor = [
+        ("1041", "Cuentas Corrientes Bancarias", "Activo", "Deudora"),
+        ("1212", "Cuentas por Cobrar Comerciales - Clientes", "Activo", "Deudora"),
+        ("3361", "Equipos para Procesamiento de Información", "Activo", "Deudora"),
+        ("4111", "Remuneraciones por Pagar", "Pasivo", "Acreedora"),
+        ("4212", "Cuentas por Pagar Comerciales - Proveedores", "Pasivo", "Acreedora"),
+        ("4511", "Préstamos Bancarios a Corto Plazo", "Pasivo", "Acreedora"),
+        ("4699", "Anticipos de Clientes (Ingresos Diferidos)", "Pasivo", "Acreedora"),
+        ("5011", "Capital Social Aportado", "Patrimonio", "Acreedora"),
+        ("7041", "Ingresos por Desarrollo de Software", "Ingreso", "Acreedora"),
+        ("6941", "Costo del Servicio - Remuneraciones de Desarrollo", "Costo", "Deudora"),
+        ("6942", "Costo del Servicio - Servicios de Nube", "Costo", "Deudora"),
+        ("9411", "Gastos Administrativos - Operativos Generales", "Gasto", "Deudora"),
+        ("9412", "Gastos Administrativos - Sueldos Devengados", "Gasto", "Deudora"),
+        ("9711", "Gastos Financieros - Intereses Bancarios", "Gasto", "Deudora")
     ]
 
-    m_start = 5
-    for idx, (cod, nom) in enumerate(cuentas_mayor_list):
-        r = m_start + idx
-        ws_m.cell(row=r, column=1, value=cod).alignment = align_center
-        ws_m.cell(row=r, column=2, value=nom).alignment = align_left
-        
-        # SUMIF Debe
-        c_d = ws_m.cell(row=r, column=3, value=f"=SUMIF(Diario!$C$5:$C$28, A{r}, Diario!$F$5:$F$28)")
-        c_d.number_format = fmt_currency
-        c_d.alignment = align_right
-        
-        # SUMIF Haber
-        c_h = ws_m.cell(row=r, column=4, value=f"=SUMIF(Diario!$C$5:$C$28, A{r}, Diario!$G$5:$G$28)")
-        c_h.number_format = fmt_currency
-        c_h.alignment = align_right
+    for row_idx, (code, name, elem, nat) in enumerate(cuentas_mayor, 5):
+        ws_m.cell(row=row_idx, column=1, value=code).alignment = align_center
+        ws_m.cell(row=row_idx, column=2, value=name).alignment = align_left
+        ws_m.cell(row=row_idx, column=3, value=elem).alignment = align_center
 
-        # Saldo Deudor
-        c_sd = ws_m.cell(row=r, column=5, value=f"=IF(C{r}>=D{r}, C{r}-D{r}, 0)")
-        c_sd.number_format = fmt_currency
-        c_sd.alignment = align_right
+        # SUMAR.SI dinámico desde Diario
+        c_debe = ws_m.cell(row=row_idx, column=4, value=f"=SUMIF(Diario!$C$5:$C$28, A{row_idx}, Diario!$F$5:$F$28)")
+        c_debe.alignment = align_right
+        c_debe.number_format = fmt_currency
 
-        # Saldo Acreedor
-        c_sa = ws_m.cell(row=r, column=6, value=f"=IF(D{r}>C{r}, D{r}-C{r}, 0)")
-        c_sa.number_format = fmt_currency
-        c_sa.alignment = align_right
+        c_haber = ws_m.cell(row=row_idx, column=5, value=f"=SUMIF(Diario!$C$5:$C$28, A{row_idx}, Diario!$G$5:$G$28)")
+        c_haber.alignment = align_right
+        c_haber.number_format = fmt_currency
 
-        for c_i in range(1, 7):
-            cell = ws_m.cell(row=r, column=c_i)
-            cell.font = font_regular
-            cell.border = box_border
+        c_sdeudor = ws_m.cell(row=row_idx, column=6, value=f"=MAX(0, D{row_idx}-E{row_idx})")
+        c_sdeudor.alignment = align_right
+        c_sdeudor.number_format = fmt_currency
 
-    m_end = m_start + len(cuentas_mayor_list) - 1
-    m_tot = m_end + 1
+        c_sacreedor = ws_m.cell(row=row_idx, column=7, value=f"=MAX(0, E{row_idx}-D{row_idx})")
+        c_sacreedor.alignment = align_right
+        c_sacreedor.number_format = fmt_currency
 
-    ws_m.cell(row=m_tot, column=2, value="TOTALES GENERALES").font = font_bold
-    ws_m.cell(row=m_tot, column=2).alignment = align_right
-    ws_m.cell(row=m_tot, column=2).border = total_border
+        for col_idx in range(1, 8):
+            ws_m.cell(row=row_idx, column=col_idx).font = font_regular
+            ws_m.cell(row=row_idx, column=col_idx).border = box_border
 
-    for c_i, col_let in enumerate(['C', 'D', 'E', 'F'], 3):
-        c = ws_m.cell(row=m_tot, column=c_i, value=f"=SUM({col_let}{m_start}:{col_let}{m_end})")
-        c.font = font_bold
-        c.number_format = fmt_currency
-        c.alignment = align_right
-        c.border = total_border
+    tot_m = len(cuentas_mayor) + 5
+    ws_m.cell(row=tot_m, column=3, value="TOTALES:").font = font_bold
+    ws_m.cell(row=tot_m, column=3).alignment = align_right
+
+    for c_idx, col_let in [(4, 'D'), (5, 'E'), (6, 'F'), (7, 'G')]:
+        cell = ws_m.cell(row=tot_m, column=c_idx, value=f"=SUM({col_let}5:{col_let}{tot_m-1})")
+        cell.font = font_bold
+        cell.alignment = align_right
+        cell.number_format = fmt_currency
+        cell.border = total_border
 
     # =========================================================================
-    # 4. HOJA: COMPROBACIÓN
+    # 4. HOJA: COMPROBACIÓN (Balance de Comprobación)
     # =========================================================================
     ws_c = wb.create_sheet(title='Comprobación')
     ws_c.views.sheetView[0].showGridLines = True
 
     ws_c['A1'] = "ANDES SOFTWARE - PROYECTO PANVIZ"
     ws_c['A1'].font = font_title
-    ws_c['A2'] = "Balance de Comprobación de Sumas y Saldos"
+    ws_c['A2'] = "Balance de Comprobación de Sumas y Saldos al Primer Mes"
     ws_c['A2'].font = font_subtitle
 
-    headers_comp = ["Código", "Nombre de la Cuenta", "Sumas Debe", "Sumas Haber", "Saldo Deudor", "Saldo Acreedor"]
+    headers_comp = ["Cód.", "Cuenta Contable", "Sumas Debe (S/)", "Sumas Haber (S/)", "Saldo Deudor (S/)", "Saldo Acreedor (S/)"]
     for col_idx, h in enumerate(headers_comp, 1):
-        cell = ws_c.cell(row=4, column=col_idx, value=h)
-        cell.font = font_header
-        cell.fill = fill_navy
-        cell.alignment = align_header
-        cell.border = header_border
+        c = ws_c.cell(row=4, column=col_idx, value=h)
+        c.font = font_header
+        c.fill = fill_navy
+        c.alignment = align_header
+        c.border = box_border
 
-    c_start = 5
-    for idx in range(len(cuentas_mayor_list)):
-        r = c_start + idx
-        m_r = m_start + idx
-        ws_c.cell(row=r, column=1, value=f"=Mayor!A{m_r}").alignment = align_center
-        ws_c.cell(row=r, column=2, value=f"=Mayor!B{m_r}").alignment = align_left
-        ws_c.cell(row=r, column=3, value=f"=Mayor!C{m_r}").alignment = align_right
-        ws_c.cell(row=r, column=4, value=f"=Mayor!D{m_r}").alignment = align_right
-        ws_c.cell(row=r, column=5, value=f"=Mayor!E{m_r}").alignment = align_right
-        ws_c.cell(row=r, column=6, value=f"=Mayor!F{m_r}").alignment = align_right
+    for row_idx in range(5, 5 + len(cuentas_mayor)):
+        m_r = row_idx
+        ws_c.cell(row=row_idx, column=1, value=f"=Mayor!A{m_r}").alignment = align_center
+        ws_c.cell(row=row_idx, column=2, value=f"=Mayor!B{m_r}").alignment = align_left
+        ws_c.cell(row=row_idx, column=3, value=f"=Mayor!D{m_r}").alignment = align_right
+        ws_c.cell(row=row_idx, column=4, value=f"=Mayor!E{m_r}").alignment = align_right
+        ws_c.cell(row=row_idx, column=5, value=f"=Mayor!F{m_r}").alignment = align_right
+        ws_c.cell(row=row_idx, column=6, value=f"=Mayor!G{m_r}").alignment = align_right
 
-        for c_i in range(1, 7):
-            cell = ws_c.cell(row=r, column=c_i)
+        for c_idx in range(1, 7):
+            cell = ws_c.cell(row=row_idx, column=c_idx)
             cell.font = font_regular
             cell.border = box_border
-            if c_i >= 3:
+            if c_idx >= 3:
                 cell.number_format = fmt_currency
 
-    c_end = c_start + len(cuentas_mayor_list) - 1
-    c_tot = c_end + 1
+    tot_c = len(cuentas_mayor) + 5
+    ws_c.cell(row=tot_c, column=2, value="TOTALES BALANCE COMPROBACIÓN:").font = font_bold
+    ws_c.cell(row=tot_c, column=2).alignment = align_right
 
-    ws_c.cell(row=c_tot, column=2, value="TOTALES BALANCE COMPROBACIÓN").font = font_bold
-    ws_c.cell(row=c_tot, column=2).alignment = align_right
-    ws_c.cell(row=c_tot, column=2).border = total_border
+    for c_idx, col_let in [(3, 'C'), (4, 'D'), (5, 'E'), (6, 'F')]:
+        cell = ws_c.cell(row=tot_c, column=c_idx, value=f"=SUM({col_let}5:{col_let}{tot_c-1})")
+        cell.font = font_bold
+        cell.alignment = align_right
+        cell.number_format = fmt_currency
+        cell.border = total_border
 
-    for c_i, col_let in enumerate(['C', 'D', 'E', 'F'], 3):
-        c = ws_c.cell(row=c_tot, column=c_i, value=f"=SUM({col_let}{c_start}:{col_let}{c_end})")
-        c.font = font_bold
-        c.number_format = fmt_currency
-        c.alignment = align_right
-        c.border = total_border
-
-    # Controles de verificación
-    ws_c.cell(row=c_tot+2, column=2, value="Control Sumas Debe = Haber:").font = font_bold
-    ws_c.cell(row=c_tot+2, column=3, value=f'=IF(C{c_tot}=D{c_tot}, "CUADRADO (DIF = 0)", "DESCUADRADO")').font = font_success
-    ws_c.cell(row=c_tot+2, column=3).alignment = align_center
-    ws_c.cell(row=c_tot+2, column=3).fill = fill_success
-
-    ws_c.cell(row=c_tot+3, column=2, value="Control Saldos Deudor = Acreedor:").font = font_bold
-    ws_c.cell(row=c_tot+3, column=5, value=f'=IF(E{c_tot}=F{c_tot}, "CUADRADO (DIF = 0)", "DESCUADRADO")').font = font_success
-    ws_c.cell(row=c_tot+3, column=5).alignment = align_center
-    ws_c.cell(row=c_tot+3, column=5).fill = fill_success
+    ctrl_c_row = tot_c + 2
+    ws_c.cell(row=ctrl_c_row, column=2, value="CONTROL DE SALDOS (DEUDOR = ACREEDOR):").font = font_bold
+    ws_c.cell(row=ctrl_c_row, column=2).alignment = align_right
+    c_dif_c = ws_c.cell(row=ctrl_c_row, column=5, value=f"=E{tot_c}-F{tot_c}")
+    c_dif_c.font = font_bold
+    c_dif_c.alignment = align_right
+    c_dif_c.number_format = fmt_currency
+    c_st_c = ws_c.cell(row=ctrl_c_row, column=6, value=f'=IF(E{tot_c}=F{tot_c}, "CONFORME (S/ 0.00)", "ERROR")')
+    c_st_c.font = font_success
+    c_st_c.fill = fill_success
+    c_st_c.alignment = align_center
 
     # =========================================================================
-    # 5. HOJA: SITUACIÓN FINANCIERA
+    # 5. HOJA: SITUACIÓN FINANCIERA (Balance General)
     # =========================================================================
-    ws_sf = wb.create_sheet(title='Situación financiera')
-    ws_sf.views.sheetView[0].showGridLines = True
+    ws_esf = wb.create_sheet(title='Situación financiera')
+    ws_esf.views.sheetView[0].showGridLines = True
 
-    ws_sf['A1'] = "ANDES SOFTWARE - PROYECTO PANVIZ"
-    ws_sf['A1'].font = font_title
-    ws_sf['A2'] = "Estado de Situación Financiera al 30 de Noviembre de 2026 (En Soles - S/)"
-    ws_sf['A2'].font = font_subtitle
+    ws_esf['A1'] = "ANDES SOFTWARE - PROYECTO PANVIZ"
+    ws_esf['A1'].font = font_title
+    ws_esf['A2'] = "Estado de Situación Financiera (Balance General) al 30 de Noviembre de 2026"
+    ws_esf['A2'].font = font_subtitle
 
-    # Estructura de Balance en 2 columnas: Activos a la izquierda (A-C), Pasivos y Patrimonio a la derecha (E-G)
-    ws_sf.merge_cells('A4:C4')
-    ws_sf['A4'] = "ACTIVO"
-    ws_sf['A4'].font = font_header
-    ws_sf['A4'].fill = fill_navy
-    ws_sf['A4'].alignment = align_center
+    # Headers Activo
+    for col_idx, h in [(1, "ACTIVO"), (2, "Importe (S/)")]:
+        c = ws_esf.cell(row=4, column=col_idx, value=h)
+        c.font = font_header
+        c.fill = fill_navy
+        c.alignment = align_center
+        c.border = box_border
 
-    ws_sf.merge_cells('E4:G4')
-    ws_sf['E4'] = "PASIVO Y PATRIMONIO NETO"
-    ws_sf['E4'].font = font_header
-    ws_sf['E4'].fill = fill_navy
-    ws_sf['E4'].alignment = align_center
-
-    # Columnas detalle
-    for col, txt in [('A', 'Código'), ('B', 'Cuenta de Activo'), ('C', 'Importe (S/)'), ('E', 'Código'), ('F', 'Cuenta de Pasivo / Patrimonio'), ('G', 'Importe (S/)')]:
-        c = ws_sf[f'{col}5']
-        c.value = txt
-        c.font = font_sub_header
-        c.fill = fill_accent
+    # Headers Pasivo y Patrimonio
+    for col_idx, h in [(4, "PASIVO Y PATRIMONIO"), (5, "Importe (S/)")]:
+        c = ws_esf.cell(row=4, column=col_idx, value=h)
+        c.font = font_header
+        c.fill = fill_navy
         c.alignment = align_center
         c.border = box_border
 
     # Activo Corriente
-    ws_sf['B6'] = "ACTIVO CORRIENTE"
-    ws_sf['B6'].font = font_bold
-    ws_sf['A7'] = "1041"
-    ws_sf['B7'] = "Efectivo y Equivalentes de Efectivo (Bancos)"
-    ws_sf['C7'] = "=Mayor!E5" # Bancos Saldo Deudor
-    ws_sf['A8'] = "1212"
-    ws_sf['B8'] = "Cuentas por Cobrar Comerciales (Cliente Salud)"
-    ws_sf['C8'] = "=Mayor!E6" # CxC Saldo Deudor
-    ws_sf['B9'] = "Total Activo Corriente"
-    ws_sf['B9'].font = font_bold
-    ws_sf['C9'] = "=SUM(C7:C8)"
-    ws_sf['C9'].font = font_bold
-    ws_sf['C9'].border = total_border
+    ws_esf.cell(row=5, column=1, value="ACTIVO CORRIENTE").font = font_bold
+    ws_esf.cell(row=6, column=1, value="  Efectivo y Equivalentes de Efectivo (Bancos 1041)")
+    ws_esf.cell(row=6, column=2, value="=Mayor!F5").number_format = fmt_currency
+    ws_esf.cell(row=7, column=1, value="  Cuentas por Cobrar Comerciales - Clientes (1212)")
+    ws_esf.cell(row=7, column=2, value="=Mayor!F6").number_format = fmt_currency
+    ws_esf.cell(row=8, column=1, value="Total Activo Corriente").font = font_bold
+    ws_esf.cell(row=8, column=2, value="=SUM(B6:B7)").font = font_bold
+    ws_esf.cell(row=8, column=2).number_format = fmt_currency
+    ws_esf.cell(row=8, column=2).border = Border(top=border_thin, bottom=border_thin)
 
     # Activo No Corriente
-    ws_sf['B11'] = "ACTIVO NO CORRIENTE"
-    ws_sf['B11'].font = font_bold
-    ws_sf['A12'] = "3361"
-    ws_sf['B12'] = "Equipos de Cómputo e Informáticos (Activo Fijo)"
-    ws_sf['C12'] = "=Mayor!E7" # Equipos Saldo Deudor
-    ws_sf['B13'] = "Total Activo No Corriente"
-    ws_sf['B13'].font = font_bold
-    ws_sf['C13'] = "=C12"
-    ws_sf['C13'].font = font_bold
-    ws_sf['C13'].border = total_border
+    ws_esf.cell(row=10, column=1, value="ACTIVO NO CORRIENTE").font = font_bold
+    ws_esf.cell(row=11, column=1, value="  Equipos para Procesamiento de Información (3361)")
+    ws_esf.cell(row=11, column=2, value="=Mayor!F7").number_format = fmt_currency
+    ws_esf.cell(row=12, column=1, value="Total Activo No Corriente").font = font_bold
+    ws_esf.cell(row=12, column=2, value="=B11").font = font_bold
+    ws_esf.cell(row=12, column=2).number_format = fmt_currency
+    ws_esf.cell(row=12, column=2).border = Border(top=border_thin, bottom=border_thin)
 
     # Total Activo
-    ws_sf['B15'] = "TOTAL ACTIVO"
-    ws_sf['B15'].font = Font(name='Segoe UI', size=11, bold=True, color='1E3A8A')
-    ws_sf['C15'] = "=C9+C13"
-    ws_sf['C15'].font = Font(name='Segoe UI', size=11, bold=True, color='1E3A8A')
-    ws_sf['C15'].border = Border(top=border_thin, bottom=border_double)
-    ws_sf['C15'].fill = fill_light_blue
+    ws_esf.cell(row=14, column=1, value="TOTAL ACTIVO").font = font_title
+    ws_esf.cell(row=14, column=2, value="=B8+B12").font = font_title
+    ws_esf.cell(row=14, column=2).number_format = fmt_currency
+    ws_esf.cell(row=14, column=2).border = total_border
 
     # Pasivo Corriente
-    ws_sf['F6'] = "PASIVO CORRIENTE"
-    ws_sf['F6'].font = font_bold
-    ws_sf['E7'] = "4212"
-    ws_sf['F7'] = "Cuentas por Pagar Comerciales - Proveedores"
-    ws_sf['G7'] = "=Mayor!F9" # Proveedores Saldo Acreedor
-    ws_sf['E8'] = "4511"
-    ws_sf['F8'] = "Obligaciones Financieras (Préstamo Bancario 6m)"
-    ws_sf['G8'] = "=Mayor!F10" # Préstamo Saldo Acreedor
-    ws_sf['E9'] = "4699"
-    ws_sf['F9'] = "Anticipos de Clientes (Servicio Futuro)"
-    ws_sf['G9'] = "=Mayor!F11" # Anticipo Saldo Acreedor
-    ws_sf['E10'] = "4111"
-    ws_sf['F10'] = "Remuneraciones y Participaciones por Pagar"
-    ws_sf['G10'] = "=Mayor!F8" # Remuneraciones Saldo Acreedor
-    ws_sf['F11'] = "Total Pasivo Corriente"
-    ws_sf['F11'].font = font_bold
-    ws_sf['G11'] = "=SUM(G7:G10)"
-    ws_sf['G11'].font = font_bold
-    ws_sf['G11'].border = total_border
+    ws_esf.cell(row=5, column=4, value="PASIVO CORRIENTE").font = font_bold
+    ws_esf.cell(row=6, column=4, value="  Cuentas por Pagar Comerciales - Proveedores (4212)")
+    ws_esf.cell(row=6, column=5, value="=Mayor!G9").number_format = fmt_currency
+    ws_esf.cell(row=7, column=4, value="  Préstamos Bancarios a Corto Plazo (4511)")
+    ws_esf.cell(row=7, column=5, value="=Mayor!G10").number_format = fmt_currency
+    ws_esf.cell(row=8, column=4, value="  Anticipos de Clientes - Ingresos Diferidos (4699)")
+    ws_esf.cell(row=8, column=5, value="=Mayor!G11").number_format = fmt_currency
+    ws_esf.cell(row=9, column=4, value="  Remuneraciones por Pagar (4111)")
+    ws_esf.cell(row=9, column=5, value="=Mayor!G8").number_format = fmt_currency
+    ws_esf.cell(row=10, column=4, value="Total Pasivo Corriente").font = font_bold
+    ws_esf.cell(row=10, column=5, value="=SUM(E6:E9)").font = font_bold
+    ws_esf.cell(row=10, column=5).number_format = fmt_currency
+    ws_esf.cell(row=10, column=5).border = Border(top=border_thin, bottom=border_thin)
 
     # Patrimonio Neto
-    ws_sf['F13'] = "PATRIMONIO NETO"
-    ws_sf['F13'].font = font_bold
-    ws_sf['E14'] = "5011"
-    ws_sf['F14'] = "Capital Social (Aportes de los Socios)"
-    ws_sf['G14'] = "=Mayor!F12" # Capital Saldo Acreedor
-    ws_sf['E15'] = "5911"
-    ws_sf['F15'] = "Resultado del Ejercicio (Utilidad Neta del Mes)"
-    ws_sf['G15'] = "=Resultados!C17" # Referencia a la Utilidad Neta en Estado de Resultados
-    ws_sf['F16'] = "Total Patrimonio Neto"
-    ws_sf['F16'].font = font_bold
-    ws_sf['G16'] = "=SUM(G14:G15)"
-    ws_sf['G16'].font = font_bold
-    ws_sf['G16'].border = total_border
+    ws_esf.cell(row=12, column=4, value="PATRIMONIO NETO").font = font_bold
+    ws_esf.cell(row=13, column=4, value="  Capital Social Aportado (5011)")
+    ws_esf.cell(row=13, column=5, value="=Mayor!G12").number_format = fmt_currency
+    ws_esf.cell(row=14, column=4, value="  Resultados Acumulados - Utilidad Neta (5911)")
+    ws_esf.cell(row=14, column=5, value="=Resultados!B14").number_format = fmt_currency
+    ws_esf.cell(row=15, column=4, value="Total Patrimonio Neto").font = font_bold
+    ws_esf.cell(row=15, column=5, value="=SUM(E13:E14)").font = font_bold
+    ws_esf.cell(row=15, column=5).number_format = fmt_currency
+    ws_esf.cell(row=15, column=5).border = Border(top=border_thin, bottom=border_thin)
 
-    # Total Pasivo + Patrimonio
-    ws_sf['F18'] = "TOTAL PASIVO Y PATRIMONIO NETO"
-    ws_sf['F18'].font = Font(name='Segoe UI', size=11, bold=True, color='1E3A8A')
-    ws_sf['G18'] = "=G11+G16"
-    ws_sf['G18'].font = Font(name='Segoe UI', size=11, bold=True, color='1E3A8A')
-    ws_sf['G18'].border = Border(top=border_thin, bottom=border_double)
-    ws_sf['G18'].fill = fill_light_blue
+    # Total Pasivo y Patrimonio
+    ws_esf.cell(row=17, column=4, value="TOTAL PASIVO Y PATRIMONIO").font = font_title
+    ws_esf.cell(row=17, column=5, value="=E10+E15").font = font_title
+    ws_esf.cell(row=17, column=5).number_format = fmt_currency
+    ws_esf.cell(row=17, column=5).border = total_border
 
-    # Formatos
-    for r in range(6, 20):
-        for c in ['C', 'G']:
-            cell = ws_sf[f'{c}{r}']
-            if cell.value:
-                cell.number_format = fmt_currency
-                cell.alignment = align_right
-
-    # Ecuación Contable Visible
-    ws_sf['B21'] = "CONTROL ECUACIÓN CONTABLE (ACTIVO - PASIVO - PATRIMONIO = 0):"
-    ws_sf['B21'].font = font_bold
-    ws_sf['B21'].alignment = align_right
-    c_eq = ws_sf['C21']
-    c_eq.value = "=C15-G18"
-    c_eq.font = font_bold
-    c_eq.number_format = fmt_currency
-    c_eq.alignment = align_center
-    c_eq.fill = fill_success
-
-    c_eq_st = ws_sf['F21']
-    c_eq_st.value = '=IF(C15=G18, "ECUACIÓN CONTABLE CUMPLE EXACTAMENTE (S/ 64,500.00)", "ERROR")'
-    c_eq_st.font = font_success
-    c_eq_st.alignment = align_left
-    c_eq_st.fill = fill_success
+    # Control Ecuación Contable
+    ws_esf.cell(row=19, column=1, value="CONTROL DE ECUACIÓN CONTABLE (ACTIVO = PASIVO + PATRIMONIO):").font = font_bold
+    ws_esf.cell(row=19, column=4, value="=B14-E17").font = font_bold
+    ws_esf.cell(row=19, column=4).number_format = fmt_currency
+    ws_esf.cell(row=19, column=5, value='=IF(B14=E17, "BALANCE EXACTO (CUADRADO)", "DESCUADRE")').font = font_success
+    ws_esf.cell(row=19, column=5).fill = fill_success
+    ws_esf.cell(row=19, column=5).alignment = align_center
 
     # =========================================================================
-    # 6. HOJA: RESULTADOS
+    # 6. HOJA: RESULTADOS (Estado de Resultados por Función)
     # =========================================================================
     ws_r = wb.create_sheet(title='Resultados')
     ws_r.views.sheetView[0].showGridLines = True
 
     ws_r['A1'] = "ANDES SOFTWARE - PROYECTO PANVIZ"
     ws_r['A1'].font = font_title
-    ws_r['A2'] = "Estado de Resultados del 01 al 30 de Noviembre de 2026 (En Soles - S/)"
+    ws_r['A2'] = "Estado de Resultados Económico al 30 de Noviembre de 2026"
     ws_r['A2'].font = font_subtitle
 
-    headers_res = ["Código", "Concepto / Línea del Estado de Resultados", "Importe (S/)", "Análisis Vertical (%)", "Notas Contables"]
-    for col_idx, h in enumerate(headers_res, 1):
-        cell = ws_r.cell(row=4, column=col_idx, value=h)
-        cell.font = font_header
-        cell.fill = fill_navy
-        cell.alignment = align_header
-        cell.border = header_border
+    for col_idx, h in [(1, "Concepto"), (2, "Importe (S/)"), (3, "% Sobre Ingresos")]:
+        c = ws_r.cell(row=4, column=col_idx, value=h)
+        c.font = font_header
+        c.fill = fill_navy
+        c.alignment = align_center
+        c.border = box_border
 
-    res_items = [
-        ("7041", "Ingresos por Servicios de Software (Hito 1 PANVIZ)", "=Mayor!F13", "=C5/$C$5", "Hito 1 entregado y aceptado (Devengado)"),
-        ("6941", "(-) Costo del Servicio - Remuneraciones Desarrollo", "=Mayor!E14", "=C6/$C$5", "Personal técnico directo consumido en el mes"),
-        ("6942", "(-) Costo del Servicio - Alojamiento en la Nube", "=Mayor!E15", "=C7/$C$5", "Infraestructura cloud consumida en el hito 1"),
-        ("", "TOTAL COSTO DEL SERVICIO", "=SUM(C6:C7)", "=C8/$C$5", "Costos directos vinculados al software"),
-        ("", "UTILIDAD BRUTA", "=C5-C8", "=C9/$C$5", "Margen bruto operativo (29.17%)"),
-        ("9411", "(-) Gastos Administrativos - Generales Pagados", "=Mayor!E16", "=C10/$C$5", "Gastos de gestión operativa del periodo"),
-        ("9412", "(-) Gastos Administrativos - Sueldos Devengados", "=Mayor!E17", "=C11/$C$5", "Sueldos administrativos pendientes de pago"),
-        ("", "TOTAL GASTOS ADMINISTRATIVOS", "=SUM(C10:C11)", "=C12/$C$5", "Carga administrativa del periodo"),
-        ("", "UTILIDAD OPERATIVA", "=C9-C12", "=C13/$C$5", "Resultado de la actividad del negocio"),
-        ("9711", "(-) Gastos Financieros - Intereses de Préstamo", "=Mayor!E18", "=C14/$C$5", "Intereses bancarios pagados en el mes"),
-        ("", "RESULTADO ANTES DE IMPUESTOS", "=C13-C14", "=C15/$C$5", "Base imponible operativa"),
-        ("", "(-) Impuesto a la Renta (Omitido por bases)", 0.0, "0.00%", "Delimitación del caso de estudio"),
-        ("", "UTILIDAD NETA DEL EJERCICIO", "=C15-C16", "=C17/$C$5", "Resultado final que capitaliza el patrimonio")
+    r_items = [
+        ("Ingresos por Desarrollo de Software (7041)", "=Mayor!G13", "=B5/$B$5", font_bold, False),
+        ("Costo del Servicio PANVIZ", "", "", font_sub_header, False),
+        ("  (-) Remuneraciones de Desarrollo (6941)", "=Mayor!F14", "=B7/$B$5", font_regular, False),
+        ("  (-) Servicios de Infraestructura Nube (6942)", "=Mayor!F15", "=B8/$B$5", font_regular, False),
+        ("Total Costo del Servicio", "=B7+B8", "=B9/$B$5", font_bold, True),
+        ("UTILIDAD BRUTA", "=B5-B9", "=B10/$B$5", font_bold, True),
+        ("Gastos de Operación", "", "", font_sub_header, False),
+        ("  (-) Gastos Administrativos Operativos (9411)", "=Mayor!F16", "=B12/$B$5", font_regular, False),
+        ("  (-) Gastos Administrativos Sueldos Devengados (9412)", "=Mayor!F17", "=B13/$B$5", font_regular, False),
+        ("Total Gastos Administrativos", "=B12+B13", "=B14/$B$5", font_bold, True),
+        ("UTILIDAD OPERATIVA (EBIT)", "=B10-B14", "=B15/$B$5", font_bold, True),
+        ("Gastos Financieros", "", "", font_sub_header, False),
+        ("  (-) Intereses Préstamo Bancario (9711)", "=Mayor!F18", "=B17/$B$5", font_regular, False),
+        ("UTILIDAD NETA DEL EJERCICIO", "=B15-B17", "=B18/$B$5", font_title, True)
     ]
 
-    for idx, (cod, nom, val, pct, nota) in enumerate(res_items, 5):
-        ws_r.cell(row=idx, column=1, value=cod).alignment = align_center
-        ws_r.cell(row=idx, column=2, value=nom).alignment = align_left
-        
-        c_val = ws_r.cell(row=idx, column=3, value=val)
-        c_val.alignment = align_right
-        c_val.number_format = fmt_currency
+    for idx, (label, val_f, pct_f, fnt, is_tot) in enumerate(r_items, 5):
+        c1 = ws_r.cell(row=idx, column=1, value=label)
+        c1.font = fnt
+        c1.border = box_border
 
-        c_pct = ws_r.cell(row=idx, column=4, value=pct)
-        c_pct.alignment = align_right
-        c_pct.number_format = fmt_percent
+        c2 = ws_r.cell(row=idx, column=2, value=val_f if val_f else None)
+        c2.font = fnt
+        c2.border = box_border
+        if val_f:
+            c2.alignment = align_right
+            c2.number_format = fmt_currency
 
-        ws_r.cell(row=idx, column=5, value=nota).alignment = align_left
+        c3 = ws_r.cell(row=idx, column=3, value=pct_f if pct_f else None)
+        c3.font = fnt
+        c3.border = box_border
+        if pct_f:
+            c3.alignment = align_right
+            c3.number_format = fmt_percent
 
-        is_tot = "TOTAL" in nom or "UTILIDAD" in nom or "RESULTADO" in nom
-        for c_i in range(1, 6):
-            cell = ws_r.cell(row=idx, column=c_i)
-            cell.font = font_bold if is_tot else font_regular
-            cell.border = box_border
-            if is_tot:
-                cell.fill = fill_light_blue
-        if nom in ["UTILIDAD BRUTA", "UTILIDAD OPERATIVA", "UTILIDAD NETA DEL EJERCICIO"]:
-            ws_r.cell(row=idx, column=3).border = total_border
+        if is_tot:
+            c1.fill = fill_accent
+            c2.fill = fill_accent
+            c3.fill = fill_accent
 
     # =========================================================================
-    # 7. HOJA: PATRIMONIO
+    # 7. HOJA: PATRIMONIO (Estado de Cambios en el Patrimonio Neto)
     # =========================================================================
-    ws_p = wb.create_sheet(title='Patrimonio')
-    ws_p.views.sheetView[0].showGridLines = True
+    ws_pat = wb.create_sheet(title='Patrimonio')
+    ws_pat.views.sheetView[0].showGridLines = True
 
-    ws_p['A1'] = "ANDES SOFTWARE - PROYECTO PANVIZ"
-    ws_p['A1'].font = font_title
-    ws_p['A2'] = "Estado de Cambios en el Patrimonio Neto (Mes 1 - Noviembre 2026)"
-    ws_p['A2'].font = font_subtitle
+    ws_pat['A1'] = "ANDES SOFTWARE - PROYECTO PANVIZ"
+    ws_pat['A1'].font = font_title
+    ws_pat['A2'] = "Estado de Cambios en el Patrimonio Neto al 30 de Noviembre de 2026"
+    ws_pat['A2'].font = font_subtitle
 
-    headers_pat = ["Concepto Patrimonial", "Capital Social (S/)", "Resultados Acumulados (S/)", "Total Patrimonio Neto (S/)"]
+    headers_pat = ["Concepto / Movimiento", "Capital Social (S/)", "Resultados Acumulados (S/)", "Total Patrimonio Neto (S/)"]
     for col_idx, h in enumerate(headers_pat, 1):
-        cell = ws_p.cell(row=4, column=col_idx, value=h)
-        cell.font = font_header
-        cell.fill = fill_navy
-        cell.alignment = align_header
-        cell.border = header_border
+        c = ws_pat.cell(row=4, column=col_idx, value=h)
+        c.font = font_header
+        c.fill = fill_navy
+        c.alignment = align_center
+        c.border = box_border
 
     pat_rows = [
-        ("Saldo Inicial al 01/11/2026", 0.0, 0.0, "=B5+C5"),
-        ("Aportes de Capital de los Socios (OP01)", "=Mayor!F12", 0.0, "=B6+C6"),
-        ("Utilidad Neta del Ejercicio (Resultados)", 0.0, "=Resultados!C17", "=B7+C7"),
-        ("SALDO FINAL AL 30/11/2026", "=SUM(B5:B7)", "=SUM(C5:C7)", "=B8+C8")
+        ("Saldos Iniciales al 01/11/2026", 0.0, 0.0, "=B5+C5"),
+        ("(+) Aportes Dinerarios de Socios (OP01)", "=Mayor!G12", 0.0, "=B6+C6"),
+        ("(+) Utilidad Neta del Primer Mes", 0.0, "=Resultados!B18", "=B7+C7"),
+        ("SALDOS FINALES AL 30/11/2026", "=SUM(B5:B7)", "=SUM(C5:C7)", "=SUM(D5:D7)")
     ]
 
-    for idx, (nom, cap, res, tot) in enumerate(pat_rows, 5):
-        ws_p.cell(row=idx, column=1, value=nom).alignment = align_left
-        ws_p.cell(row=idx, column=2, value=cap).alignment = align_right
-        ws_p.cell(row=idx, column=3, value=res).alignment = align_right
-        ws_p.cell(row=idx, column=4, value=tot).alignment = align_right
+    for idx, (label, cap, res, tot) in enumerate(pat_rows, 5):
+        ws_pat.cell(row=idx, column=1, value=label).font = font_bold if idx == 8 else font_regular
+        ws_pat.cell(row=idx, column=1).border = box_border
 
-        is_tot = idx == 8
-        for c_i in range(1, 5):
-            cell = ws_p.cell(row=idx, column=c_i)
-            cell.font = font_bold if is_tot else font_regular
-            cell.border = total_border if is_tot else box_border
-            if c_i >= 2:
-                cell.number_format = fmt_currency
-            if is_tot:
-                cell.fill = fill_light_blue
-
-    # Control de variación patrimonial
-    ws_p['A10'] = "Control: Variación Patrimonial sin Aportes = Resultado del Mes"
-    ws_p['A10'].font = font_bold
-    ws_p['D10'] = "=D8-B6"
-    ws_p['D10'].font = font_bold
-    ws_p['D10'].number_format = fmt_currency
-    ws_p['D10'].fill = fill_success
-
-    # =========================================================================
-    # 8. HOJA: FLUJO
-    # =========================================================================
-    ws_f = wb.create_sheet(title='Flujo')
-    ws_f.views.sheetView[0].showGridLines = True
-
-    ws_f['A1'] = "ANDES SOFTWARE - PROYECTO PANVIZ"
-    ws_f['A1'].font = font_title
-    ws_f['A2'] = "Estado de Flujos de Efectivo - Método Directo (Noviembre 2026)"
-    ws_f['A2'].font = font_subtitle
-
-    headers_flujo = ["Actividad / Concepto de Flujo de Efectivo", "Referencia OP", "Entradas / Cobros (S/)", "Salidas / Pagos (S/)", "Flujo Neto (S/)"]
-    for col_idx, h in enumerate(headers_flujo, 1):
-        cell = ws_f.cell(row=4, column=col_idx, value=h)
-        cell.font = font_header
-        cell.fill = fill_navy
-        cell.alignment = align_header
-        cell.border = header_border
-
-    # Criterio declarado de intereses: Actividades de Operación (NIC 7 párrafo 31)
-    flujo_data = [
-        ("ACTIVIDADES DE OPERACIÓN", "", "", "", ""),
-        ("Cobranza en efectivo por entrega de Hito 1 PANVIZ", "OP08", 16000.0, 0.0, ""),
-        ("Anticipo en efectivo recibido de la entidad de salud", "OP04", 9000.0, 0.0, ""),
-        ("(-) Pago de remuneraciones de desarrollo de software", "OP05", 0.0, 15000.0, ""),
-        ("(-) Pago de servicios de nube e infraestructura", "OP06", 0.0, 2000.0, ""),
-        ("(-) Pago de gastos operativos y administrativos", "OP07", 0.0, 3000.0, ""),
-        ("(-) Pago de intereses del préstamo bancario (Criterio Operativo)", "OP11", 0.0, 500.0, ""),
-        ("FLUJO NETO DE ACTIVIDADES DE OPERACIÓN", "", "=SUM(C6:C11)", "=SUM(D6:D11)", "=C12-D12"),
-        ("", "", "", "", ""),
-        ("ACTIVIDADES DE INVERSIÓN", "", "", "", ""),
-        ("(-) Pago inicial de contado por compra de equipos de cómputo", "OP02", 0.0, 8000.0, ""),
-        ("(-) Pago posterior de amortización a proveedor de equipos", "OP09", 0.0, 2000.0, ""),
-        ("FLUJO NETO DE ACTIVIDADES DE INVERSIÓN", "", "=SUM(C15:C16)", "=SUM(D15:D16)", "=C17-D17"),
-        ("", "", "", "", ""),
-        ("ACTIVIDADES DE FINANCIACIÓN", "", "", "", ""),
-        ("Aporte de capital inicial de los socios en efectivo", "OP01", 40000.0, 0.0, ""),
-        ("Desembolso de préstamo bancario obtenido", "OP03", 10000.0, 0.0, ""),
-        ("FLUJO NETO DE ACTIVIDADES DE FINANCIACIÓN", "", "=SUM(C20:C21)", "=SUM(D20:D21)", "=C22-D22"),
-        ("", "", "", "", ""),
-        ("VARIACIÓN NETA DE EFECTIVO DEL PERIODO", "", "", "", "=E12+E17+E22"),
-        ("Saldo Inicial de Efectivo y Equivalentes (01/11/2026)", "", "", "", 0.0),
-        ("SALDO FINAL DE EFECTIVO Y EQUIVALENTES AL 30/11/2026", "", "", "", "=E24+E25")
-    ]
-
-    for idx, (nom, op, ent, sal, net) in enumerate(flujo_data, 5):
-        ws_f.cell(row=idx, column=1, value=nom).alignment = align_left
-        ws_f.cell(row=idx, column=2, value=op).alignment = align_center
-        ws_f.cell(row=idx, column=3, value=ent).alignment = align_right
-        ws_f.cell(row=idx, column=4, value=sal).alignment = align_right
-        ws_f.cell(row=idx, column=5, value=net).alignment = align_right
-
-        is_header_sec = nom in ["ACTIVIDADES DE OPERACIÓN", "ACTIVIDADES DE INVERSIÓN", "ACTIVIDADES DE FINANCIACIÓN"]
-        is_tot_sec = "FLUJO NETO" in nom or "SALDO FINAL" in nom or "VARIACIÓN NETA" in nom
-
-        for c_i in range(1, 6):
-            cell = ws_f.cell(row=idx, column=c_i)
+        for c_idx, val in [(2, cap), (3, res), (4, tot)]:
+            cell = ws_pat.cell(row=idx, column=c_idx, value=val)
+            cell.font = font_bold if idx == 8 else font_regular
+            cell.alignment = align_right
+            cell.number_format = fmt_currency
             cell.border = box_border
-            if is_header_sec:
-                cell.font = font_sub_header
+            if idx == 8:
+                cell.border = total_border
                 cell.fill = fill_accent
-            elif is_tot_sec:
-                cell.font = font_bold
-                cell.fill = fill_light_blue
-                if "SALDO FINAL" in nom:
-                    cell.border = Border(top=border_thin, bottom=border_double)
-            else:
-                cell.font = font_regular
-
-            if c_i in [3, 4, 5] and cell.value != "":
-                cell.number_format = fmt_currency
-
-    # Control con Saldo en Bancos
-    ws_f['A28'] = "CONTROL CONCILIACIÓN: SALDO FINAL FLUJO = SALDO EN BANCOS (SITUACIÓN FINANCIERA)"
-    ws_f['A28'].font = font_bold
-    ws_f['C28'] = "=E26-Mayor!E5"
-    ws_f['C28'].font = font_bold
-    ws_f['C28'].number_format = fmt_currency
-    ws_f['C28'].fill = fill_success
-
-    ws_f['E28'] = '=IF(E26=Mayor!E5, "CONCILIADO EXACTO (DIFERENCIA = S/ 0.00)", "ERROR")'
-    ws_f['E28'].font = font_success
-    ws_f['E28'].fill = fill_success
 
     # =========================================================================
-    # 9. HOJA: CAJA 15 DÍAS
+    # 8. HOJA: FLUJO (Estado de Flujos de Efectivo - Método Directo NIC 7)
+    # =========================================================================
+    ws_fe = wb.create_sheet(title='Flujo')
+    ws_fe.views.sheetView[0].showGridLines = True
+
+    ws_fe['A1'] = "ANDES SOFTWARE - PROYECTO PANVIZ"
+    ws_fe['A1'].font = font_title
+    ws_fe['A2'] = "Estado de Flujos de Efectivo (Método Directo NIC 7) al 30 de Noviembre de 2026"
+    ws_fe['A2'].font = font_subtitle
+
+    for col_idx, h in [(1, "Actividades de Flujo de Efectivo"), (2, "Importe Parcial (S/)"), (3, "Flujo Neto (S/)")]:
+        c = ws_fe.cell(row=4, column=col_idx, value=h)
+        c.font = font_header
+        c.fill = fill_navy
+        c.alignment = align_center
+        c.border = box_border
+
+    fe_data = [
+        ("ACTIVIDADES DE OPERACIÓN", "", "", font_bold, False),
+        ("  Cobranza por servicios de software (Hito 1 OP08)", 16000.00, "", font_regular, False),
+        ("  Cobranza por anticipo de clientes (Hito 2 OP04)", 9000.00, "", font_regular, False),
+        ("  (-) Pago de remuneraciones al equipo de desarrollo (OP05)", -15000.00, "", font_regular, False),
+        ("  (-) Pago por servicios de nube consumidos (OP06)", -2000.00, "", font_regular, False),
+        ("  (-) Pago de gastos administrativos operativos (OP07)", -3000.00, "", font_regular, False),
+        ("  (-) Pago de intereses bancarios del préstamo (OP11)", -500.00, "", font_regular, False),
+        ("Flujo Neto de Actividades de Operación", "", "=SUM(B6:B11)", font_bold, True),
+        ("ACTIVIDADES DE INVERSIÓN", "", "", font_bold, False),
+        ("  (-) Pago en efectivo por compra de equipos informáticos (OP02)", -8000.00, "", font_regular, False),
+        ("  (-) Pago a proveedor por deuda de adquisición de equipos (OP09)", -2000.00, "", font_regular, False),
+        ("Flujo Neto de Actividades de Inversión", "", "=SUM(B14:B15)", font_bold, True),
+        ("ACTIVIDADES DE FINANCIACIÓN", "", "", font_bold, False),
+        ("  Aporte de capital inicial de los socios (OP01)", 40000.00, "", font_regular, False),
+        ("  Desembolso de préstamo bancario recibido (OP03)", 10000.00, "", font_regular, False),
+        ("Flujo Neto de Actividades de Financiación", "", "=SUM(B18:B19)", font_bold, True),
+        ("AUMENTO NETO DE EFECTIVO Y EQUIVALENTES", "", "=C12+C16+C20", font_title, True),
+        ("Saldo Inicial de Efectivo al 01/11/2026", "", 0.00, font_regular, False),
+        ("SALDO FINAL DE EFECTIVO Y EQUIVALENTES AL 30/11/2026", "", "=C21+C22", font_title, True)
+    ]
+
+    for idx, (label, p_val, n_val, fnt, is_tot) in enumerate(fe_data, 5):
+        c1 = ws_fe.cell(row=idx, column=1, value=label)
+        c1.font = fnt
+        c1.border = box_border
+
+        c2 = ws_fe.cell(row=idx, column=2, value=p_val if p_val != "" else None)
+        c2.font = fnt
+        c2.border = box_border
+        if p_val != "":
+            c2.alignment = align_right
+            c2.number_format = fmt_currency
+
+        c3 = ws_fe.cell(row=idx, column=3, value=n_val if n_val != "" else None)
+        c3.font = fnt
+        c3.border = box_border
+        if n_val != "":
+            c3.alignment = align_right
+            c3.number_format = fmt_currency
+
+        if is_tot:
+            c1.fill = fill_accent
+            c2.fill = fill_accent
+            c3.fill = fill_accent
+
+    # Control de Conciliación con Situación Financiera
+    ctrl_fe = 25
+    ws_fe.cell(row=ctrl_fe, column=1, value="CONTROL DE SALDO FINAL (CONCILIACIÓN CON BANCOS ESF):").font = font_bold
+    ws_fe.cell(row=ctrl_fe, column=2, value="='Situación financiera'!B6").font = font_bold
+    ws_fe.cell(row=ctrl_fe, column=2).number_format = fmt_currency
+    ws_fe.cell(row=ctrl_fe, column=3, value='=IF(C23=\'Situación financiera\'!B6, "CONCILIADO EXACTO", "DIFERENCIA")').font = font_success
+    ws_fe.cell(row=ctrl_fe, column=3).fill = fill_success
+    ws_fe.cell(row=ctrl_fe, column=3).alignment = align_center
+
+    # =========================================================================
+    # 9. HOJA: CAJA 15 DÍAS (Presupuesto de Caja Quincenal e Indicadores)
     # =========================================================================
     ws_cj = wb.create_sheet(title='Caja 15 días')
     ws_cj.views.sheetView[0].showGridLines = True
 
     ws_cj['A1'] = "ANDES SOFTWARE - PROYECTO PANVIZ"
     ws_cj['A1'].font = font_title
-    ws_cj['A2'] = "Presupuesto de Caja a 15 Días, Proyección de Estrés a 45 Días e Indicadores Financieros"
+    ws_cj['A2'] = "Presupuesto de Caja Quincenal (15 Días) y Evaluación de Estrés a 45 Días"
     ws_cj['A2'].font = font_subtitle
 
+    # Tabla 1: Presupuesto 15 Días
+    ws_cj.cell(row=4, column=1, value="Concepto de Tesorería").font = font_header
+    ws_cj.cell(row=4, column=1).fill = fill_navy
+    ws_cj.cell(row=4, column=2, value="Importe Proyectado (S/)").font = font_header
+    ws_cj.cell(row=4, column=2).fill = fill_navy
+    ws_cj.cell(row=4, column=3, value="Sustento y Justificación Técnica").font = font_header
+    ws_cj.cell(row=4, column=3).fill = fill_navy
+
+    caja_rows = [
+        ("SALDO INICIAL DISPONIBLE EN BANCOS (Día 1)", "='Situación financiera'!B6", "Saldo en cuenta corriente certificado al cierre del mes 1."),
+        ("(+) INGRESOS Y COBROS PROYECTADOS", 0.00, "Cliente advirtió cobro de S/ 8,000 a 45 días; no se anticipan cobros."),
+        ("(-) EGRESOS PROYECTADOS (PRÓXIMOS 15 DÍAS)", "", "Compromisos operacionales ineludibles para la continuidad del servicio."),
+        ("  Remuneraciones previstas del equipo", 18000.00, "Nómina técnica quincenal/mensual requerida para desarrollo del Módulo 2."),
+        ("  Servicios de nube (Cloud computing)", 2000.00, "Costo de servidores para mantener disponible la ingesta de datos PANVIZ."),
+        ("  Deuda restante con proveedor de equipos", 2000.00, "Cancelación de saldo pendiente de compra de hardware (OP02 y OP09)."),
+        ("  Remuneraciones administrativas pendientes", 1500.00, "Obligación devengada en OP10 con personal administrativo."),
+        ("TOTAL EGRESOS PROYECTADOS (15 DÍAS)", "=SUM(B8:B11)", "Total desembolsos ineludibles de la quincena."),
+        ("SALDO FINAL PROYECTADO DE CAJA (Día 15)", "=B5+B6-B12", "Excedente temporal de liquidez al corte del día 15.")
+    ]
+
+    for idx, (label, val, just) in enumerate(caja_rows, 5):
+        c1 = ws_cj.cell(row=idx, column=1, value=label)
+        c2 = ws_cj.cell(row=idx, column=2, value=val if val != "" else None)
+        c3 = ws_cj.cell(row=idx, column=3, value=just)
+
+        fnt = font_bold if idx in [5, 12, 13] else font_regular
+        c1.font = fnt
+        c2.font = fnt
+        c3.font = font_regular
+
+        c1.border = box_border
+        c2.border = box_border
+        c3.border = box_border
+
+        if val != "":
+            c2.alignment = align_right
+            c2.number_format = fmt_currency
+        if idx in [12, 13]:
+            c1.fill = fill_accent
+            c2.fill = fill_accent
+            c3.fill = fill_accent
+
     # Indicadores Financieros
-    ws_cj['A4'] = "EVALUACIÓN DEL CONTROL ECONÓMICO E INDICADORES CLAVE"
-    ws_cj['A4'].font = font_header
-    ws_cj.merge_cells('A4:E4')
-    ws_cj['A4'].fill = fill_navy
+    ws_cj.cell(row=15, column=1, value="INDICADORES FINANCIEROS Y RATIOS DE LIQUIDEZ").font = font_title
+    headers_ind = ["Ratio / Indicador", "Fórmula Contable", "Valor Calculado", "Interpretación y Diagnóstico Gerencial"]
+    for col_idx, h in enumerate(headers_ind, 1):
+        c = ws_cj.cell(row=17, column=col_idx, value=h)
+        c.font = font_header
+        c.fill = fill_navy
+        c.alignment = align_center
+        c.border = box_border
 
-    indicadores = [
-        ("Margen Neto", "=Resultados!C17/Resultados!C5", fmt_percent, "Resultado del Mes / Ingresos Totales", "8.33% - Rentabilidad contable sobre ingresos facturados"),
-        ("Razón Corriente", "='Situación financiera'!C9/'Situación financiera'!G11", fmt_number, "Activo Corriente / Pasivo Corriente", "2.33 - Aparente solvencia a corto plazo (distorsionada)"),
-        ("Cobertura Inmediata", "=Mayor!E5/D17", fmt_number, "Saldo en Bancos / Pagos Previstos en 15 días", "1.89 - Capacidad de pago para la primera quincena")
+    ind_data = [
+        ("Margen Bruto", "Utilidad Bruta / Ingresos", "=Resultados!B10/Resultados!B5", fmt_percent, "29.17% - Eficiencia operativa en costo directo de desarrollo y servidores."),
+        ("Margen Neto", "Utilidad Neta / Ingresos", "=Resultados!B18/Resultados!B5", fmt_percent, "8.33% - Rentabilidad económica positiva pero reducida tras gastos operativos."),
+        ("Razón Corriente", "Activo Corriente / Pasivo Corriente", "='Situación financiera'!B8/'Situación financiera'!E10", fmt_number, "2.33 - Respaldo contable de corto plazo holgado (S/ 2.33 por cada sol de pasivo)."),
+        ("Prueba Ácida", "(Activo Cte. - Inventario) / Pasivo Cte.", "='Situación financiera'!B8/'Situación financiera'!E10", fmt_number, "2.33 - Excelente liquidez teórica (empresa de software sin inventarios físicos)."),
+        ("Cobertura Inmediata (15 días)", "Saldo Bancos / Egresos 15 días", "=B5/B12", fmt_number, "1.89 - Caja actual cubre 1.89 veces los compromisos de los primeros 15 días.")
     ]
 
-    for idx, (ind, form, f_type, formula_txt, interp) in enumerate(indicadores, 5):
-        ws_cj.cell(row=idx, column=1, value=ind).font = font_bold
-        c_val = ws_cj.cell(row=idx, column=2, value=form)
-        c_val.font = font_bold
-        c_val.number_format = f_type
-        c_val.alignment = align_center
-        c_val.fill = fill_light_blue
-        ws_cj.cell(row=idx, column=3, value=formula_txt).font = font_regular
-        ws_cj.cell(row=idx, column=4, value=interp).font = font_regular
+    for idx, (nom, form, val, fmt, interp) in enumerate(ind_data, 18):
+        c1 = ws_cj.cell(row=idx, column=1, value=nom)
+        c2 = ws_cj.cell(row=idx, column=2, value=form)
+        c3 = ws_cj.cell(row=idx, column=3, value=val)
+        c4 = ws_cj.cell(row=idx, column=4, value=interp)
 
-        for c_i in range(1, 5):
-            ws_cj.cell(row=idx, column=c_i).border = box_border
+        for col_i, cell in enumerate([c1, c2, c3, c4], 1):
+            cell.font = font_bold if col_i in [1, 3] else font_regular
+            cell.border = box_border
+            if col_i == 3:
+                cell.alignment = align_right
+                cell.number_format = fmt
+            elif col_i == 2:
+                cell.alignment = align_center
 
-    # Presupuesto de Tesorería a 15 días
-    ws_cj['A10'] = "PRESUPUESTO DE CAJA - PRIMEROS 15 DÍAS (01/12 AL 15/12)"
-    ws_cj['A10'].font = font_header
-    ws_cj.merge_cells('A10:D10')
-    ws_cj['A10'].fill = fill_slate
+    # Proyección de Estrés a 45 Días
+    ws_cj.cell(row=24, column=1, value="ANÁLISIS DE ESTRÉS DE TESORERÍA A 45 DÍAS (LA TRAMPA DE LIQUIDEZ)").font = font_title
+    headers_stress = ["Hito Temporal", "Saldo Inicial (S/)", "Egresos Ciclo (S/)", "Cobros Previstos (S/)", "Saldo Neto (S/)", "Alerta Gerencial / Riesgo Operativo"]
+    for col_idx, h in enumerate(headers_stress, 1):
+        c = ws_cj.cell(row=26, column=col_idx, value=h)
+        c.font = font_header
+        c.fill = fill_slate
+        c.alignment = align_center
+        c.border = box_border
 
-    caja_15_rows = [
-        ("Saldo Inicial en Bancos (Disponible al cierre del mes)", "=Mayor!E5", "Efectivo real en cuenta corriente"),
-        ("(+) Cobros proyectados de clientes en 15 días", 0.0, "Cliente advirtió que S/ 8,000 se cobran en 45 días"),
-        ("TOTAL EFECTIVO DISPONIBLE QUINCENA", "=B11+B12", "Fondos para hacer frente a obligaciones"),
-        ("(-) Pagos de remuneraciones técnicas y desarrollo", 18000.0, "Personal técnico para módulo de alertas"),
-        ("(-) Pagos de servicios de nube e infraestructura", 2000.0, "Consumo continuo de servidores cloud"),
-        ("(-) Pago deuda restante proveedor de equipos informáticos", 2000.0, "Saldo pendiente de compra de hardware"),
-        ("(-) Pago de remuneraciones administrativas pendientes", 1500.0, "Pasivo devengado en OP10"),
-        ("TOTAL EGRESOS PREVISTOS EN 15 DÍAS", "=SUM(B14:B17)", "Salidas de efectivo comprometidas"),
-        ("SALDO FINAL ESTIMADO AL DÍA 15 (EXCEDENTE)", "=B13-B18", "Excedente de caja transitorio al día 15")
+    stress_data = [
+        ("Día 1 al Día 15 (Quincena 1)", "=B5", "=B12", 0.00, "=B27-C27+D27", "SUPERÁVIT: Cobertura segura de compromisos iniciales."),
+        ("Día 16 al Día 30 (Quincena 2)", "=E27", 18000.00 + 2000.00, 0.00, "=B28-C28+D28", "PRESIÓN: Caja remanente cae a S/ 1,000 por nueva nómina y nube."),
+        ("Día 31 al Día 44 (Días críticos)", "=E28", 3500.00, 0.00, "=B29-C29+D29", "DÉFICIT INMINENTE (-S/ 2,500): Suspensión de pagos si no hay financiamiento."),
+        ("Día 45 (Cobranza Hito 1)", "=E29", 0.00, 8000.00, "=B30-C30+D30", "RECUPERACIÓN: Ingreso de S/ 8,000 restablece caja a S/ 5,500.")
     ]
 
-    for idx, (nom, val, desc) in enumerate(caja_15_rows, 11):
-        ws_cj.cell(row=idx, column=1, value=nom).alignment = align_left
-        c_val = ws_cj.cell(row=idx, column=2, value=val)
-        c_val.alignment = align_right
-        c_val.number_format = fmt_currency
-        ws_cj.cell(row=idx, column=3, value=desc).alignment = align_left
+    for idx, (periodo, s_ini, egres, cobr, s_net, diag) in enumerate(stress_data, 27):
+        c1 = ws_cj.cell(row=idx, column=1, value=periodo)
+        c2 = ws_cj.cell(row=idx, column=2, value=s_ini)
+        c3 = ws_cj.cell(row=idx, column=3, value=egres)
+        c4 = ws_cj.cell(row=idx, column=4, value=cobr)
+        c5 = ws_cj.cell(row=idx, column=5, value=s_net)
+        c6 = ws_cj.cell(row=idx, column=6, value=diag)
 
-        is_tot = "TOTAL" in nom or "SALDO FINAL" in nom
-        for c_i in range(1, 4):
-            cell = ws_cj.cell(row=idx, column=c_i)
-            cell.font = font_bold if is_tot else font_regular
-            cell.border = total_border if is_tot else box_border
-            if is_tot:
-                cell.fill = fill_light_blue
-
-    # Análisis de Estrés Financiero a 45 Días
-    ws_cj['A21'] = "PROYECCIÓN DE LIQUIDEZ Y ESTRÉS FINANCIERO A 45 DÍAS (DÍA 16 AL 45)"
-    ws_cj['A21'].font = font_header
-    ws_cj.merge_cells('A21:D21')
-    ws_cj['A21'].fill = PatternFill(start_color='991B1B', end_color='991B1B', fill_type='solid') # Red Header
-
-    estres_rows = [
-        ("Saldo al inicio del periodo de estrés (Día 16)", "=B19", "Efectivo remanente de la primera quincena"),
-        ("(+) Cobranzas proyectadas del Día 16 al Día 44", 0.0, "No hay nuevos cobros programados"),
-        ("(-) Egresos operativos estimados del Día 16 al Día 44 (Nómina + Nube + Gastos)", 23500.0, "Obligaciones mensuales recurrentes para sostener PANVIZ"),
-        ("DÉFICIT PROYECTADO ANTES DE COBRANZA EN DÍA 45", "=B22+B23-B24", "QUIEBRA TÉCNICA DE CAJA SIN GESTIÓN DE LIQUIDEZ"),
-        ("(+) Cobranza pendiente de la entidad de salud en Día 45", "=Mayor!E6", "Ingreso de S/ 8,000 en el día 45"),
-        ("SALDO PROYECTADO TRAS COBRANZA DÍA 45", "=B25+B26", "Situación de caja severamente debilitada")
-    ]
-
-    for idx, (nom, val, desc) in enumerate(estres_rows, 22):
-        ws_cj.cell(row=idx, column=1, value=nom).alignment = align_left
-        c_val = ws_cj.cell(row=idx, column=2, value=val)
-        c_val.alignment = align_right
-        c_val.number_format = fmt_currency
-        ws_cj.cell(row=idx, column=3, value=desc).alignment = align_left
-
-        is_tot = "DÉFICIT" in nom or "SALDO PROYECTADO" in nom
-        for c_i in range(1, 4):
-            cell = ws_cj.cell(row=idx, column=c_i)
-            cell.font = font_bold if is_tot else font_regular
-            cell.border = total_border if is_tot else box_border
-            if "DÉFICIT" in nom:
+        for col_i, cell in enumerate([c1, c2, c3, c4, c5, c6], 1):
+            cell.font = font_bold if col_i in [1, 5] else font_regular
+            cell.border = box_border
+            if col_i in [2, 3, 4, 5]:
+                cell.alignment = align_right
+                cell.number_format = fmt_currency
+            if idx == 29: # Fila crítica
                 cell.fill = fill_gold
-                cell.font = Font(name='Segoe UI', size=10, bold=True, color='991B1B')
 
     # =========================================================================
     # 10. HOJA: CONCILIACIÓN GNUCASH
     # =========================================================================
-    ws_cg = wb.create_sheet(title='Conciliación GnuCash')
-    ws_cg.views.sheetView[0].showGridLines = True
+    ws_conc = wb.create_sheet(title='Conciliación GnuCash')
+    ws_conc.views.sheetView[0].showGridLines = True
 
-    ws_cg['A1'] = "ANDES SOFTWARE - PROYECTO PANVIZ"
-    ws_cg['A1'].font = font_title
-    ws_cg['A2'] = "Tabla de Conciliación Integral entre Calc / Excel y GnuCash (Corte 30/11/2026)"
-    ws_cg['A2'].font = font_subtitle
+    ws_conc['A1'] = "ANDES SOFTWARE - PROYECTO PANVIZ"
+    ws_conc['A1'].font = font_title
+    ws_conc['A2'] = "Matriz de Conciliación Integral: Hoja de Cálculo (Calc/Excel) vs. GnuCash"
+    ws_conc['A2'].font = font_subtitle
 
-    headers_concil = ["Código", "Cuenta o Indicador Financiero", "Saldo Calc (S/)", "Saldo GnuCash (S/)", "Diferencia (S/)", "Estado de Conciliación", "Evidencia en GnuCash"]
-    for col_idx, h in enumerate(headers_concil, 1):
-        cell = ws_cg.cell(row=4, column=col_idx, value=h)
-        cell.font = font_header
-        cell.fill = fill_navy
-        cell.alignment = align_header
-        cell.border = header_border
+    headers_conc = ["Cód.", "Cuenta o Indicador Contable", "Saldo Calc / Excel (S/)", "Saldo GnuCash (S/)", "Diferencia Absoluta (S/)", "Estado de Conciliación", "Sustento Técnico y Enlace a Evidencia"]
+    for col_idx, h in enumerate(headers_conc, 1):
+        c = ws_conc.cell(row=4, column=col_idx, value=h)
+        c.font = font_header
+        c.fill = fill_navy
+        c.alignment = align_header
+        c.border = box_border
 
-    concil_data = [
-        ("1041", "Bancos - Cuenta Corriente", "=Mayor!E5", 44500.0, "Cuenta Corriente en GnuCash"),
-        ("1212", "Cuentas por Cobrar (Clientes)", "=Mayor!E6", 8000.0, "Activos:Clientes:Facturas por Cobrar"),
-        ("3361", "Equipos Informáticos", "=Mayor!E7", 12000.0, "Activos:Equipos Informáticos"),
-        ("4212", "Cuentas por Pagar Proveedores", "=Mayor!F9", 2000.0, "Pasivos:Proveedores:Equipos"),
-        ("4511", "Obligaciones Financieras (Préstamo)", "=Mayor!F10", 10000.0, "Pasivos:Préstamos Bancarios"),
-        ("4699", "Anticipos de Clientes", "=Mayor!F11", 9000.0, "Pasivos:Anticipos de Clientes"),
-        ("4111", "Remuneraciones por Pagar", "=Mayor!F8", 1500.0, "Pasivos:Sueldos por Pagar"),
-        ("5011", "Capital Social (Aportes)", "=Mayor!F12", 40000.0, "Patrimonio:Capital Social"),
-        ("7041", "Ingresos por Servicios de Software", "=Mayor!F13", 24000.0, "Ingresos:Desarrollo de Software"),
-        ("6941", "Costo Servicio - Remuneraciones", "=Mayor!E14", 15000.0, "Gastos:Costo:Remuneraciones"),
-        ("6942", "Costo Servicio - Nube", "=Mayor!E15", 2000.0, "Gastos:Costo:Servicios de Nube"),
-        ("9411", "Gastos Administrativos Generales", "=Mayor!E16", 3000.0, "Gastos:Administrativos:Generales"),
-        ("9412", "Gastos Adm. - Sueldos Devengados", "=Mayor!E17", 1500.0, "Gastos:Administrativos:Sueldos"),
-        ("9711", "Gastos Financieros - Intereses", "=Mayor!E18", 500.0, "Gastos:Financieros:Intereses"),
-        ("5911", "Resultado del Ejercicio (Utilidad Neta)", "=Resultados!C17", 2000.0, "Pérdidas y Ganancias GnuCash"),
-        ("PAT", "Patrimonio Neto Total", "='Situación financiera'!G16", 42000.0, "Balance General GnuCash: Total Patrimonio")
+    conc_data = [
+        ("1041", "Cuentas Corrientes Bancarias", "='Situación financiera'!B6", 44500.00, "Criterio directo bancario; ver capturas/captura_3_balance_general_gnucash.png"),
+        ("1212", "Cuentas por Cobrar Comerciales - Clientes", "='Situación financiera'!B7", 8000.00, "Registro manual por cobrar comercial; ver balance GnuCash"),
+        ("3361", "Equipos para Procesamiento de Información", "='Situación financiera'!B11", 12000.00, "Reconocimiento como PPE a costo histórico (NIC 16)"),
+        ("4212", "Cuentas por Pagar Comerciales - Proveedores", "='Situación financiera'!E6", 2000.00, "Pasivo por saldo de compra hardware tras amortización OP09"),
+        ("4511", "Préstamos Bancarios a Corto Plazo", "='Situación financiera'!E7", 10000.00, "Deuda financiera principal a 6 meses"),
+        ("4699", "Anticipos de Clientes (Ingresos Diferidos)", "='Situación financiera'!E8", 9000.00, "Pasivo corriente por desempeño pendiente de Hito 2 (NIIF 15)"),
+        ("4111", "Remuneraciones por Pagar", "='Situación financiera'!E9", 1500.00, "Pasivo devengado administrativo del cierre (OP10)"),
+        ("5011", "Capital Social Aportado", "='Situación financiera'!E13", 40000.00, "Aporte dinerario inicial de socios (OP01)"),
+        ("5911", "Resultado del Ejercicio (Utilidad Neta)", "=Resultados!B18", 2000.00, "Utilidad neta idéntica en EERR; ver captura_4_estado_resultados_gnucash.png"),
+        ("TOT", "TOTAL ACTIVO", "='Situación financiera'!B14", 64500.00, "Total de activos conciliado con diferencia cero"),
+        ("TOT", "TOTAL PASIVO Y PATRIMONIO", "='Situación financiera'!E17", 64500.00, "Equilibrio contable perfecto en ambas plataformas")
     ]
 
-    for idx, (cod, nom, form_calc, val_gnu, evid) in enumerate(concil_data, 5):
-        ws_cg.cell(row=idx, column=1, value=cod).alignment = align_center
-        ws_cg.cell(row=idx, column=2, value=nom).alignment = align_left
-        
-        c_calc = ws_cg.cell(row=idx, column=3, value=form_calc)
-        c_calc.number_format = fmt_currency
-        c_calc.alignment = align_right
+    for idx, (code, nom, f_calc, val_gnu, sust) in enumerate(conc_data, 5):
+        c1 = ws_conc.cell(row=idx, column=1, value=code).alignment = align_center
+        c2 = ws_conc.cell(row=idx, column=2, value=nom)
+        c3 = ws_conc.cell(row=idx, column=3, value=f_calc)
+        c4 = ws_conc.cell(row=idx, column=4, value=val_gnu)
+        c5 = ws_conc.cell(row=idx, column=5, value=f"=C{idx}-D{idx}")
+        c6 = ws_conc.cell(row=idx, column=6, value=f'=IF(E{idx}=0, "CONCILIADO EXACTO", "DIFERENCIA")')
+        c7 = ws_conc.cell(row=idx, column=7, value=sust)
 
-        c_gnu = ws_cg.cell(row=idx, column=4, value=val_gnu)
-        c_gnu.number_format = fmt_currency
-        c_gnu.alignment = align_right
-
-        c_dif = ws_cg.cell(row=idx, column=5, value=f"=C{idx}-D{idx}")
-        c_dif.number_format = fmt_currency
-        c_dif.alignment = align_right
-
-        c_st = ws_cg.cell(row=idx, column=6, value=f'=IF(E{idx}=0, "CONCILIADO EXACTO", "DISCREPANCIA")')
-        c_st.alignment = align_center
-        c_st.font = font_success
-        c_st.fill = fill_success
-
-        ws_cg.cell(row=idx, column=7, value=evid).alignment = align_left
-
-        for c_i in range(1, 8):
-            cell = ws_cg.cell(row=idx, column=c_i)
-            cell.font = font_bold if cod in ["5911", "PAT"] else font_regular
+        for col_i in range(1, 8):
+            cell = ws_conc.cell(row=idx, column=col_i)
+            cell.font = font_bold if code == "TOT" else font_regular
             cell.border = box_border
-
-    tot_concil_r = len(concil_data) + 5
-    ws_cg.cell(row=tot_concil_r, column=2, value="SUMATORIA DE DIFERENCIAS").font = font_bold
-    ws_cg.cell(row=tot_concil_r, column=2).alignment = align_right
-    c_tot_dif = ws_cg.cell(row=tot_concil_r, column=5, value=f"=SUM(E5:E{tot_concil_r-1})")
-    c_tot_dif.font = font_bold
-    c_tot_dif.number_format = fmt_currency
-    c_tot_dif.alignment = align_right
-    c_tot_dif.border = total_border
-    c_tot_dif.fill = fill_success
-
-    ws_cg.cell(row=tot_concil_r, column=6, value=f'=IF(E{tot_concil_r}=0, "DIFERENCIA CERO (100% CONCILIADO)", "ERROR")').font = font_success
-    ws_cg.cell(row=tot_concil_r, column=6).alignment = align_center
-    ws_cg.cell(row=tot_concil_r, column=6).fill = fill_success
+            if col_i in [3, 4, 5]:
+                cell.alignment = align_right
+                cell.number_format = fmt_currency
+            elif col_i == 6:
+                cell.font = font_success
+                cell.fill = fill_success
+                cell.alignment = align_center
 
     # =========================================================================
-    # 11. HOJA: PARTICIPACIÓN
+    # 11. HOJA: PARTICIPACIÓN (Equipo de 4 Integrantes)
     # =========================================================================
     ws_pt = wb.create_sheet(title='Participación')
     ws_pt.views.sheetView[0].showGridLines = True
 
     ws_pt['A1'] = "ANDES SOFTWARE - PROYECTO PANVIZ"
     ws_pt['A1'].font = font_title
-    ws_pt['A2'] = "Matriz de Distribución de Responsabilidades y Revisión Cruzada (Peer Review)"
+    ws_pt['A2'] = "Matriz de Asignación de Responsabilidades y Revisión Cruzada del Equipo (4 Integrantes)"
     ws_pt['A2'].font = font_subtitle
 
-    headers_part = ["#", "Estudiante Integrante", "CUI", "Correo Institucional", "Responsabilidad Principal", "Entregable / Hoja Custodiada", "Revisión Cruzada Realizada", "Conformidad"]
+    headers_part = ["#", "Estudiante Integrante", "Rol Asignado", "Responsabilidad Principal", "Hojas Custodiadas / Entregable", "Revisión Cruzada Realizada", "Conformidad"]
     for col_idx, h in enumerate(headers_part, 1):
-        cell = ws_pt.cell(row=4, column=col_idx, value=h)
-        cell.font = font_header
-        cell.fill = fill_navy
-        cell.alignment = align_header
-        cell.border = header_border
+        c = ws_pt.cell(row=4, column=col_idx, value=h)
+        c.font = font_header
+        c.fill = fill_navy
+        c.alignment = align_header
+        c.border = box_border
 
-    integrantes_info = [
-        ("1", "Suclle Suca, Michael Benjamin", "20210678", "msuclles@unsa.edu.pe", "Coordinación general, síntesis crítica de lectura e integración", "Informe PDF/MD y Sección 1, 2", "Revisa decisiones y sustento del integrante 5", "APROBADO (100%)"),
-        ("2", "Fernandez Huarca, Rodrigo Alexander", "20210672", "rfernandezh@unsa.edu.pe", "Catálogo y registros completos en GnuCash", "Archivo PANVIZ_equipo06.gnucash y reportes", "Revisa síntesis e informe del integrante 1", "APROBADO (100%)"),
-        ("3", "Meza Vizcarra, Cielo Cristal", "20210685", "cmezav@unsa.edu.pe", "Hoja de cálculo: Cuentas, Diario, Mayor y Comprobación", "Hojas Cuentas, Diario, Mayor, Comprobación", "Revisa libro GnuCash del integrante 2", "APROBADO (100%)"),
-        ("4", "Borda Espinoza, Gabriela Nayely", "20210665", "gbordae@unsa.edu.pe", "Estados financieros y tabla integral de conciliación", "Hojas Situación Fin., Resultados, Flujo, Patrimonio", "Revisa mayorización y balance del integrante 3", "APROBADO (100%)"),
-        ("5", "Ccoscco Alvis, Italo Frankdux", "20210669", "iccosccoa@unsa.edu.pe", "Indicadores, presupuesto de caja y decisiones", "Hoja Caja 15 días y Sección 5, 6 de decisiones", "Revisa estados financieros del integrante 4", "APROBADO (100%)")
+    equipo_data = [
+        ("1", "Chambilla Perca, Ricardo Mauricio", "Especialista Contable y Modelado Operacional", "Diseño del Catálogo de Cuentas, registro de transacciones OP01-OP11 en Diario, Mayorización y Balance de Comprobación.", "Cuentas, Diario, Mayor, Comprobación", "Revisa la Síntesis Crítica y el Control de Lectura 43 de Suclle Suca", "APROBADO (100%)"),
+        ("2", "Gutiérrez Ccama, Juan Diego", "Especialista en Reportes Financieros y Conciliación", "Elaboración de Estados Financieros (ESF, EERR, EFE, Patrimonio), conciliación integral Calc vs. GnuCash y validación de balances.", "Situación financiera, Resultados, Patrimonio, Flujo, Conciliación GnuCash", "Revisa los registros contables y comprobación de Chambilla Perca", "APROBADO (100%)"),
+        ("3", "Mollo Chuquicaña, Dolly Yadhira", "Analista de Liquidez, Ratios y Tesorería", "Cálculo de Ratios Financieros, proyección de Presupuesto de Caja a 15 y 45 días, detección de brecha de liquidez y decisiones gerenciales.", "Caja 15 días, Modelado de Estrés", "Revisa los Estados Financieros y Conciliación de Gutiérrez Ccama", "APROBADO (100%)"),
+        ("4", "Suclle Suca, Michael Benjamin", "Coordinador de Proyecto y Auditoría Gerencial", "Coordinación general, resolución del Control de Lectura 43 (Slide 43), Síntesis Crítica de Guim-Bustos et al. (2023) e integración de decisiones gerenciales.", "Informe MD/PDF, Presentación HTML, Control 43", "Revisa el Presupuesto de Caja y Decisiones Estratégicas de Mollo Chuquicaña", "APROBADO (100%)")
     ]
 
-    for idx, row_vals in enumerate(integrantes_info, 5):
-        for c_i, v in enumerate(row_vals, 1):
-            cell = ws_pt.cell(row=idx, column=c_i, value=v)
-            cell.font = font_regular
-            cell.border = box_border
-            if c_i in [1, 3, 8]:
-                cell.alignment = align_center
-            else:
-                cell.alignment = align_left
-            if c_i == 8:
-                cell.font = font_success
-                cell.fill = fill_success
+    for idx, row in enumerate(equipo_data, 5):
+        for col_i, val in enumerate(row, 1):
+            c = ws_pt.cell(row=idx, column=col_i, value=val)
+            c.font = font_regular
+            c.border = box_border
+            if col_i in [1, 7]:
+                c.alignment = align_center
+                if col_i == 7:
+                    c.font = font_success
+                    c.fill = fill_success
 
-    # Ajustar ancho de columnas automáticamente en todas las hojas
+    # Ajuste automático del ancho de columnas para todas las hojas
     for sheet in wb.worksheets:
         for col in sheet.columns:
             max_len = 0
             col_letter = get_column_letter(col[0].column)
             for cell in col:
-                # Omitir títulos combinados en fila 1 y 2 para ancho
-                if cell.row in [1, 2]:
-                    continue
                 val_str = str(cell.value or '')
-                if len(val_str) > max_len:
-                    max_len = len(val_str)
+                if not val_str.startswith('='):
+                    max_len = max(max_len, len(val_str))
+                else:
+                    max_len = max(max_len, 15)
             sheet.column_dimensions[col_letter].width = max(max_len + 3, 12)
 
     wb.save(filepath)
-    print(f"Libro Excel generado exitosamente en: {filepath}")
+    print(f"Libro contable guardado exitosamente en: {filepath}")
 
-if __name__ == '__main__':
-    out_path = r"C:\Users\micha\Downloads\Borrar entregable 6\GPS-Entregable-6\PANVIZ_Control_Economico_Equipo06.xlsx"
-    build_panviz_excel(out_path)
+if __name__ == "__main__":
+    import os
+    target = os.path.join(r"C:\Users\micha\Downloads\Borrar entregable 6\GPS-Entregable-6", "PANVIZ_Control_Economico.xlsx")
+    build_panviz_excel(target)

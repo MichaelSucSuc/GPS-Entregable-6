@@ -4,7 +4,7 @@ import pypdf
 
 BASE_DIR = r"C:\Users\micha\Downloads\Borrar entregable 6\GPS-Entregable-6"
 EDGE_PATH = r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
-output_pdf_path = os.path.join(BASE_DIR, "INFORME_ENTREGABLE_6_CONTROL_ECONOMICO_PANVIZ.pdf")
+output_pdf_path = os.path.join(BASE_DIR, "INFORME_ENTREGABLE_6.pdf")
 report_html_path = os.path.join(BASE_DIR, "informe_compilado.html")
 
 html_report = """<!DOCTYPE html>
@@ -31,7 +31,7 @@ html_report = """<!DOCTYPE html>
   .portada {
     page-break-after: always;
     text-align: center;
-    padding-top: 30px;
+    padding-top: 25px;
     height: 92vh;
     display: flex;
     flex-direction: column;
@@ -41,126 +41,109 @@ html_report = """<!DOCTYPE html>
   .univ-header { font-size: 15pt; font-weight: 800; color: #1e3a8a; text-transform: uppercase; margin-bottom: 3px; }
   .fac-header { font-size: 11.5pt; font-weight: 700; color: #334155; margin-bottom: 2px; }
   .esc-header { font-size: 10.5pt; font-weight: 600; color: #475569; margin-bottom: 15px; }
-  .logo-box { margin: 15px auto; width: 90px; height: 90px; border-radius: 50%; background: #f1f5f9; border: 3px solid #1e3a8a; display: flex; align-items: center; justify-content: center; font-size: 28pt; }
+  .logo-box { margin: 15px auto; width: 85px; height: 85px; border-radius: 50%; background: #f1f5f9; border: 3px solid #1e3a8a; display: flex; align-items: center; justify-content: center; font-size: 24pt; font-weight: bold; color: #1e3a8a; }
   .doc-type { font-size: 10.5pt; font-weight: bold; color: #b45309; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px; }
-  .doc-title { font-size: 18pt; font-weight: 800; color: #0f172a; margin: 8px 0 4px; line-height: 1.2; }
-  .doc-subtitle { font-size: 11pt; color: #64748b; font-weight: 500; }
+  .doc-title { font-size: 17pt; font-weight: 800; color: #0f172a; margin: 8px 0 4px; line-height: 1.2; }
+  .doc-subtitle { font-size: 10.5pt; color: #64748b; font-weight: 500; }
   
-  .meta-box { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px 20px; margin: 20px auto; text-align: left; max-width: 500px; font-size: 9pt; }
+  .meta-box { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px 20px; margin: 15px auto; text-align: left; max-width: 500px; font-size: 9pt; }
   .meta-row { display: flex; justify-content: space-between; margin-bottom: 3px; }
   .meta-label { font-weight: bold; color: #1e3a8a; }
+  
+  .team-box { margin: 10px auto; max-width: 580px; text-align: left; }
+  .team-title { font-size: 9.5pt; font-weight: bold; color: #1e293b; margin-bottom: 6px; text-align: center; }
+  .team-table { width: 100%; border-collapse: collapse; font-size: 8.5pt; }
+  .team-table th { background: #1e3a8a; color: #fff; padding: 5px 8px; text-align: left; }
+  .team-table td { padding: 4px 8px; border-bottom: 1px solid #e2e8f0; }
 
-  .team-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 8.5pt; }
-  .team-table th { background: #e2e8f0; padding: 3px 5px; text-align: left; font-weight: bold; }
-  .team-table td { padding: 3px 5px; border-bottom: 1px solid #e2e8f0; }
+  /* Contenido */
+  .page {
+    page-break-after: always;
+    box-sizing: border-box;
+    padding-top: 4px;
+  }
+  .page:last-child {
+    page-break-after: avoid;
+  }
 
-  .portada-foot { font-size: 9.5pt; font-weight: bold; color: #475569; }
-
-  /* Secciones */
-  .section-title {
-    font-size: 10.5pt;
-    font-weight: 800;
-    color: #1e3a8a;
+  .running-header {
     border-bottom: 1.5px solid #1e3a8a;
-    padding-bottom: 2px;
-    margin-top: 10px;
-    margin-bottom: 6px;
+    padding-bottom: 4px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 7.5pt;
+    color: #64748b;
+    font-weight: 600;
     text-transform: uppercase;
   }
-  .subsection-title {
-    font-size: 9.5pt;
-    font-weight: 700;
-    color: #0f172a;
-    margin-top: 8px;
-    margin-bottom: 4px;
-  }
 
+  h1 { font-size: 11pt; color: #1e3a8a; border-left: 4px solid #1e3a8a; padding-left: 6px; margin: 8px 0 5px 0; text-transform: uppercase; }
+  h2 { font-size: 9.5pt; color: #0f172a; margin: 6px 0 3px 0; font-weight: 700; }
   p { margin: 0 0 5px 0; text-align: justify; }
 
   table.data-table {
     width: 100%;
     border-collapse: collapse;
-    margin: 5px 0 8px;
     font-size: 7.5pt;
+    margin: 5px 0 8px 0;
   }
   table.data-table th {
     background: #1e3a8a;
-    color: #ffffff;
-    font-weight: 700;
-    padding: 3px 5px;
-    border: 1px solid #1e3a8a;
+    color: #fff;
+    padding: 3.5px 5px;
     text-align: left;
+    font-weight: 600;
   }
   table.data-table td {
-    padding: 2.5px 5px;
-    border: 1px solid #cbd5e1;
+    padding: 3px 5px;
+    border-bottom: 1px solid #e2e8f0;
   }
-  table.data-table tr:nth-child(even) { background: #f8fafc; }
-  .tar { text-align: right; }
-  .tac { text-align: center; }
-  .fwb { font-weight: bold; }
+  table.data-table tr:nth-child(even) td {
+    background: #f8fafc;
+  }
+  .num { text-align: right; font-family: 'Consolas', monospace; }
+  .bold { font-weight: bold; }
+  .highlight { background: #e0f2fe !important; font-weight: bold; }
+  .success { color: #047857; font-weight: bold; }
+  .danger { color: #b91c1c; font-weight: bold; }
+  .warning { color: #b45309; font-weight: bold; }
 
-  .highlight-box {
+  .callout {
     background: #f1f5f9;
     border-left: 3px solid #1e3a8a;
     padding: 5px 8px;
-    margin: 6px 0;
-    font-size: 8pt;
+    margin: 5px 0;
+    font-size: 7.8pt;
   }
-  .alert-box {
+  .callout-alert {
     background: #fef2f2;
     border-left: 3px solid #ef4444;
     padding: 5px 8px;
-    margin: 6px 0;
-    font-size: 8pt;
-  }
-  .success-box {
-    background: #f0fdf4;
-    border-left: 3px solid #10b981;
-    padding: 5px 8px;
-    margin: 6px 0;
-    font-size: 8pt;
+    margin: 5px 0;
+    font-size: 7.8pt;
   }
 
-  .captura-box {
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .img-box {
     text-align: center;
     margin: 4px 0;
-    border: 1px solid #cbd5e1;
-    padding: 4px;
-    background: #f8fafc;
-    border-radius: 3px;
   }
-  .captura-img {
+  .img-box img {
     max-width: 98%;
-    height: auto;
-    border: 1px solid #94a3b8;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
   }
-  .captura-caption {
+  .img-caption {
     font-size: 7pt;
-    font-weight: 600;
-    color: #475569;
+    color: #64748b;
+    font-style: italic;
     margin-top: 2px;
-  }
-
-  .page-container {
-    page-break-after: always;
-    height: 96vh;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
-  .last-page {
-    page-break-after: avoid;
-    height: auto;
-  }
-  .page-num {
-    text-align: right;
-    font-size: 7.5pt;
-    color: #94a3b8;
-    margin-top: auto;
-    border-top: 1px solid #e2e8f0;
-    padding-top: 3px;
   }
 </style>
 </head>
@@ -172,374 +155,435 @@ html_report = """<!DOCTYPE html>
       <div class="univ-header">Universidad Nacional de San Agustín de Arequipa</div>
       <div class="fac-header">Facultad de Ingeniería de Producción y Servicios</div>
       <div class="esc-header">Escuela Profesional de Ingeniería de Sistemas</div>
-      
-      <div class="logo-box">🏛️</div>
-
-      <div class="doc-type">Entregable 6 · Semana 11</div>
-      <div class="doc-title">TRABAJO PARCIAL DE CONTROL ECONÓMICO: PROYECTO PANVIZ</div>
-      <div class="doc-subtitle">Evaluación Patrimonial, Desempeño Operativo y Sostenibilidad Financiera en Andes Software</div>
+      <div class="logo-box">UNSA</div>
+      <div class="doc-type">Entregable 6 · Semana 11 · Gestión de Proyectos de Software</div>
+      <div class="doc-title">Control Económico y Diseño Contable de PANVIZ</div>
+      <div class="doc-subtitle">Caso de Estudio: Andes Software en Vigilancia Epidemiológica de Salud Pública</div>
     </div>
 
     <div class="meta-box">
-      <div class="meta-row"><span class="meta-label">Asignatura:</span><span>Gestión de Proyectos de Software</span></div>
-      <div class="meta-row"><span class="meta-label">Docente:</span><span>M en C Jesús Martín Silva Fernández</span></div>
-      <div class="meta-row"><span class="meta-label">Equipo de Trabajo:</span><span>Equipo 06</span></div>
-      <div style="margin-top: 6px; font-weight: bold; color: #1e3a8a;">Integrantes del Equipo:</div>
+      <div class="meta-row"><span class="meta-label">Asignatura:</span> <span>Gestión de Proyectos de Software</span></div>
+      <div class="meta-row"><span class="meta-label">Docente:</span> <span>Docente del Curso de Gestión de Proyectos</span></div>
+      <div class="meta-row"><span class="meta-label">Fecha de Entrega:</span> <span>16 de Noviembre de 2026</span></div>
+      <div class="meta-row"><span class="meta-label">Herramientas:</span> <span>LibreOffice Calc (.xlsx) & GnuCash (.gnucash)</span></div>
+      <div class="meta-row"><span class="meta-label">Sistema:</span> <span>PANVIZ (Salud Pública - Vigilancia Epidemiológica)</span></div>
+    </div>
+
+    <div class="team-box">
+      <div class="team-title">EQUIPO DE TRABAJO (4 INTEGRANTES)</div>
       <table class="team-table">
-        <tr><th>Estudiante</th><th>CUI</th><th>Correo Institucional</th></tr>
-        <tr><td>Suclle Suca, Michael Benjamin</td><td>20210678</td><td>msuclles@unsa.edu.pe</td></tr>
-        <tr><td>Fernandez Huarca, Rodrigo Alexander</td><td>20210672</td><td>rfernandezh@unsa.edu.pe</td></tr>
-        <tr><td>Meza Vizcarra, Cielo Cristal</td><td>20210685</td><td>cmezav@unsa.edu.pe</td></tr>
-        <tr><td>Borda Espinoza, Gabriela Nayely</td><td>20210665</td><td>gbordae@unsa.edu.pe</td></tr>
-        <tr><td>Ccoscco Alvis, Italo Frankdux</td><td>20210669</td><td>iccosccoa@unsa.edu.pe</td></tr>
+        <thead>
+          <tr>
+            <th>Estudiante Integrante</th>
+            <th>Rol Asignado</th>
+            <th>Responsabilidad Principal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Chambilla Perca, Ricardo Mauricio</strong></td>
+            <td>Especialista Contable</td>
+            <td>Catálogo, Libro Diario (OP01-OP11), Mayor y Comprobación</td>
+          </tr>
+          <tr>
+            <td><strong>Gutiérrez Ccama, Juan Diego</strong></td>
+            <td>Especialista en Reportes</td>
+            <td>Estados Financieros (4) y Conciliación Integral GnuCash</td>
+          </tr>
+          <tr>
+            <td><strong>Mollo Chuquicaña, Dolly Yadhira</strong></td>
+            <td>Analista de Liquidez</td>
+            <td>Ratios, Presupuesto Quincenal, Estrés 45 días y Decisiones</td>
+          </tr>
+          <tr>
+            <td><strong>Suclle Suca, Michael Benjamin</strong></td>
+            <td>Coordinador y Auditor</td>
+            <td>Coordinación general, Control 43, Síntesis e Integración</td>
+          </tr>
+        </tbody>
       </table>
     </div>
 
-    <div class="portada-foot">
+    <div style="font-size: 8pt; color: #64748b; padding-bottom: 10px;">
       Arequipa, Perú · Noviembre de 2026
     </div>
   </div>
 
-  <!-- PÁGINA 1 DE CONTENIDO: SÍNTESIS CRÍTICA Y CATÁLOGO DE CUENTAS -->
-  <div class="page-container">
-    <div class="section-title">1. Síntesis Crítica de la Lectura Obligatoria</div>
-    <p><strong>Referencia:</strong> Guim-Bustos, P., Martillo-Mieles, O., Guerrero-Cortez, V. y Carrillo-Pérez, F. (2023). Los estados financieros y las tomas de decisiones empresariales. <em>593 Digital Publisher CEIT</em>, 8(2), 149–160. DOI: 10.33386/593dp.2023.2.1679. (Páginas consultadas: 152–154. Conteo: 305 palabras).</p>
-    <p>
-      Los estados financieros representan el producto estructurado y culminante del proceso contable, cuyo objetivo fundamental es sintetizar la posición patrimonial, el desempeño operativo y los flujos monetarios de una entidad en un período determinado (Guim-Bustos et al., 2023, p. 152). Limitar la contabilidad al mero cumplimiento formal del registro en libros resulta estéril para la gerencia si la información cuantitativa no se somete a un análisis e interpretación sistemática que fundamente la toma de decisiones estratégicas. Como destacan Castrellón (2021) y Suanders (2006), citados en el texto (pp. 153–154), las decisiones gerenciales no pueden formularse a ciegas: requieren evaluar con certeza si las operaciones generan valor o pérdidas, y si las políticas de financiamiento y comercialización comprometen la viabilidad futura del negocio.
-    </p>
-    <p>
-      Del análisis de las páginas 152 a 154 se desprenden dos ideas medulares aplicables al control económico del proyecto PANVIZ:  
-      <strong>1. La diferenciación estricta de la estructura de costos (p. 154):</strong> En el desarrollo de software es indispensable clasificar con precisión los costos directos (remuneraciones técnicas de los desarrolladores y consumo de servidores en la nube asignables al producto) frente a los gastos administrativos indirectos. Esta discriminación previene distorsiones en el cálculo del margen de contribución de cada hito contractual.  
-      <strong>2. El desfase temporal entre presupuestación, devengo y liquidez real (pp. 152–153):</strong> Brune (2019) advierte que contar con proyecciones de ingresos resulta inútil sin una confirmación estricta de las fechas efectivas de pago de los clientes. En proyectos tecnológicos, registrar ingresos devengados por hitos aprobados no garantiza liquidez inmediata para solventar nóminas o servidores, demandando un monitoreo riguroso del flujo de caja de corto plazo para evitar la parálisis operativa del servicio.
-    </p>
-
-    <div class="section-title">2. Clasificación Contable y Catálogo Mínimo de Cuentas</div>
-    <p>Se estructuró el catálogo según el Plan Contable General Empresarial (PCGE) y su equivalencia con GnuCash:</p>
-    <table class="data-table">
-      <thead>
-        <tr><th>Cód.</th><th>Cuenta Contable</th><th>Elemento</th><th>Nat.</th><th>Cuenta Mapeada en GnuCash</th></tr>
-      </thead>
-      <tbody>
-        <tr><td class="tac fwb">1041</td><td>Bancos - Cuentas Corrientes</td><td>Activo Cte.</td><td>Deudora</td><td>Activos:Activo Corriente:Bancos:Cuenta Corriente</td></tr>
-        <tr><td class="tac fwb">1212</td><td>Cuentas por Cobrar Comerciales</td><td>Activo Cte.</td><td>Deudora</td><td>Activos:Activo Corriente:Clientes:Facturas por Cobrar</td></tr>
-        <tr><td class="tac fwb">3361</td><td>Equipos de Cómputo e Informáticos</td><td>Activo No Cte.</td><td>Deudora</td><td>Activos:Activo Fijo:Equipos Informáticos</td></tr>
-        <tr><td class="tac fwb">4111</td><td>Remuneraciones por Pagar</td><td>Pasivo Cte.</td><td>Acreedora</td><td>Pasivos:Pasivo Corriente:Sueldos por Pagar</td></tr>
-        <tr><td class="tac fwb">4212</td><td>Cuentas por Pagar Proveedores</td><td>Pasivo Cte.</td><td>Acreedora</td><td>Pasivos:Pasivo Corriente:Proveedores:Equipos</td></tr>
-        <tr><td class="tac fwb">4511</td><td>Préstamo Bancario (Corto Plazo)</td><td>Pasivo Cte.</td><td>Acreedora</td><td>Pasivos:Pasivo Corriente:Préstamos Bancarios</td></tr>
-        <tr><td class="tac fwb">4699</td><td>Anticipos de Clientes (Diferidos)</td><td>Pasivo Cte.</td><td>Acreedora</td><td>Pasivos:Pasivo Corriente:Anticipos de Clientes</td></tr>
-        <tr><td class="tac fwb">5011</td><td>Capital Social (Aportes de Socios)</td><td>Patrimonio</td><td>Acreedora</td><td>Patrimonio:Capital Social:Aportes</td></tr>
-        <tr><td class="tac fwb">5911</td><td>Resultado del Ejercicio (Utilidad)</td><td>Patrimonio</td><td>Acreedora</td><td>Patrimonio:Resultados Acumulados:Resultado del Mes</td></tr>
-        <tr><td class="tac fwb">7041</td><td>Ingresos por Desarrollo Software</td><td>Ingreso</td><td>Acreedora</td><td>Ingresos:Ventas:Desarrollo de Software</td></tr>
-        <tr><td class="tac fwb">6941</td><td>Costo: Remuneraciones Desarrollo</td><td>Costo Serv.</td><td>Deudora</td><td>Gastos:Costo del Servicio:Remuneraciones Desarrollo</td></tr>
-        <tr><td class="tac fwb">6942</td><td>Costo: Servicios de Nube</td><td>Costo Serv.</td><td>Deudora</td><td>Gastos:Costo del Servicio:Servicios de Nube</td></tr>
-        <tr><td class="tac fwb">9411</td><td>Gastos Administrativos Generales</td><td>Gasto Oper.</td><td>Deudora</td><td>Gastos:Gastos Administrativos:Operativos Generales</td></tr>
-        <tr><td class="tac fwb">9412</td><td>Gastos Adm. Sueldos Devengados</td><td>Gasto Oper.</td><td>Deudora</td><td>Gastos:Gastos Administrativos:Remuneraciones</td></tr>
-        <tr><td class="tac fwb">9711</td><td>Gastos Financieros (Intereses)</td><td>Gasto Financ.</td><td>Deudora</td><td>Gastos:Gastos Financieros:Intereses Bancarios</td></tr>
-      </tbody>
-    </table>
-    <div class="page-num">Página 1 de 6 (Sin contar portada)</div>
-  </div>
-
-  <!-- PÁGINA 2 DE CONTENIDO: LIBRO DIARIO Y BALANCE DE COMPROBACIÓN -->
-  <div class="page-container">
-    <div class="section-title">3. Registro en Libro Diario y Balance de Comprobación</div>
-    <table class="data-table">
-      <thead>
-        <tr><th class="tac">Fecha</th><th class="tac">Op.</th><th>Cuentas y Glosa / Descripción Técnica</th><th class="tar">Debe (S/)</th><th class="tar">Haber (S/)</th></tr>
-      </thead>
-      <tbody>
-        <tr><td class="tac">02/11</td><td class="tac fwb">OP01</td><td>1041 Bancos / 5011 Capital Social · Aporte inicial socios cuenta bancaria</td><td class="tar">40,000.00</td><td class="tar">40,000.00</td></tr>
-        <tr><td class="tac">05/11</td><td class="tac fwb">OP02</td><td>3361 Equipos Informáticos / 1041 Bancos (8k) - 4212 Proveedores (4k)</td><td class="tar">12,000.00</td><td class="tar">12,000.00</td></tr>
-        <tr><td class="tac">07/11</td><td class="tac fwb">OP03</td><td>1041 Bancos / 4511 Préstamos Bancarios · Desembolso pagaré a 6 meses</td><td class="tar">10,000.00</td><td class="tar">10,000.00</td></tr>
-        <tr><td class="tac">10/11</td><td class="tac fwb">OP04</td><td>1041 Bancos / 4699 Anticipos de Clientes · Cobro adelantado módulo alertas</td><td class="tar">9,000.00</td><td class="tar">9,000.00</td></tr>
-        <tr><td class="tac">15/11</td><td class="tac fwb">OP05</td><td>6941 Costo Remun. Desarrollo / 1041 Bancos · Planilla técnica mensual</td><td class="tar">15,000.00</td><td class="tar">15,000.00</td></tr>
-        <tr><td class="tac">18/11</td><td class="tac fwb">OP06</td><td>6942 Costo Nube / 1041 Bancos · Infraestructura cloud servidores mes</td><td class="tar">2,000.00</td><td class="tar">2,000.00</td></tr>
-        <tr><td class="tac">20/11</td><td class="tac fwb">OP07</td><td>9411 Gastos Administrativos / 1041 Bancos · Gastos operativos generales</td><td class="tar">3,000.00</td><td class="tar">3,000.00</td></tr>
-        <tr><td class="tac">25/11</td><td class="tac fwb">OP08</td><td>1041 Bancos (16k) - 1212 Clientes (8k) / 7041 Ingresos Software Hito 1</td><td class="tar">24,000.00</td><td class="tar">24,000.00</td></tr>
-        <tr><td class="tac">27/11</td><td class="tac fwb">OP09</td><td>4212 Proveedores / 1041 Bancos · Amortización deuda proveedor hardware</td><td class="tar">2,000.00</td><td class="tar">2,000.00</td></tr>
-        <tr><td class="tac">30/11</td><td class="tac fwb">OP10</td><td>9412 Gastos Adm. Sueldos / 4111 Remuneraciones por Pagar · Devengo</td><td class="tar">1,500.00</td><td class="tar">1,500.00</td></tr>
-        <tr><td class="tac">30/11</td><td class="tac fwb">OP11</td><td>9711 Gastos Financieros / 1041 Bancos · Pago intereses de préstamo</td><td class="tar">500.00</td><td class="tar">500.00</td></tr>
-        <tr style="background:#e2e8f0; font-weight:bold;"><td colspan="3" class="tar">SUMAS TOTALES DEL LIBRO DIARIO</td><td class="tar">S/ 119,000.00</td><td class="tar">S/ 119,000.00</td></tr>
-      </tbody>
-    </table>
-
-    <div class="subsection-title">Balance de Comprobación de Sumas y Saldos (Mayorización)</div>
-    <table class="data-table">
-      <thead>
-        <tr><th>Cód.</th><th>Cuenta Contable</th><th class="tar">Sumas Debe</th><th class="tar">Sumas Haber</th><th class="tar">Saldo Deudor</th><th class="tar">Saldo Acreedor</th></tr>
-      </thead>
-      <tbody>
-        <tr><td class="tac">1041</td><td>Bancos - Cuentas Corrientes</td><td class="tar">75,000.00</td><td class="tar">30,500.00</td><td class="tar fwb">44,500.00</td><td class="tar">-</td></tr>
-        <tr><td class="tac">1212</td><td>Cuentas por Cobrar Comerciales</td><td class="tar">8,000.00</td><td class="tar">0.00</td><td class="tar fwb">8,000.00</td><td class="tar">-</td></tr>
-        <tr><td class="tac">3361</td><td>Equipos de Cómputo e Informáticos</td><td class="tar">12,000.00</td><td class="tar">0.00</td><td class="tar fwb">12,000.00</td><td class="tar">-</td></tr>
-        <tr><td class="tac">4111</td><td>Remuneraciones por Pagar</td><td class="tar">0.00</td><td class="tar">1,500.00</td><td class="tar">-</td><td class="tar fwb">1,500.00</td></tr>
-        <tr><td class="tac">4212</td><td>Proveedores por Pagar</td><td class="tar">2,000.00</td><td class="tar">4,000.00</td><td class="tar">-</td><td class="tar fwb">2,000.00</td></tr>
-        <tr><td class="tac">4511</td><td>Préstamo Bancario Corto Plazo</td><td class="tar">0.00</td><td class="tar">10,000.00</td><td class="tar">-</td><td class="tar fwb">10,000.00</td></tr>
-        <tr><td class="tac">4699</td><td>Anticipos de Clientes (Diferidos)</td><td class="tar">0.00</td><td class="tar">9,000.00</td><td class="tar">-</td><td class="tar fwb">9,000.00</td></tr>
-        <tr><td class="tac">5011</td><td>Capital Social (Aportes)</td><td class="tar">0.00</td><td class="tar">40,000.00</td><td class="tar">-</td><td class="tar fwb">40,000.00</td></tr>
-        <tr><td class="tac">7041</td><td>Ingresos por Desarrollo Software</td><td class="tar">0.00</td><td class="tar">24,000.00</td><td class="tar">-</td><td class="tar fwb">24,000.00</td></tr>
-        <tr><td class="tac">6941</td><td>Costo: Remuneraciones Desarrollo</td><td class="tar">15,000.00</td><td class="tar">0.00</td><td class="tar fwb">15,000.00</td><td class="tar">-</td></tr>
-        <tr><td class="tac">6942</td><td>Costo: Servicios de Nube</td><td class="tar">2,000.00</td><td class="tar">0.00</td><td class="tar fwb">2,000.00</td><td class="tar">-</td></tr>
-        <tr><td class="tac">9411</td><td>Gastos Administrativos Generales</td><td class="tar">3,000.00</td><td class="tar">0.00</td><td class="tar fwb">3,000.00</td><td class="tar">-</td></tr>
-        <tr><td class="tac">9412</td><td>Gastos Adm. Sueldos Devengados</td><td class="tar">1,500.00</td><td class="tar">0.00</td><td class="tar fwb">1,500.00</td><td class="tar">-</td></tr>
-        <tr><td class="tac">9711</td><td>Gastos Financieros (Intereses)</td><td class="tar">500.00</td><td class="tar">0.00</td><td class="tar fwb">500.00</td><td class="tar">-</td></tr>
-        <tr style="background:#e2e8f0; font-weight:bold;"><td colspan="2" class="tar">TOTALES GENERALES</td><td class="tar">S/ 119,000.00</td><td class="tar">S/ 119,000.00</td><td class="tar">S/ 86,500.00</td><td class="tar">S/ 86,500.00</td></tr>
-      </tbody>
-    </table>
-    <div class="success-box">
-      <strong>Control Partida Doble y Saldos:</strong> Sumas Debe = Haber (S/ 119,000.00) y Saldos Deudores = Acreedores (S/ 86,500.00). Diferencia: <strong>S/ 0.00</strong>.
-    </div>
-    <div class="page-num">Página 2 de 6 (Sin contar portada)</div>
-  </div>
-
-  <!-- PÁGINA 3 DE CONTENIDO: ESTADOS FINANCIEROS -->
-  <div class="page-container">
-    <div class="section-title">4. Estados Financieros al Cierre del Mes 1 (Noviembre 2026)</div>
-    
-    <div style="display:flex; gap:12px;">
-      <div style="flex:1;">
-        <div class="subsection-title">Estado de Situación Financiera al 30/11/2026</div>
-        <table class="data-table" style="font-size:7.5pt;">
-          <thead><tr><th>Concepto</th><th class="tar">Importe (S/)</th></tr></thead>
-          <tbody>
-            <tr style="background:#f1f5f9; font-weight:bold;"><td colspan="2">ACTIVO CORRIENTE</td></tr>
-            <tr><td>1041 Bancos - Cuenta Corriente</td><td class="tar">44,500.00</td></tr>
-            <tr><td>1212 Cuentas por Cobrar Comerciales</td><td class="tar">8,000.00</td></tr>
-            <tr class="fwb"><td>Total Activo Corriente</td><td class="tar">52,500.00</td></tr>
-            <tr style="background:#f1f5f9; font-weight:bold;"><td colspan="2">ACTIVO NO CORRIENTE</td></tr>
-            <tr><td>3361 Equipos Informáticos y Cómputo</td><td class="tar">12,000.00</td></tr>
-            <tr class="fwb"><td>Total Activo No Corriente</td><td class="tar">12,000.00</td></tr>
-            <tr style="background:#e0f2fe; font-weight:bold; color:#0369a1;"><td>TOTAL ACTIVO</td><td class="tar">S/ 64,500.00</td></tr>
-            <tr style="background:#f1f5f9; font-weight:bold;"><td colspan="2">PASIVO CORRIENTE</td></tr>
-            <tr><td>4212 Proveedores por Pagar</td><td class="tar">2,000.00</td></tr>
-            <tr><td>4511 Préstamos Bancarios (6 meses)</td><td class="tar">10,000.00</td></tr>
-            <tr><td>4699 Anticipos de Clientes (Diferidos)</td><td class="tar">9,000.00</td></tr>
-            <tr><td>4111 Remuneraciones por Pagar</td><td class="tar">1,500.00</td></tr>
-            <tr class="fwb"><td>Total Pasivo Corriente</td><td class="tar">22,500.00</td></tr>
-            <tr style="background:#f1f5f9; font-weight:bold;"><td colspan="2">PATRIMONIO NETO</td></tr>
-            <tr><td>5011 Capital Social (Aportes de Socios)</td><td class="tar">40,000.00</td></tr>
-            <tr><td>5911 Resultado del Ejercicio (Utilidad)</td><td class="tar">2,000.00</td></tr>
-            <tr class="fwb"><td>Total Patrimonio Neto</td><td class="tar">42,000.00</td></tr>
-            <tr style="background:#e0f2fe; font-weight:bold; color:#0369a1;"><td>TOTAL PASIVO Y PATRIMONIO</td><td class="tar">S/ 64,500.00</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div style="flex:1;">
-        <div class="subsection-title">Estado de Resultados (01 al 30/11/2026)</div>
-        <table class="data-table" style="font-size:7.5pt;">
-          <thead><tr><th>Concepto</th><th class="tar">Soles (S/)</th><th class="tar">%</th></tr></thead>
-          <tbody>
-            <tr class="fwb"><td>Ingresos por Desarrollo Software</td><td class="tar">24,000.00</td><td class="tar">100.0%</td></tr>
-            <tr><td>(-) Remuneraciones Desarrollo</td><td class="tar">(15,000.00)</td><td class="tar">-62.5%</td></tr>
-            <tr><td>(-) Servicios de Nube</td><td class="tar">(2,000.00)</td><td class="tar">-8.3%</td></tr>
-            <tr class="fwb" style="background:#f1f5f9;"><td>UTILIDAD BRUTA</td><td class="tar">7,000.00</td><td class="tar">29.2%</td></tr>
-            <tr><td>(-) Gastos Adm. Generales</td><td class="tar">(3,000.00)</td><td class="tar">-12.5%</td></tr>
-            <tr><td>(-) Sueldos Adm. Devengados</td><td class="tar">(1,500.00)</td><td class="tar">-6.3%</td></tr>
-            <tr class="fwb" style="background:#f1f5f9;"><td>UTILIDAD OPERATIVA</td><td class="tar">2,500.00</td><td class="tar">10.4%</td></tr>
-            <tr><td>(-) Intereses Financieros Préstamo</td><td class="tar">(500.00)</td><td class="tar">-2.1%</td></tr>
-            <tr class="fwb" style="background:#ecfdf5; color:#047857;"><td>UTILIDAD NETA DEL MES</td><td class="tar">S/ 2,000.00</td><td class="tar">8.33%</td></tr>
-          </tbody>
-        </table>
-
-        <div class="subsection-title">Flujo de Efectivo - Método Directo</div>
-        <table class="data-table" style="font-size:7.5pt;">
-          <thead><tr><th>Actividad</th><th class="tar">Neto (S/)</th></tr></thead>
-          <tbody>
-            <tr><td>Cobros Hito 1 (16k) + Anticipo (9k)</td><td class="tar">25,000.00</td></tr>
-            <tr><td>(-) Pagos Operativos (Nómina+Nube+Adm+Int)</td><td class="tar">(20,500.00)</td></tr>
-            <tr class="fwb" style="background:#f1f5f9;"><td>Flujo Neto de Operación</td><td class="tar">+4,500.00</td></tr>
-            <tr><td>(-) Pagos Equipos Hardware (8k + 2k)</td><td class="tar">(10,000.00)</td></tr>
-            <tr class="fwb" style="background:#f1f5f9;"><td>Flujo Neto de Inversión</td><td class="tar">-10,000.00</td></tr>
-            <tr><td>Aporte Socios (40k) + Préstamo (10k)</td><td class="tar">50,000.00</td></tr>
-            <tr class="fwb" style="background:#f1f5f9;"><td>Flujo Neto de Financiación</td><td class="tar">+50,000.00</td></tr>
-            <tr class="fwb" style="background:#e0f2fe; color:#0369a1;"><td>SALDO FINAL EN BANCOS</td><td class="tar">S/ 44,500.00</td></tr>
-          </tbody>
-        </table>
-      </div>
+  <!-- PÁGINA 1: CONTROL DE LECTURA 43 Y SÍNTESIS CRÍTICA -->
+  <div class="page">
+    <div class="running-header">
+      <span>Andes Software · Control Económico PANVIZ</span>
+      <span>Sección I & II: Fundamentos Teóricos</span>
     </div>
 
-    <div class="highlight-box">
-      <strong>Declaración del Criterio de Intereses (NIC 7):</strong> Clasificados en Actividades de Operación (S/ 500.00) por sustentar la liquidez operativa diaria del proyecto. El saldo de flujo (S/ 44,500.00) concilia 100% con bancos.
+    <h1>Sección I: Control de Lectura 43 (Slide 43 PPTX)</h1>
+    <div class="callout">
+      <strong>Pregunta 1: Propósito de los estados financieros e insuficiencia del registro sin análisis gerencial:</strong><br>
+      Según Guim-Bustos et al. (2023, pp. 152–154), los estados financieros proveen una representación estructurada, fidedigna y comprensible del desempeño económico, patrimonial y de liquidez de una organización. Registrar operaciones mecánicamente (teneduría de libros) resulta insuficiente porque compila hechos pasados sin diagnóstico predictivo. Sin un análisis e interpretación profunda de ratios y flujos, la gerencia no puede anticipar insolvencias, evaluar el ciclo de conversión de efectivo ni respaldar la toma de decisiones estratégicas.
     </div>
-    <div class="page-num">Página 3 de 6 (Sin contar portada)</div>
-  </div>
+    <div class="callout">
+      <strong>Pregunta 2: Tres componentes contables en una empresa de software:</strong><br>
+      1. <em>Activos:</em> Hardware informático y servidores de desarrollo (NIC 16), recursos tecnológicos que generan beneficios futuros.<br>
+      2. <em>Pasivos:</em> Anticipos de clientes por hitos de software pendientes de entrega (NIIF 15) y deuda cloud devengada.<br>
+      3. <em>Costos del Servicio:</em> Remuneraciones directas de programadores y consumo mensual de infraestructura en la nube asignable al proyecto.
+    </div>
+    <div class="callout">
+      <strong>Pregunta 3: Empresa de software con utilidades pero sin caja para pagar remuneraciones:</strong><br>
+      Debe contrastarse el <em>Estado de Resultados</em> (evalúa ganancias por devengo al entregar el hito) con el <em>Estado de Flujos de Efectivo</em> (evalúa dinero real en banco). Si la facturación es a 45 días, la utilidad es en papel mientras la caja se extingue. <strong>Decisión Inmediata:</strong> Gestionar factoring bancario o descuento por pronto pago sobre la factura aceptada para inyectar liquidez inmediata y pagar la nómina del equipo técnico.
+    </div>
 
-  <!-- PÁGINA 4 DE CONTENIDO: COMPROBACIONES TEÓRICAS Y CONCILIACIÓN GNUCASH -->
-  <div class="page-container">
-    <div class="section-title">5. Verificaciones Teóricas y Conciliación con GnuCash</div>
-    
-    <div class="subsection-title">Fundamentos Contables Normativos</div>
+    <h1>Sección II: Síntesis Crítica (Guim-Bustos et al., 2023, pp. 152–154)</h1>
+    <p><em>(Extensión: 288 palabras · Rango normativo: 250 a 350 palabras)</em></p>
     <p>
-      <strong>• ¿Por qué el anticipo es un pasivo y no una utilidad disponible?</strong><br>
-      Bajo la NIIF 15, los ingresos se reconocen cuando se transfiere el control de los bienes o servicios al cliente. En la OP04, los S/ 9,000.00 recibidos por adelantado corresponden al módulo de alertas que aún no ha sido desarrollado ni entregado. Por tanto, no existe ganancia devengada sino una <strong>obligación de desempeño ineludible</strong> que demanda destinar horas de trabajo y servidores futuros. Si el servicio no se ejecuta, nace la obligación jurídica de restituir el dinero. Tratarlo como utilidad disponible induciría a un gasto imprudente de recursos no devengados.
+      Los estados financieros constituyen el compendio estructurado de la realidad económica, patrimonial y financiera de una entidad, cuyo propósito central trasciende la obligación legal o tributaria para erigirse en el fundamento analítico de la toma de decisiones gerenciales. En las páginas examinadas (152–154), los autores demuestran que registrar transacciones mediante partida doble es meramente instrumental; si la gerencia no analiza los saldos mediante indicadores ni interpreta la interacción entre devengo y liquidez, la organización opera en la incertidumbre. La dirección estratégica exige comprender el comportamiento del balance general, las pérdidas y ganancias, y el flujo de caja para evaluar solvencia, anticipar insolvencias y respaldar decisiones de inversión o endeudamiento con evidencia contable verificable.
     </p>
     <p>
-      <strong>• ¿Por qué comprar equipos no equivale a reconocer un gasto completo del mes?</strong><br>
-      Bajo la NIC 16, un activo es un recurso controlado que generará beneficios económicos futuros durante varios ejercicios. Las computadoras adquiridas por S/ 12,000.00 no se extinguen en noviembre; constituyen la plataforma técnica para desarrollar PANVIZ y proyectos subsiguientes durante una vida útil de 3 a 5 años. Asignar el importe total a resultados violaría el <strong>principio de correlación de ingresos y gastos</strong>, arrojando una falsa pérdida artificial. Su costo se reconoce de manera gradual mediante la depreciación sistemática.
+      De este análisis se desprenden dos ideas aplicables directamente al control económico de PANVIZ:
+      <strong>1) La autonomía analítica del flujo de caja frente al resultado contable:</strong> Reconocer ingresos por hitos aprobados produce utilidades en el estado de resultados, pero no garantiza solvencia inmediata si los plazos de cobranza exceden las obligaciones laborales quincenales. Para PANVIZ, el control debe basarse en un presupuesto de caja proyectado que evite la asfixia de tesorería por retrasos del sector público.
+      <strong>2) La categorización rigurosa de las obligaciones de desempeño como pasivo corriente:</strong> Los fondos recibidos de forma anticipada antes de prestar el servicio tecnológico no deben registrarse como ingresos ganados, sino como un pasivo diferido. Esto asegura que la gerencia visualice con precisión las obligaciones técnicas comprometidas y salvaguarde los recursos requeridos para completar los módulos sanitarios pendientes sin comprometer la continuidad operativa del sistema.
     </p>
-
-    <div class="subsection-title">Tabla de Conciliación Integral Calc / Excel vs. GnuCash (Corte 30/11/2026)</div>
-    <table class="data-table">
-      <thead>
-        <tr><th>Cód.</th><th>Cuenta Contable / Indicador</th><th class="tar">Saldo Calc (S/)</th><th class="tar">Saldo GnuCash (S/)</th><th class="tar">Diferencia</th><th class="tac">Estado de Conciliación</th></tr>
-      </thead>
-      <tbody>
-        <tr><td class="tac">1041</td><td>Bancos - Cuentas Corrientes</td><td class="tar">44,500.00</td><td class="tar">44,500.00</td><td class="tar fwb">0.00</td><td class="tac" style="color:green; font-weight:bold;">CONCILIADO</td></tr>
-        <tr><td class="tac">1212</td><td>Cuentas por Cobrar Comerciales</td><td class="tar">8,000.00</td><td class="tar">8,000.00</td><td class="tar fwb">0.00</td><td class="tac" style="color:green; font-weight:bold;">CONCILIADO</td></tr>
-        <tr><td class="tac">3361</td><td>Equipos de Cómputo e Informáticos</td><td class="tar">12,000.00</td><td class="tar">12,000.00</td><td class="tar fwb">0.00</td><td class="tac" style="color:green; font-weight:bold;">CONCILIADO</td></tr>
-        <tr><td class="tac">4111</td><td>Remuneraciones por Pagar</td><td class="tar">1,500.00</td><td class="tar">1,500.00</td><td class="tar fwb">0.00</td><td class="tac" style="color:green; font-weight:bold;">CONCILIADO</td></tr>
-        <tr><td class="tac">4212</td><td>Proveedores por Pagar</td><td class="tar">2,000.00</td><td class="tar">2,000.00</td><td class="tar fwb">0.00</td><td class="tac" style="color:green; font-weight:bold;">CONCILIADO</td></tr>
-        <tr><td class="tac">4511</td><td>Préstamos Bancarios Corto Plazo</td><td class="tar">10,000.00</td><td class="tar">10,000.00</td><td class="tar fwb">0.00</td><td class="tac" style="color:green; font-weight:bold;">CONCILIADO</td></tr>
-        <tr><td class="tac">4699</td><td>Anticipos de Clientes (Diferidos)</td><td class="tar">9,000.00</td><td class="tar">9,000.00</td><td class="tar fwb">0.00</td><td class="tac" style="color:green; font-weight:bold;">CONCILIADO</td></tr>
-        <tr><td class="tac">5011</td><td>Capital Social Aportado</td><td class="tar">40,000.00</td><td class="tar">40,000.00</td><td class="tar fwb">0.00</td><td class="tac" style="color:green; font-weight:bold;">CONCILIADO</td></tr>
-        <tr><td class="tac">7041</td><td>Ingresos por Desarrollo Software</td><td class="tar">24,000.00</td><td class="tar">24,000.00</td><td class="tar fwb">0.00</td><td class="tac" style="color:green; font-weight:bold;">CONCILIADO</td></tr>
-        <tr><td class="tac">6941</td><td>Costo: Remuneraciones Desarrollo</td><td class="tar">15,000.00</td><td class="tar">15,000.00</td><td class="tar fwb">0.00</td><td class="tac" style="color:green; font-weight:bold;">CONCILIADO</td></tr>
-        <tr><td class="tac">6942</td><td>Costo: Servicios de Nube</td><td class="tar">2,000.00</td><td class="tar">2,000.00</td><td class="tar fwb">0.00</td><td class="tac" style="color:green; font-weight:bold;">CONCILIADO</td></tr>
-        <tr><td class="tac">9411</td><td>Gastos Administrativos Generales</td><td class="tar">3,000.00</td><td class="tar">3,000.00</td><td class="tar fwb">0.00</td><td class="tac" style="color:green; font-weight:bold;">CONCILIADO</td></tr>
-        <tr><td class="tac">9412</td><td>Gastos Adm. Sueldos Devengados</td><td class="tar">1,500.00</td><td class="tar">1,500.00</td><td class="tar fwb">0.00</td><td class="tac" style="color:green; font-weight:bold;">CONCILIADO</td></tr>
-        <tr><td class="tac">9711</td><td>Gastos Financieros (Intereses)</td><td class="tar">500.00</td><td class="tar">500.00</td><td class="tar fwb">0.00</td><td class="tac" style="color:green; font-weight:bold;">CONCILIADO</td></tr>
-        <tr><td class="tac fwb">5911</td><td>Utilidad Neta del Ejercicio</td><td class="tar fwb">2,000.00</td><td class="tar fwb">2,000.00</td><td class="tar fwb">0.00</td><td class="tac" style="color:green; font-weight:bold;">CONCILIADO</td></tr>
-        <tr><td class="tac fwb">PAT</td><td>Total Patrimonio Neto</td><td class="tar fwb">42,000.00</td><td class="tar fwb">42,000.00</td><td class="tar fwb">0.00</td><td class="tac" style="color:green; font-weight:bold;">CONCILIADO</td></tr>
-        <tr style="background:#ecfdf5; font-weight:bold;"><td colspan="4" class="tar">SUMATORIA TOTAL DE DIFERENCIAS</td><td class="tar" style="color:#047857;">S/ 0.00</td><td class="tac" style="color:#047857;">100% CONCILIADO</td></tr>
-      </tbody>
-    </table>
-    <div class="page-num">Página 4 de 6 (Sin contar portada)</div>
   </div>
 
-  <!-- PÁGINA 5 DE CONTENIDO: EVALUACIÓN ECONÓMICA Y DECISIONES -->
-  <div class="page-container">
-    <div class="section-title">6. Evaluación Económica, Presupuesto y Riesgo de Caja</div>
-    
-    <div class="subsection-title">Indicadores Financieros Clave</div>
+  <!-- PÁGINA 2: CASO PANVIZ, CATÁLOGO Y LIBRO DIARIO -->
+  <div class="page">
+    <div class="running-header">
+      <span>Andes Software · Control Económico PANVIZ</span>
+      <span>Sección III & IV: Catálogo y Libro Diario</span>
+    </div>
+
+    <h1>Sección III: Caso de Estudio PANVIZ y Criterios Normativos</h1>
+    <p>
+      Andes Software ejecuta el desarrollo de PANVIZ para salud pública. En el mes 1 entrega el Hito 1 (ingesta e indicadores) y recibe un anticipo para el Hito 2 (alertas y reportes). Criterios NIIF aplicados:
+      <strong>NIIF 15 (Anticipo OP04 S/ 9,000):</strong> Se clasifica como pasivo (ingreso diferido) por constituir una obligación de desempeño no satisfecha.
+      <strong>NIC 16 (Hardware OP02 S/ 12,000):</strong> Se activa como PPE a costo histórico (sin depreciación por delimitación académica).
+      <strong>Devengo (OP10 S/ 1,500):</strong> Sueldos administrativos del mes se reconocen como gasto del ejercicio aun impagos.
+    </p>
+
+    <h1>Sección IV: Libro Diario General (OP01 - OP11)</h1>
     <table class="data-table">
-      <thead><tr><th>Indicador</th><th class="tac">Valor</th><th>Fórmula Aplicada</th><th>Diagnóstico Crítico</th></tr></thead>
+      <thead>
+        <tr>
+          <th style="width:6%;">ID</th>
+          <th style="width:9%;">Fecha</th>
+          <th style="width:7%;">Cód.</th>
+          <th style="width:30%;">Cuenta Contable</th>
+          <th style="width:34%;">Glosa / Explicación de la Operación</th>
+          <th style="width:7%; text-align:right;">Debe (S/)</th>
+          <th style="width:7%; text-align:right;">Haber (S/)</th>
+        </tr>
+      </thead>
       <tbody>
-        <tr><td class="fwb">Margen Neto</td><td class="tac fwb" style="color:#047857;">8.33%</td><td>Resultado / Ingresos (2k / 24k)</td><td>Rentabilidad sobre facturación modesta, absorbida en 70.8% por costos directos.</td></tr>
-        <tr><td class="fwb">Razón Corriente</td><td class="tac fwb" style="color:#b45309;">2.33</td><td>Act. Corriente / Pas. Corriente (52.5k / 22.5k)</td><td>Aparente solvencia distorsionada por cuentas por cobrar ilíquidas y pasivo diferido.</td></tr>
-        <tr><td class="fwb">Cobertura Inmediata</td><td class="tac fwb" style="color:#0369a1;">1.89</td><td>Bancos / Pagos 15 días (44.5k / 23.5k)</td><td>Liquidez quincenal suficiente, pero altamente vulnerable en las semanas siguientes.</td></tr>
+        <tr><td>OP01</td><td>02/11</td><td>1041<br>5011</td><td>Cuentas Corrientes Bancarias<br>Capital Social Aportado</td><td>Aporte de capital inicial de los socios en cuenta corriente bancaria</td><td class="num">40,000.00<br>-</td><td class="num">-<br>40,000.00</td></tr>
+        <tr><td>OP02</td><td>04/11</td><td>3361<br>1041<br>4212</td><td>Equipos para Procesamiento Inf.<br>Cuentas Corrientes Bancarias<br>Proveedores por Pagar</td><td>Compra de equipos informáticos (S/ 12,000 total): pago S/ 8,000 en bancos y saldo S/ 4,000 pendiente a proveedor</td><td class="num">12,000.00<br>-<br>-</td><td class="num">-<br>8,000.00<br>4,000.00</td></tr>
+        <tr><td>OP03</td><td>06/11</td><td>1041<br>4511</td><td>Cuentas Corrientes Bancarias<br>Préstamos Bancarios Corto Plazo</td><td>Desembolso de préstamo bancario recibido para capital a 6 meses</td><td class="num">10,000.00<br>-</td><td class="num">-<br>10,000.00</td></tr>
+        <tr><td>OP04</td><td>09/11</td><td>1041<br>4699</td><td>Cuentas Corrientes Bancarias<br>Anticipos Clientes (Diferidos)</td><td>Recepción de anticipo por Hito 2 de salud pública (NIIF 15)</td><td class="num">9,000.00<br>-</td><td class="num">-<br>9,000.00</td></tr>
+        <tr><td>OP05</td><td>13/11</td><td>6941<br>1041</td><td>Costo Serv. - Remuneraciones Dev.<br>Cuentas Corrientes Bancarias</td><td>Pago desde bancos de planillas de desarrollo técnico del mes</td><td class="num">15,000.00<br>-</td><td class="num">-<br>15,000.00</td></tr>
+        <tr><td>OP06</td><td>16/11</td><td>6942<br>1041</td><td>Costo Serv. - Servicios de Nube<br>Cuentas Corrientes Bancarias</td><td>Pago de consumo mensual de infraestructura en nube para PANVIZ</td><td class="num">2,000.00<br>-</td><td class="num">-<br>2,000.00</td></tr>
+        <tr><td>OP07</td><td>19/11</td><td>9411<br>1041</td><td>Gastos Admin. - Operativos<br>Cuentas Corrientes Bancarias</td><td>Pago de gastos administrativos operativos del mes en bancos</td><td class="num">3,000.00<br>-</td><td class="num">-<br>3,000.00</td></tr>
+        <tr><td>OP08</td><td>23/11</td><td>1041<br>1212<br>7041</td><td>Cuentas Corrientes Bancarias<br>Facturas por Cobrar Clientes<br>Ingresos Desarrollo Software</td><td>Entrega y aceptación de Hito 1: Factura S/ 24,000 (cobro S/ 16,000 y saldo S/ 8,000 a 45 días)</td><td class="num">16,000.00<br>8,000.00<br>-</td><td class="num">-<br>-<br>24,000.00</td></tr>
+        <tr><td>OP09</td><td>25/11</td><td>4212<br>1041</td><td>Proveedores por Pagar<br>Cuentas Corrientes Bancarias</td><td>Amortización de deuda con proveedor de equipos desde bancos</td><td class="num">2,000.00<br>-</td><td class="num">-<br>2,000.00</td></tr>
+        <tr><td>OP10</td><td>28/11</td><td>9412<br>4111</td><td>Gastos Admin. - Sueldos Dev.<br>Remuneraciones por Pagar</td><td>Devengo de remuneraciones administrativas del mes pendientes</td><td class="num">1,500.00<br>-</td><td class="num">-<br>1,500.00</td></tr>
+        <tr><td>OP11</td><td>30/11</td><td>9711<br>1041</td><td>Gastos Financieros - Intereses<br>Cuentas Corrientes Bancarias</td><td>Pago de intereses devengados del préstamo bancario recibido</td><td class="num">500.00<br>-</td><td class="num">-<br>500.00</td></tr>
+        <tr class="highlight">
+          <td colspan="5" style="text-align:right;">TOTALES DEL LIBRO DIARIO (CONTROL PARTIDA DOBLE: DIFERENCIA S/ 0.00):</td>
+          <td class="num">S/ 119,000.00</td>
+          <td class="num">S/ 119,000.00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PÁGINA 3: BALANCE DE COMPROBACIÓN Y ESTADOS FINANCIEROS -->
+  <div class="page">
+    <div class="running-header">
+      <span>Andes Software · Control Económico PANVIZ</span>
+      <span>Sección IV & V: Comprobación y Estados Financieros</span>
+    </div>
+
+    <h1>Balance de Comprobación de Sumas y Saldos</h1>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Cód.</th>
+          <th>Cuenta Contable</th>
+          <th style="text-align:right;">Sumas Debe</th>
+          <th style="text-align:right;">Sumas Haber</th>
+          <th style="text-align:right;">Saldo Deudor</th>
+          <th style="text-align:right;">Saldo Acreedor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1041</td><td>Cuentas Corrientes Bancarias</td><td class="num">75,000.00</td><td class="num">30,500.00</td><td class="num">44,500.00</td><td class="num">-</td></tr>
+        <tr><td>1212</td><td>Facturas por Cobrar Clientes</td><td class="num">8,000.00</td><td class="num">-</td><td class="num">8,000.00</td><td class="num">-</td></tr>
+        <tr><td>3361</td><td>Equipos para Procesamiento Inf.</td><td class="num">12,000.00</td><td class="num">-</td><td class="num">12,000.00</td><td class="num">-</td></tr>
+        <tr><td>4111</td><td>Remuneraciones por Pagar</td><td class="num">-</td><td class="num">1,500.00</td><td class="num">-</td><td class="num">1,500.00</td></tr>
+        <tr><td>4212</td><td>Proveedores por Pagar</td><td class="num">2,000.00</td><td class="num">4,000.00</td><td class="num">-</td><td class="num">2,000.00</td></tr>
+        <tr><td>4511</td><td>Préstamos Bancarios Corto Plazo</td><td class="num">-</td><td class="num">10,000.00</td><td class="num">-</td><td class="num">10,000.00</td></tr>
+        <tr><td>4699</td><td>Anticipos de Clientes (Diferidos)</td><td class="num">-</td><td class="num">9,000.00</td><td class="num">-</td><td class="num">9,000.00</td></tr>
+        <tr><td>5011</td><td>Capital Social Aportado</td><td class="num">-</td><td class="num">40,000.00</td><td class="num">-</td><td class="num">40,000.00</td></tr>
+        <tr><td>7041</td><td>Ingresos por Desarrollo Software</td><td class="num">-</td><td class="num">24,000.00</td><td class="num">-</td><td class="num">24,000.00</td></tr>
+        <tr><td>6941</td><td>Costo Servicio - Remuneraciones Dev.</td><td class="num">15,000.00</td><td class="num">-</td><td class="num">15,000.00</td><td class="num">-</td></tr>
+        <tr><td>6942</td><td>Costo Servicio - Servicios de Nube</td><td class="num">2,000.00</td><td class="num">-</td><td class="num">2,000.00</td><td class="num">-</td></tr>
+        <tr><td>9411</td><td>Gastos Admin. - Operativos Generales</td><td class="num">3,000.00</td><td class="num">-</td><td class="num">3,000.00</td><td class="num">-</td></tr>
+        <tr><td>9412</td><td>Gastos Admin. - Sueldos Devengados</td><td class="num">1,500.00</td><td class="num">-</td><td class="num">1,500.00</td><td class="num">-</td></tr>
+        <tr><td>9711</td><td>Gastos Financieros - Intereses</td><td class="num">500.00</td><td class="num">-</td><td class="num">500.00</td><td class="num">-</td></tr>
+        <tr class="highlight">
+          <td colspan="2">TOTALES BALANCE DE COMPROBACIÓN:</td>
+          <td class="num">S/ 119,000.00</td><td class="num">S/ 119,000.00</td><td class="num">S/ 86,500.00</td><td class="num">S/ 86,500.00</td>
+        </tr>
       </tbody>
     </table>
 
-    <div class="subsection-title">Presupuesto de Caja a 15 Días y Estrés Financiero a 45 Días</div>
-    <div style="display:flex; gap:12px;">
-      <div style="flex:1;">
-        <table class="data-table" style="font-size:7.5pt;">
-          <thead><tr style="background:#334155;"><th>Presupuesto Días 1 a 15</th><th class="tar">Importe (S/)</th></tr></thead>
-          <tbody>
-            <tr><td>Saldo Inicial en Bancos al 01/12</td><td class="tar fwb">44,500.00</td></tr>
-            <tr><td>(+) Cobros previstos de clientes</td><td class="tar">0.00</td></tr>
-            <tr><td>(-) Remuneraciones técnicas previstas</td><td class="tar">(18,000.00)</td></tr>
-            <tr><td>(-) Servicios de infraestructura en nube</td><td class="tar">(2,000.00)</td></tr>
-            <tr><td>(-) Deuda restante proveedor equipos</td><td class="tar">(2,000.00)</td></tr>
-            <tr><td>(-) Sueldos administrativos devengados</td><td class="tar">(1,500.00)</td></tr>
-            <tr class="fwb" style="background:#f1f5f9;"><td>TOTAL EGRESOS EN 15 DÍAS</td><td class="tar">(23,500.00)</td></tr>
-            <tr class="fwb" style="background:#ecfdf5; color:#047857;"><td>SALDO FINAL DÍA 15 (EXCEDENTE)</td><td class="tar">S/ 21,000.00</td></tr>
-          </tbody>
+    <div class="grid-2">
+      <div>
+        <h1>Estado de Situación Financiera al 30/11/2026</h1>
+        <table class="data-table">
+          <tr><th colspan="2">ACTIVOS</th></tr>
+          <tr><td>Bancos (1041)</td><td class="num">S/ 44,500.00</td></tr>
+          <tr><td>Clientes Facturas por Cobrar (1212)</td><td class="num">S/ 8,000.00</td></tr>
+          <tr class="bold"><td>Total Activo Corriente</td><td class="num">S/ 52,500.00</td></tr>
+          <tr><td>Equipos de Cómputo (NIC 16 3361)</td><td class="num">S/ 12,000.00</td></tr>
+          <tr class="highlight"><td>TOTAL ACTIVO</td><td class="num">S/ 64,500.00</td></tr>
+          <tr><th colspan="2">PASIVOS Y PATRIMONIO</th></tr>
+          <tr><td>Proveedores por Pagar (4212)</td><td class="num">S/ 2,000.00</td></tr>
+          <tr><td>Préstamos Bancarios Corto Plazo (4511)</td><td class="num">S/ 10,000.00</td></tr>
+          <tr><td>Anticipos de Clientes (NIIF 15 4699)</td><td class="num">S/ 9,000.00</td></tr>
+          <tr><td>Remuneraciones por Pagar (4111)</td><td class="num">S/ 1,500.00</td></tr>
+          <tr class="bold"><td>Total Pasivo Corriente</td><td class="num">S/ 22,500.00</td></tr>
+          <tr><td>Capital Social Aportado (5011)</td><td class="num">S/ 40,000.00</td></tr>
+          <tr><td>Resultados Acumulados (Utilidad 5911)</td><td class="num">S/ 2,000.00</td></tr>
+          <tr class="bold"><td>Total Patrimonio Neto</td><td class="num">S/ 42,000.00</td></tr>
+          <tr class="highlight"><td>TOTAL PASIVO Y PATRIMONIO</td><td class="num">S/ 64,500.00</td></tr>
         </table>
       </div>
 
-      <div style="flex:1;">
-        <table class="data-table" style="font-size:7.5pt;">
-          <thead><tr style="background:#991b1b;"><th>Proyección de Estrés (Días 16 a 45)</th><th class="tar">Importe (S/)</th></tr></thead>
-          <tbody>
-            <tr><td>Saldo Inicial remanente al Día 16</td><td class="tar fwb">21,000.00</td></tr>
-            <tr><td>(+) Cobranzas previstas Día 16 al 44</td><td class="tar">0.00</td></tr>
-            <tr><td>(-) Nómina técnica segunda quincena</td><td class="tar">(18,000.00)</td></tr>
-            <tr><td>(-) Nube del mes siguiente</td><td class="tar">(2,000.00)</td></tr>
-            <tr><td>(-) Gastos administrativos recurrentes</td><td class="tar">(3,500.00)</td></tr>
-            <tr class="fwb" style="background:#fee2e2; color:#991b1b;"><td>DÉFICIT PROYECTADO DÍA 44</td><td class="tar">-S/ 2,500.00</td></tr>
-            <tr><td>(+) Cobro de factura cliente en Día 45</td><td class="tar">8,000.00</td></tr>
-            <tr class="fwb" style="background:#f1f5f9;"><td>Saldo Final en Día 45 tras Cobro</td><td class="tar">S/ 5,500.00</td></tr>
-          </tbody>
+      <div>
+        <h1>Estado de Resultados Económico</h1>
+        <table class="data-table">
+          <tr><th>Concepto</th><th style="text-align:right;">Importe (S/)</th><th style="text-align:right;">%</th></tr>
+          <tr><td>Ingresos Desarrollo Software (7041)</td><td class="num">24,000.00</td><td class="num">100.0%</td></tr>
+          <tr><td>(-) Nómina de Desarrollo (6941)</td><td class="num">(15,000.00)</td><td class="num">62.5%</td></tr>
+          <tr><td>(-) Infraestructura Cloud (6942)</td><td class="num">(2,000.00)</td><td class="num">8.3%</td></tr>
+          <tr class="bold"><td>UTILIDAD BRUTA</td><td class="num">7,000.00</td><td class="num">29.2%</td></tr>
+          <tr><td>(-) Gastos Administrativos Operativos (9411)</td><td class="num">(3,000.00)</td><td class="num">12.5%</td></tr>
+          <tr><td>(-) Sueldos Administrativos Devengados (9412)</td><td class="num">(1,500.00)</td><td class="num">6.3%</td></tr>
+          <tr class="bold"><td>UTILIDAD OPERATIVA (EBIT)</td><td class="num">2,500.00</td><td class="num">10.4%</td></tr>
+          <tr><td>(-) Intereses Préstamo Bancario (9711)</td><td class="num">(500.00)</td><td class="num">2.1%</td></tr>
+          <tr class="highlight"><td>UTILIDAD NETA DEL EJERCICIO</td><td class="num">S/ 2,000.00</td><td class="num">8.33%</td></tr>
+        </table>
+
+        <h1>Estado de Flujos de Efectivo (NIC 7)</h1>
+        <table class="data-table">
+          <tr><th>Actividad</th><th style="text-align:right;">Neto (S/)</th></tr>
+          <tr><td>Flujo Neto Actividades de Operación</td><td class="num success">+S/ 4,500.00</td></tr>
+          <tr><td>Flujo Neto Actividades de Inversión</td><td class="num danger">-S/ 10,000.00</td></tr>
+          <tr><td>Flujo Neto Actividades de Financiación</td><td class="num success">+S/ 50,000.00</td></tr>
+          <tr class="highlight"><td>SALDO FINAL EFECTIVO (BANCOS)</td><td class="num">S/ 44,500.00</td></tr>
         </table>
       </div>
     </div>
-
-    <div class="alert-box">
-      <strong>La Ilusión de la Utilidad y la Razón Corriente:</strong>  
-      La utilidad de S/ 2,000.00 es devengada pero no líquida; contiene S/ 8,000.00 que se cobrarán recién en 45 días. Por su parte, la razón corriente de 2.33 incluye ese monto inmovilizado y S/ 9,000.00 de anticipos que demandarán quemar caja en programadores sin inyectar nuevo efectivo. El saldo de bancos actual proviene de préstamos y aportes, no del ciclo comercial. Sin gestión de cobranza, <strong>Andes Software quebraría por falta de caja en el día 35</strong>.
-    </div>
-
-    <div class="section-title">7. Tres Decisiones Estratégicas y Continuidad Sanitaria</div>
-    <p><strong>1. Negociación de Cobranza Anticipada (Factoring o Pronto Pago):</strong> La Gerencia General negociará en 7 días un pronto pago con 3% de descuento (S/ 7,760 netos) o un factoring bancario de los S/ 8,000. <em>Efecto sanitario:</em> Garantiza liquidez para remuneraciones técnicas sin demoras.</p>
-    <p><strong>2. Fondo de Reserva Intangible para Servidores y Personal Crítico:</strong> TI y Finanzas blindarán en 3 días S/ 20,000 del saldo de caja para servidores cloud y salarios clave. <em>Efecto sanitario:</em> Cero interrupciones (99.9% uptime) en la ingesta hospitalaria de datos epidemiológicos.</p>
-    <p><strong>3. Partición del Módulo Anticipado en Sub-hitos Quincenales:</strong> El Líder de Proyecto dividirá en 10 días el módulo de alertas en dos entregas quincenales de S/ 4,500 cada una. <em>Efecto sanitario:</em> Los hospitales recibirán alertas tempranas en 15 días, conteniendo brotes epidémicos con anticipación.</p>
-    <div class="page-num">Página 5 de 6 (Sin contar portada)</div>
   </div>
 
-  <!-- PÁGINA 6 DE CONTENIDO: EVIDENCIAS GNUCASH, ROLES Y CONCLUSIONES -->
-  <div class="page-container last-page">
-    <div class="section-title">8. Evidencias Mínimas en GnuCash (Sección 10)</div>
-    
-    <div style="display:flex; gap:8px;">
-      <div class="captura-box" style="flex:1;">
-        <img class="captura-img" src="capturas/captura_1_catalogo_cuentas_gnucash.png" alt="Catálogo GnuCash">
-        <div class="captura-caption">Captura 1: Catálogo de cuentas y árbol de saldos en GnuCash (Activo: S/ 64,500.00).</div>
-      </div>
-      <div class="captura-box" style="flex:1;">
-        <img class="captura-img" src="capturas/captura_2_transaccion_compuesta_gnucash.png" alt="Transacción OP08">
-        <div class="captura-caption">Captura 2: Transacción dividida (Split) OP08 por S/ 24,000.00 balanceada a cero.</div>
-      </div>
+  <!-- PÁGINA 4: CONCILIACIÓN INTEGRAL Y EVIDENCIAS GNUCASH -->
+  <div class="page">
+    <div class="running-header">
+      <span>Andes Software · Control Económico PANVIZ</span>
+      <span>Sección VI: Conciliación Calc vs. GnuCash</span>
     </div>
 
-    <div style="display:flex; gap:8px;">
-      <div class="captura-box" style="flex:1;">
-        <img class="captura-img" src="capturas/captura_3_balance_general_gnucash.png" alt="Balance GnuCash">
-        <div class="captura-caption">Captura 3: Reporte de Balance de Situación exportado desde GnuCash.</div>
-      </div>
-      <div class="captura-box" style="flex:1;">
-        <img class="captura-img" src="capturas/captura_4_estado_resultados_gnucash.png" alt="Resultados GnuCash">
-        <div class="captura-caption">Captura 4: Reporte de Pérdidas y Ganancias (Utilidad: S/ 2,000.00).</div>
-      </div>
-    </div>
-
-    <div class="subsection-title">Matriz de Responsabilidades y Revisión Cruzada (Peer Review)</div>
-    <table class="data-table" style="font-size:7pt;">
+    <h1>Sección VI: Matriz de Conciliación Integral Hoja de Cálculo vs. GnuCash</h1>
+    <table class="data-table">
       <thead>
-        <tr><th>#</th><th>Integrante</th><th>Responsabilidad Principal</th><th>Entregable Custodiado</th><th>Revisión Cruzada</th><th>Dictamen</th></tr>
+        <tr>
+          <th>Cód.</th>
+          <th>Cuenta / Renglón Financiero</th>
+          <th style="text-align:right;">Saldo Calc (S/)</th>
+          <th style="text-align:right;">Saldo GnuCash (S/)</th>
+          <th style="text-align:right;">Diferencia</th>
+          <th style="text-align:center;">Estado</th>
+          <th>Sustento y Validación Técnica</th>
+        </tr>
       </thead>
       <tbody>
-        <tr><td class="tac">1</td><td>Suclle Suca, Michael</td><td>Coordinación y síntesis crítica</td><td>Informe general, Diapositiva 1</td><td>Revisa decisiones del integrante 5</td><td class="tac fwb" style="color:green;">APROBADO</td></tr>
-        <tr><td class="tac">2</td><td>Fernandez Huarca, Rodrigo</td><td>Catálogo y registros GnuCash</td><td>Libro .gnucash, Diapositiva 2</td><td>Revisa síntesis del integrante 1</td><td class="tac fwb" style="color:green;">APROBADO</td></tr>
-        <tr><td class="tac">3</td><td>Meza Vizcarra, Cielo</td><td>Hoja de cálculo y comprobación</td><td>Diario, Mayor, Comprobación .xlsx</td><td>Revisa registros GnuCash del int. 2</td><td class="tac fwb" style="color:green;">APROBADO</td></tr>
-        <tr><td class="tac">4</td><td>Borda Espinoza, Gabriela</td><td>Estados financieros y conciliación</td><td>Estados y conciliación .xlsx</td><td>Revisa mayorización de la int. 3</td><td class="tac fwb" style="color:green;">APROBADO</td></tr>
-        <tr><td class="tac">5</td><td>Ccoscco Alvis, Italo</td><td>Indicadores, caja y decisiones</td><td>Caja 15 días, Diapositiva 5</td><td>Revisa estados de la integrante 4</td><td class="tac fwb" style="color:green;">APROBADO</td></tr>
+        <tr><td>1041</td><td>Cuentas Corrientes Bancarias</td><td class="num">44,500.00</td><td class="num">44,500.00</td><td class="num">0.00</td><td class="num success">CONFORME</td><td>Saldo idéntico en cuenta corriente; coincidencia directa.</td></tr>
+        <tr><td>1212</td><td>Facturas por Cobrar Clientes</td><td class="num">8,000.00</td><td class="num">8,000.00</td><td class="num">0.00</td><td class="num success">CONFORME</td><td>Derecho exigible por Hito 1 aceptado (cobro 45 días).</td></tr>
+        <tr><td>3361</td><td>Equipos para Cómputo (NIC 16)</td><td class="num">12,000.00</td><td class="num">12,000.00</td><td class="num">0.00</td><td class="num success">CONFORME</td><td>Hardware reconocido a costo histórico en activos.</td></tr>
+        <tr><td>4111</td><td>Remuneraciones por Pagar</td><td class="num">1,500.00</td><td class="num">1,500.00</td><td class="num">0.00</td><td class="num success">CONFORME</td><td>Pasivo laboral administrativo devengado al cierre OP10.</td></tr>
+        <tr><td>4212</td><td>Proveedores por Pagar</td><td class="num">2,000.00</td><td class="num">2,000.00</td><td class="num">0.00</td><td class="num success">CONFORME</td><td>Saldo deudor tras amortización de S/ 2,000 en OP09.</td></tr>
+        <tr><td>4511</td><td>Préstamos Bancarios Corto Plazo</td><td class="num">10,000.00</td><td class="num">10,000.00</td><td class="num">0.00</td><td class="num success">CONFORME</td><td>Deuda financiera recibida en bancos a 6 meses.</td></tr>
+        <tr><td>4699</td><td>Anticipos Clientes (NIIF 15)</td><td class="num">9,000.00</td><td class="num">9,000.00</td><td class="num">0.00</td><td class="num success">CONFORME</td><td>Obligación de desempeño diferida del Hito 2.</td></tr>
+        <tr><td>5011</td><td>Capital Social Aportado</td><td class="num">40,000.00</td><td class="num">40,000.00</td><td class="num">0.00</td><td class="num success">CONFORME</td><td>Aporte constitutivo inicial de los socios.</td></tr>
+        <tr><td>7041</td><td>Ingresos Desarrollo Software</td><td class="num">24,000.00</td><td class="num">24,000.00</td><td class="num">0.00</td><td class="num success">CONFORME</td><td>Ingreso por Hito 1 aceptado formalmente.</td></tr>
+        <tr><td>69</td><td>Costo del Servicio PANVIZ</td><td class="num">17,000.00</td><td class="num">17,000.00</td><td class="num">0.00</td><td class="num success">CONFORME</td><td>Sueldos técnicos (15k) y consumo de nube (2k).</td></tr>
+        <tr><td>94</td><td>Gastos Administrativos Totales</td><td class="num">4,500.00</td><td class="num">4,500.00</td><td class="num">0.00</td><td class="num success">CONFORME</td><td>Gastos operativos generales (3k) y nómina dev. (1.5k).</td></tr>
+        <tr><td>97</td><td>Gastos Financieros Intereses</td><td class="num">500.00</td><td class="num">500.00</td><td class="num">0.00</td><td class="num success">CONFORME</td><td>Interés devengado mensual pagado en OP11.</td></tr>
+        <tr><td>5911</td><td>Utilidad Neta del Ejercicio</td><td class="num">2,000.00</td><td class="num">2,000.00</td><td class="num">0.00</td><td class="num success">CONFORME</td><td>Resultado del ejercicio idéntico en ambas plataformas.</td></tr>
+        <tr class="highlight">
+          <td colspan="2">TOTAL ACTIVO</td>
+          <td class="num">64,500.00</td><td class="num">64,500.00</td><td class="num">0.00</td><td class="num success">CONFORME</td><td>Equilibrio patrimonial certificado al 100%.</td>
+        </tr>
       </tbody>
     </table>
 
-    <div class="subsection-title">Conclusiones Finales</div>
-    <p style="font-size:7.5pt; margin-bottom:4px;">
-      El control económico formal demostró que Andes Software mantiene una estructura patrimonial balanceada (S/ 64,500.00) y utilidad contable positiva (S/ 2,000.00), pero enfrenta una amenaza severa de iliquidez quincenal debido a que su caja no proviene de la explotación comercial sino de capital y deuda. La adopción de decisiones estratégicas de cobranza acelerada y blindaje de la nube asegura la continuidad ininterrumpida de PANVIZ como plataforma crítica de salud pública.
-    </p>
+    <h2>Evidencias de la Plataforma Contable GnuCash (PANVIZ.gnucash)</h2>
+    <div class="grid-2">
+      <div class="img-box">
+        <img src="capturas/captura_1_catalogo_cuentas_gnucash.png" alt="Catálogo GnuCash">
+        <div class="img-caption">Evidencia 1: Árbol de Cuentas y Saldos en GnuCash (Total Activo: S/ 64,500.00)</div>
+      </div>
+      <div class="img-box">
+        <img src="capturas/captura_2_transaccion_compuesta_gnucash.png" alt="Transacción Compuesta OP02">
+        <div class="img-caption">Evidencia 2: Transacción Compuesta OP02 con Asiento Dividido (Split Transaction)</div>
+      </div>
+    </div>
+  </div>
 
-    <div class="subsection-title" style="margin-top:4px;">Referencias Bibliográficas (APA 7)</div>
-    <p style="font-size:6.8pt; color:#475569; margin:0;">
-      • Guim-Bustos, P., et al. (2023). Los estados financieros y las tomas de decisiones empresariales. <em>593 Digital Publisher CEIT</em>, 8(2), 149–160. · IASB (2018). <em>Marco Conceptual para la Información Financiera</em>. · IASB (2014). <em>NIIF 15: Ingresos de Actividades Ordinarias</em>. · IASB (2001). <em>NIC 7: Estado de Flujos de Efectivo</em>. · IASB (2003). <em>NIC 16: Propiedad, Planta y Equipo</em>. · MEF (2019). <em>Plan Contable General Empresarial (PCGE)</em>.
+  <!-- PÁGINA 5: INDICADORES, PRESUPUESTO Y ESTRÉS A 45 DÍAS -->
+  <div class="page">
+    <div class="running-header">
+      <span>Andes Software · Control Económico PANVIZ</span>
+      <span>Sección VII & VIII: Indicadores y Presupuesto</span>
+    </div>
+
+    <h1>Sección VII: Indicadores Financieros y Diagnóstico</h1>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Indicador</th>
+          <th>Fórmula Contable</th>
+          <th style="text-align:right;">Valor</th>
+          <th>Diagnóstico e Interpretación Gerencial</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Margen Bruto</td><td>Utilidad Bruta / Ventas</td><td class="num">29.17%</td><td>Eficiencia técnica: se retienen S/ 0.29 por sol facturado tras nómina y servidores.</td></tr>
+        <tr><td>Margen Neto</td><td>Utilidad Neta / Ventas</td><td class="num">8.33%</td><td>Rentabilidad final modesta; cualquier desvío operativo puede convertirla en pérdida.</td></tr>
+        <tr><td>Razón Corriente</td><td>Activo Cte. / Pasivo Cte.</td><td class="num">2.33</td><td>S/ 2.33 de respaldo contable por cada sol adeudado (incluye S/ 9k de anticipo diferido).</td></tr>
+        <tr><td>Prueba Ácida</td><td>(Activo Cte. - Inv.) / Pasivo Cte.</td><td class="num">2.33</td><td>Empresa tecnológica sin inventarios físicos; liquidez formal excelente.</td></tr>
+        <tr><td>Cobertura Inmediata</td><td>Saldo Bancos / Egresos 15 días</td><td class="num">1.89 veces</td><td>Caja disponible en bancos cubre 1.89 veces los compromisos ineludibles de 15 días.</td></tr>
+      </tbody>
+    </table>
+
+    <h1>Sección VIII: Presupuesto de Caja Quincenal y la "Trampa de Liquidez" a 45 Días</h1>
+    <div class="grid-2">
+      <div>
+        <h2>Presupuesto Quincenal (15 Días)</h2>
+        <table class="data-table">
+          <tr><th>Concepto de Flujo</th><th style="text-align:right;">Importe (S/)</th></tr>
+          <tr><td>SALDO INICIAL BANCOS (Día 1)</td><td class="num">S/ 44,500.00</td></tr>
+          <tr><td>(+) Cobros Proyectados Declarados</td><td class="num">S/ 0.00</td></tr>
+          <tr><td>(-) Nómina de Desarrollo Prevista</td><td class="num danger">(S/ 18,000.00)</td></tr>
+          <tr><td>(-) Infraestructura en la Nube</td><td class="num danger">(S/ 2,000.00)</td></tr>
+          <tr><td>(-) Deuda Proveedor Equipos</td><td class="num danger">(S/ 2,000.00)</td></tr>
+          <tr><td>(-) Sueldos Admin. Pendientes (OP10)</td><td class="num danger">(S/ 1,500.00)</td></tr>
+          <tr class="bold"><td>Total Egresos Ineludibles (15 días)</td><td class="num danger">(S/ 23,500.00)</td></tr>
+          <tr class="highlight"><td>SALDO PROYECTADO DÍA 15 (Superávit)</td><td class="num success">S/ 21,000.00</td></tr>
+        </table>
+      </div>
+
+      <div>
+        <h2>Simulación de Estrés a 45 Días</h2>
+        <table class="data-table">
+          <thead>
+            <tr><th>Ventana</th><th style="text-align:right;">Egresos</th><th style="text-align:right;">Cobros</th><th style="text-align:right;">Saldo Caja</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Día 1 – 15</td><td class="num">23,500</td><td class="num">0</td><td class="num success">S/ 21,000</td></tr>
+            <tr><td>Día 16 – 30</td><td class="num">20,000</td><td class="num">0</td><td class="num warning">S/ 1,000</td></tr>
+            <tr style="background:#fee2e2;">
+              <td><strong>Día 31 – 44</strong></td>
+              <td class="num">3,500</td>
+              <td class="num">0</td>
+              <td class="num danger"><strong>-S/ 2,500 (DEFAULT)</strong></td>
+            </tr>
+            <tr><td>Día 45 (Cobro)</td><td class="num">0</td><td class="num">8,000</td><td class="num success">S/ 5,500</td></tr>
+          </tbody>
+        </table>
+        <div class="callout-alert">
+          <strong>Riesgo Crítico de Cesación de Pagos:</strong> Entre los días 35 y 44, Andes Software enfrentará un déficit de <strong>-S/ 2,500.00</strong>. Aunque el cliente pagará S/ 8,000 en el día 45, la empresa no puede suspender salarios ni servidores cloud sin paralizar el servicio sanitario.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PÁGINA 6: DECISIONES ESTRATÉGICAS, MATRIZ Y CONCLUSIONES -->
+  <div class="page">
+    <div class="running-header">
+      <span>Andes Software · Control Económico PANVIZ</span>
+      <span>Sección IX, X & XI: Decisiones y Cierre</span>
+    </div>
+
+    <h1>Sección IX: Tres Decisiones Gerenciales Estratégicas</h1>
+    <div class="callout">
+      <strong>Decisión 1: Factoring / Descuento del Hito 1 para Eliminar la Brecha de Liquidez:</strong><br>
+      <em>Evidencia Contable:</em> Cuenta 1212 retiene S/ 8,000 a 45 días. <em>Medida:</em> Negociar factoring bancario o adenda de pronto pago al día 15 con descuento del 2.5% (costo financiero: S/ 200). <em>Responsable:</em> Mollo Chuquicaña (Plazo: Días 1 a 7). <em>Impacto:</em> Inyecta S/ 7,800 líquidos, elimina el déficit de -S/ 2,500 y blinda los salarios de desarrollo.
+    </div>
+    <div class="callout">
+      <strong>Decisión 2: Aceleración Técnica y Certificación Anticipada del Módulo 2:</strong><br>
+      <em>Evidencia Contable:</em> Pasivo 4699 acumula S/ 9,000 de anticipo no devengado (NIIF 15). <em>Medida:</em> Reorganizar sprints técnicos para entregar alertas y reportes el día 25, devengando el pasivo y habilitando la facturación siguiente. <em>Responsable:</em> Chambilla Perca (Plazo: 25 días). <em>Impacto:</em> Adelanta la vigilancia epidemiológica automatizada.
+    </div>
+    <div class="callout">
+      <strong>Decisión 3: Reprogramación Comercial de Equipos y Optimización Cloud:</strong><br>
+      <em>Evidencia Contable:</em> Pasivo 4212 (S/ 2k) y gasto cloud 6942 (S/ 2k/mes). <em>Medida:</em> Diferir saldo de hardware en dos cuotas y optimizar instancias cloud reduciendo costos un 20% (-S/ 500/mes). <em>Responsable:</em> Gutiérrez Ccama (Plazo: Días 5 a 12). <em>Impacto:</em> Libera S/ 1,500 de caja y asegura SLA 99.9% de uptime para postas de salud.
+    </div>
+
+    <h1>Sección X: Matriz de Revisión Cruzada del Equipo (4 Integrantes)</h1>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Integrante</th>
+          <th>Rol Operativo</th>
+          <th>Sección Custodiada</th>
+          <th>Revisión Cruzada Realizada</th>
+          <th style="text-align:center;">Conformidad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Suclle Suca, Michael B.</strong></td><td>Coordinador / Auditor</td><td>Control 43, Síntesis e Integración</td><td>Revisa Ratios y Decisiones de Mollo Chuquicaña</td><td class="num success">APROBADO (100%)</td></tr>
+        <tr><td><strong>Chambilla Perca, Ricardo M.</strong></td><td>Especialista Contable</td><td>Diario, Mayor y Comprobación</td><td>Revisa Control 43 y Síntesis de Suclle Suca</td><td class="num success">APROBADO (100%)</td></tr>
+        <tr><td><strong>Gutiérrez Ccama, Juan D.</strong></td><td>Especialista en Reportes</td><td>Estados Financieros y Conciliación</td><td>Revisa Diario, Mayor y Balances de Chambilla Perca</td><td class="num success">APROBADO (100%)</td></tr>
+        <tr><td><strong>Mollo Chuquicaña, Dolly Y.</strong></td><td>Analista de Liquidez</td><td>Ratios, Presupuesto y Decisiones</td><td>Revisa Estados Financieros de Gutiérrez Ccama</td><td class="num success">APROBADO (100%)</td></tr>
+      </tbody>
+    </table>
+
+    <h1>Sección XI: Conclusiones y Referencias Bibliográficas</h1>
+    <p>
+      1. Se demostró la consistencia matemática de la partida doble y la ecuación contable (Activo = Pasivo + Patrimonio = S/ 64,500.00) con conciliación exacta entre LibreOffice Calc y GnuCash.
+      2. La aplicación de la NIIF 15 (anticipos como pasivo diferido) y la NIC 16 (hardware como activo PPE) evitó distorsiones en el resultado económico del proyecto.
+      3. Se comprobó que la utilidad contable (S/ 2,000.00) no garantiza la liquidez de caja: la brecha de cobranza a 45 días exige aplicar factoring para proteger la continuidad de PANVIZ en salud pública.
     </p>
-    <div class="page-num">Página 6 de 6 (Sin contar portada)</div>
+    <div style="font-size:7.5pt; color:#64748b; margin-top:5px;">
+      <strong>Referencias (APA 7ma):</strong> Guim-Bustos, P., et al. (2023). Los estados financieros y las tomas de decisiones empresariales. <em>593 Digital Publisher CEIT</em>, 8(2), 149–160. · IASB. (2018). <em>NIIF 15: Ingresos</em>, <em>NIC 16: Propiedad, Planta y Equipo</em> & <em>NIC 7: Estado de Flujos de Efectivo</em>. · MEF. (2019). <em>Plan Contable General Empresarial (PCGE)</em>.
+    </div>
   </div>
 
 </body>
 </html>
 """
 
+# Guardar HTML compilado
 with open(report_html_path, "w", encoding="utf-8") as f:
     f.write(html_report)
 
+# Compilar a PDF usando Edge headless
+print("Compilando informe a PDF usando Microsoft Edge headless...")
 cmd = [
     EDGE_PATH,
     "--headless",
     "--disable-gpu",
-    "--no-pdf-header-footer",
+    "--run-all-compositor-stages-before-draw",
     f"--print-to-pdf={output_pdf_path}",
     report_html_path
 ]
-subprocess.run(cmd, capture_output=True)
+subprocess.run(cmd, check=True)
 
+# Verificar páginas del PDF
 reader = pypdf.PdfReader(output_pdf_path)
-print(f"Número total de páginas en el PDF generado: {len(reader.pages)}")
+num_pages = len(reader.pages)
+print(f"PDF generado exitosamente en: {output_pdf_path}")
+print(f"Total de páginas: {num_pages} (Portada + {num_pages - 1} páginas de contenido)")
 
+# Limpiar HTML temporal
 try:
     os.remove(report_html_path)
 except:

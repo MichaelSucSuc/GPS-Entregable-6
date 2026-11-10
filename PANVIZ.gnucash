@@ -1,0 +1,695 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<gnc-v2 xmlns:gnc="http://www.gnucash.org/XML/gnc"
+        xmlns:act="http://www.gnucash.org/XML/act"
+        xmlns:book="http://www.gnucash.org/XML/book"
+        xmlns:cd="http://www.gnucash.org/XML/cd"
+        xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+        xmlns:price="http://www.gnucash.org/XML/price"
+        xmlns:slot="http://www.gnucash.org/XML/slot"
+        xmlns:split="http://www.gnucash.org/XML/split"
+        xmlns:sx="http://www.gnucash.org/XML/sx"
+        xmlns:trn="http://www.gnucash.org/XML/trn"
+        xmlns:ts="http://www.gnucash.org/XML/ts"
+        xmlns:fs="http://www.gnucash.org/XML/fs"
+        xmlns:bgt="http://www.gnucash.org/XML/bgt"
+        xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+        xmlns:lot="http://www.gnucash.org/XML/lot"
+        xmlns:cust="http://www.gnucash.org/XML/cust"
+        xmlns:job="http://www.gnucash.org/XML/job"
+        xmlns:addr="http://www.gnucash.org/XML/addr"
+        xmlns:owner="http://www.gnucash.org/XML/owner"
+        xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+        xmlns:tte="http://www.gnucash.org/XML/tte"
+        xmlns:employee="http://www.gnucash.org/XML/employee"
+        xmlns:order="http://www.gnucash.org/XML/order"
+        xmlns:billterm="http://www.gnucash.org/XML/billterm"
+        xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+        xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+        xmlns:invoice="http://www.gnucash.org/XML/invoice"
+        xmlns:entry="http://www.gnucash.org/XML/entry"
+        xmlns:vendor="http://www.gnucash.org/XML/vendor">
+<gnc:count-data cd:type="book">1</gnc:count-data>
+<gnc:book version="2.0.0">
+<book:id type="guid">978f20509a3440659e5b8862cd23100e</book:id>
+<gnc:count-data cd:type="commodity">1</gnc:count-data>
+<gnc:count-data cd:type="account">25</gnc:count-data>
+<gnc:count-data cd:type="transaction">11</gnc:count-data>
+<gnc:commodity version="2.0.0">
+  <cmdty:space>CURRENCY</cmdty:space>
+  <cmdty:id>PEN</cmdty:id>
+  <cmdty:get_quotes/>
+  <cmdty:quote_source>currency</cmdty:quote_source>
+  <cmdty:quote_tz/>
+</gnc:commodity>
+<gnc:commodity version="2.0.0">
+  <cmdty:space>template</cmdty:space>
+  <cmdty:id>template</cmdty:id>
+  <cmdty:name>template</cmdty:name>
+  <cmdty:xcode>template</cmdty:xcode>
+  <cmdty:fraction>1</cmdty:fraction>
+</gnc:commodity>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="guid">792d2f4919514b4f9a14a3a130217f43</act:id>
+  <act:type>ROOT</act:type>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Activos</act:name>
+  <act:id type="guid">03cdf9121380483491249162cb34809a</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">792d2f4919514b4f9a14a3a130217f43</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Pasivos</act:name>
+  <act:id type="guid">1cf9a01081404e71b7a3e056f1ccd767</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">792d2f4919514b4f9a14a3a130217f43</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Patrimonio</act:name>
+  <act:id type="guid">857e27d09dcf4c76864015f8d9314f62</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">792d2f4919514b4f9a14a3a130217f43</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ingresos</act:name>
+  <act:id type="guid">fb3976fb6d9e47d1920c4016e99d9bc4</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">792d2f4919514b4f9a14a3a130217f43</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gastos</act:name>
+  <act:id type="guid">0982870a59da4e079ede8f02772ca4c9</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">792d2f4919514b4f9a14a3a130217f43</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Activo Corriente</act:name>
+  <act:id type="guid">164203e52dbb4c09be59608721bddf23</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>10</act:code>
+  <act:parent type="guid">03cdf9121380483491249162cb34809a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Cuenta Corriente Bancaria</act:name>
+  <act:id type="guid">6e9f8320cb3842d799cd8ed3ad858264</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1041</act:code>
+  <act:parent type="guid">164203e52dbb4c09be59608721bddf23</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Facturas por Cobrar Comerciales</act:name>
+  <act:id type="guid">f2f7fc01196345d9ab91ec6ad138b319</act:id>
+  <act:type>RECEIVABLE</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1212</act:code>
+  <act:parent type="guid">164203e52dbb4c09be59608721bddf23</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Activo No Corriente</act:name>
+  <act:id type="guid">897831d6a6484ad2bf09994fe497a8fc</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>33</act:code>
+  <act:parent type="guid">03cdf9121380483491249162cb34809a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Equipos Informáticos y Cómputo</act:name>
+  <act:id type="guid">560a99afdcef49a3939054e3bf10bfab</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>3361</act:code>
+  <act:parent type="guid">897831d6a6484ad2bf09994fe497a8fc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Pasivo Corriente</act:name>
+  <act:id type="guid">4bf4ad8de0ed4219a5e24e7851efff81</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>40</act:code>
+  <act:parent type="guid">1cf9a01081404e71b7a3e056f1ccd767</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Proveedores por Pagar</act:name>
+  <act:id type="guid">41bf81d91921496da4e37d03733e959c</act:id>
+  <act:type>PAYABLE</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>4212</act:code>
+  <act:parent type="guid">4bf4ad8de0ed4219a5e24e7851efff81</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Préstamos Bancarios Corto Plazo</act:name>
+  <act:id type="guid">25a4f5ca1369430f9f07238a13478bb7</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>4511</act:code>
+  <act:parent type="guid">4bf4ad8de0ed4219a5e24e7851efff81</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Anticipos de Clientes (Diferidos)</act:name>
+  <act:id type="guid">a9ca44d0471c4386a0753c5e191591b8</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>4699</act:code>
+  <act:parent type="guid">4bf4ad8de0ed4219a5e24e7851efff81</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Remuneraciones por Pagar</act:name>
+  <act:id type="guid">c430f04a3d1b45c5bc19edc74ccdc24c</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>4111</act:code>
+  <act:parent type="guid">4bf4ad8de0ed4219a5e24e7851efff81</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Capital Social Aportado</act:name>
+  <act:id type="guid">7b0083dddd7c4d9989c911c214a1d8e0</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5011</act:code>
+  <act:parent type="guid">857e27d09dcf4c76864015f8d9314f62</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Resultados del Ejercicio</act:name>
+  <act:id type="guid">416f593bed2744c49828a2931e952a07</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5911</act:code>
+  <act:parent type="guid">857e27d09dcf4c76864015f8d9314f62</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ingresos por Desarrollo de Software</act:name>
+  <act:id type="guid">6934aa0576cc45db808cf215823c77ed</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7041</act:code>
+  <act:parent type="guid">fb3976fb6d9e47d1920c4016e99d9bc4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Costo del Servicio PANVIZ</act:name>
+  <act:id type="guid">789f0cca32c242d6ad0efa2be7bc109e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>69</act:code>
+  <act:parent type="guid">0982870a59da4e079ede8f02772ca4c9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Remuneraciones de Desarrollo</act:name>
+  <act:id type="guid">b4d7d7e207df4418a33fc617f9fe4bae</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6941</act:code>
+  <act:parent type="guid">789f0cca32c242d6ad0efa2be7bc109e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Servicios de Infraestructura Cloud</act:name>
+  <act:id type="guid">22317ec605af4017b27e1f6bb6804991</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6942</act:code>
+  <act:parent type="guid">789f0cca32c242d6ad0efa2be7bc109e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gastos Administrativos Generales</act:name>
+  <act:id type="guid">94430836df2c4cbaad88d7cf387e5c05</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>9411</act:code>
+  <act:parent type="guid">0982870a59da4e079ede8f02772ca4c9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Sueldos Administrativos Devengados</act:name>
+  <act:id type="guid">a8a5b613d8174a7fad4dcfa2bb536546</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>9412</act:code>
+  <act:parent type="guid">0982870a59da4e079ede8f02772ca4c9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gastos Financieros e Intereses</act:name>
+  <act:id type="guid">e451e2ddbe634d16bc946383964e0883</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>9711</act:code>
+  <act:parent type="guid">0982870a59da4e079ede8f02772ca4c9</act:parent>
+</gnc:account>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">bd26d50987384344a73211926065afef</trn:id>
+  <trn:currency>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </trn:currency>
+  <trn:num>OP01</trn:num>
+  <trn:date-posted>
+    <ts:date>2026-11-02 10:00:00 +0000</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2026-11-10 17:14:20 +0000</ts:date>
+  </trn:date-entered>
+  <trn:description>Aporte inicial de los socios depositado en bancos</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">4cc57648a6894e7ea737273649159893</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>4000000/100</split:value>
+      <split:quantity>4000000/100</split:quantity>
+      <split:account type="guid">6e9f8320cb3842d799cd8ed3ad858264</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">bc1e9c8ef5db4bc28a74f9a4c98d18a0</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-4000000/100</split:value>
+      <split:quantity>-4000000/100</split:quantity>
+      <split:account type="guid">7b0083dddd7c4d9989c911c214a1d8e0</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">91df51499ba5488b8bdb4e7320662b0b</trn:id>
+  <trn:currency>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </trn:currency>
+  <trn:num>OP02</trn:num>
+  <trn:date-posted>
+    <ts:date>2026-11-04 10:00:00 +0000</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2026-11-10 17:14:20 +0000</ts:date>
+  </trn:date-entered>
+  <trn:description>Compra de equipos informáticos (pago parcial y crédito proveedor)</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">5759bff10e5b46a39605b2160499d28a</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>1200000/100</split:value>
+      <split:quantity>1200000/100</split:quantity>
+      <split:account type="guid">560a99afdcef49a3939054e3bf10bfab</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">287d7638b9444efe88d3b7e96786e6a3</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-800000/100</split:value>
+      <split:quantity>-800000/100</split:quantity>
+      <split:account type="guid">6e9f8320cb3842d799cd8ed3ad858264</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">78d60be0bca9461480cca298b699ba1d</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-400000/100</split:value>
+      <split:quantity>-400000/100</split:quantity>
+      <split:account type="guid">41bf81d91921496da4e37d03733e959c</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">a8501495d56f403d9e14a89f50af15cb</trn:id>
+  <trn:currency>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </trn:currency>
+  <trn:num>OP03</trn:num>
+  <trn:date-posted>
+    <ts:date>2026-11-06 10:00:00 +0000</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2026-11-10 17:14:20 +0000</ts:date>
+  </trn:date-entered>
+  <trn:description>Desembolso de préstamo bancario recibido a 6 meses</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">72025b0233074428bf75adc91168ab3c</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>1000000/100</split:value>
+      <split:quantity>1000000/100</split:quantity>
+      <split:account type="guid">6e9f8320cb3842d799cd8ed3ad858264</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">beac6091a767472aa9f489efa60430dc</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-1000000/100</split:value>
+      <split:quantity>-1000000/100</split:quantity>
+      <split:account type="guid">25a4f5ca1369430f9f07238a13478bb7</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">bccd9d086e6c4c11acfc2ca12a52f9f1</trn:id>
+  <trn:currency>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </trn:currency>
+  <trn:num>OP04</trn:num>
+  <trn:date-posted>
+    <ts:date>2026-11-09 10:00:00 +0000</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2026-11-10 17:14:20 +0000</ts:date>
+  </trn:date-entered>
+  <trn:description>Anticipo recibido de entidad de salud por módulo próximo mes</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">b079f44fb8574d85b67456e0639e7251</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>900000/100</split:value>
+      <split:quantity>900000/100</split:quantity>
+      <split:account type="guid">6e9f8320cb3842d799cd8ed3ad858264</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">a2935dc99bcb435a83d45bd3fd937e0c</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-900000/100</split:value>
+      <split:quantity>-900000/100</split:quantity>
+      <split:account type="guid">a9ca44d0471c4386a0753c5e191591b8</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">0d08526a80d74c5ea2ff4008e8f7ffb6</trn:id>
+  <trn:currency>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </trn:currency>
+  <trn:num>OP05</trn:num>
+  <trn:date-posted>
+    <ts:date>2026-11-13 10:00:00 +0000</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2026-11-10 17:14:20 +0000</ts:date>
+  </trn:date-entered>
+  <trn:description>Pago de remuneraciones de desarrollo del mes</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">05da426e1a84420d9991105cd33b4a45</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>1500000/100</split:value>
+      <split:quantity>1500000/100</split:quantity>
+      <split:account type="guid">b4d7d7e207df4418a33fc617f9fe4bae</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">d8f4792d2c5540aeadbb133ed4175a7d</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-1500000/100</split:value>
+      <split:quantity>-1500000/100</split:quantity>
+      <split:account type="guid">6e9f8320cb3842d799cd8ed3ad858264</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">cc82d75e88a04c598e800dab5939b968</trn:id>
+  <trn:currency>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </trn:currency>
+  <trn:num>OP06</trn:num>
+  <trn:date-posted>
+    <ts:date>2026-11-16 10:00:00 +0000</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2026-11-10 17:14:20 +0000</ts:date>
+  </trn:date-entered>
+  <trn:description>Pago de servicios de infraestructura nube del mes</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">898164820abb48dfa44a436f61c09da1</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>200000/100</split:value>
+      <split:quantity>200000/100</split:quantity>
+      <split:account type="guid">22317ec605af4017b27e1f6bb6804991</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">b9f4505cc582448f99b09d51e13d8da1</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-200000/100</split:value>
+      <split:quantity>-200000/100</split:quantity>
+      <split:account type="guid">6e9f8320cb3842d799cd8ed3ad858264</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">d89e3d38236e460eb0b3f7c3f2bb5dd5</trn:id>
+  <trn:currency>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </trn:currency>
+  <trn:num>OP07</trn:num>
+  <trn:date-posted>
+    <ts:date>2026-11-19 10:00:00 +0000</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2026-11-10 17:14:20 +0000</ts:date>
+  </trn:date-entered>
+  <trn:description>Pago de gastos administrativos operativos del mes</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">4097e7c1abe64068a419dcccd8928cf9</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>300000/100</split:value>
+      <split:quantity>300000/100</split:quantity>
+      <split:account type="guid">94430836df2c4cbaad88d7cf387e5c05</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">2bedb76784a7479e86ad4772254e72dd</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-300000/100</split:value>
+      <split:quantity>-300000/100</split:quantity>
+      <split:account type="guid">6e9f8320cb3842d799cd8ed3ad858264</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">edabe65bb1fb4318b0c302335870773f</trn:id>
+  <trn:currency>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </trn:currency>
+  <trn:num>OP08</trn:num>
+  <trn:date-posted>
+    <ts:date>2026-11-23 10:00:00 +0000</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2026-11-10 17:14:20 +0000</ts:date>
+  </trn:date-entered>
+  <trn:description>Entrega y aceptación hito 1 independiente (cobro 16k, crédito 8k)</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">65f176bad3e345faa993467b2694d184</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>1600000/100</split:value>
+      <split:quantity>1600000/100</split:quantity>
+      <split:account type="guid">6e9f8320cb3842d799cd8ed3ad858264</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">705bd96312fa480791d1f5cb01277f4d</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>800000/100</split:value>
+      <split:quantity>800000/100</split:quantity>
+      <split:account type="guid">f2f7fc01196345d9ab91ec6ad138b319</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">c1864a49b4a84263b176e00c45082e48</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-2400000/100</split:value>
+      <split:quantity>-2400000/100</split:quantity>
+      <split:account type="guid">6934aa0576cc45db808cf215823c77ed</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">be27839155c34df79b4d8d4cce3b2abc</trn:id>
+  <trn:currency>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </trn:currency>
+  <trn:num>OP09</trn:num>
+  <trn:date-posted>
+    <ts:date>2026-11-25 10:00:00 +0000</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2026-11-10 17:14:20 +0000</ts:date>
+  </trn:date-entered>
+  <trn:description>Pago parcial de deuda con proveedor de equipos</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">e34786b3089a43aab85e03216f26feac</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>200000/100</split:value>
+      <split:quantity>200000/100</split:quantity>
+      <split:account type="guid">41bf81d91921496da4e37d03733e959c</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">6262922c6e704ca4beae692dac71903b</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-200000/100</split:value>
+      <split:quantity>-200000/100</split:quantity>
+      <split:account type="guid">6e9f8320cb3842d799cd8ed3ad858264</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">d424a68789cc4b00a306ce7911ec4cd0</trn:id>
+  <trn:currency>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </trn:currency>
+  <trn:num>OP10</trn:num>
+  <trn:date-posted>
+    <ts:date>2026-11-28 10:00:00 +0000</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2026-11-10 17:14:20 +0000</ts:date>
+  </trn:date-entered>
+  <trn:description>Reconocimiento de remuneraciones administrativas devengadas pendientes</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">7008ed1a46de481194e8219cd33e49f8</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>150000/100</split:value>
+      <split:quantity>150000/100</split:quantity>
+      <split:account type="guid">a8a5b613d8174a7fad4dcfa2bb536546</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">473fcf4ca9b841d0922ea4091f4ba1e2</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-150000/100</split:value>
+      <split:quantity>-150000/100</split:quantity>
+      <split:account type="guid">c430f04a3d1b45c5bc19edc74ccdc24c</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">97b1efa3e3a441cfa42a8756a2fdf958</trn:id>
+  <trn:currency>
+    <cmdty:space>CURRENCY</cmdty:space>
+    <cmdty:id>PEN</cmdty:id>
+  </trn:currency>
+  <trn:num>OP11</trn:num>
+  <trn:date-posted>
+    <ts:date>2026-11-30 10:00:00 +0000</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2026-11-10 17:14:20 +0000</ts:date>
+  </trn:date-entered>
+  <trn:description>Pago de intereses bancarios devengados del préstamo</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">5f320f8901424d71b126b84dc6cb8cd8</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>50000/100</split:value>
+      <split:quantity>50000/100</split:quantity>
+      <split:account type="guid">e451e2ddbe634d16bc946383964e0883</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">1d48556b8d92481c9936e25087442992</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-50000/100</split:value>
+      <split:quantity>-50000/100</split:quantity>
+      <split:account type="guid">6e9f8320cb3842d799cd8ed3ad858264</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+</gnc:book>
+</gnc-v2>

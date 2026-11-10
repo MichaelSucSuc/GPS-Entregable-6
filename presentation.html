@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control Económico PANVIZ - Presentación Ejecutiva (UNSA - EPIS)</title>
+  <style>
+    :root {
+      --bg-main: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card-hover: #273549;
+      --border-color: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-indigo: #818cf8;
+      --accent-green: #34d399;
+      --accent-amber: #fbbf24;
+      --accent-rose: #f43f5e;
+      --font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    /* Top Progress Bar */
+    #progress-container {
+      width: 100%;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.1);
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 100;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 14.28%;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-indigo));
+      transition: width 0.35s ease;
+    }
+
+    /* Header Nav */
+    header {
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 50;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      letter-spacing: 0.5px;
+    }
+
+    .brand span {
+      color: var(--text-muted);
+      font-weight: 400;
+      font-size: 13px;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    .slide-counter {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-blue);
+      background: rgba(56, 189, 248, 0.1);
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    /* Main Slide Container */
+    #slide-viewport {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 48px;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(40px) scale(0.98);
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 32px 56px;
+      box-sizing: border-box;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0) scale(1);
+    }
+
+    .slide.prev {
+      transform: translateX(-40px) scale(0.98);
+    }
+
+    /* Typography inside slides */
+    .slide-badge {
+      display: inline-block;
+      align-self: flex-start;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent-blue);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      border-left: 3px solid var(--accent-blue);
+    }
+
+    .slide-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
+      line-height: 1.25;
+    }
+
+    .slide-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      width: 100%;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      width: 100%;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      width: 100%;
+    }
+
+    /* Card Component */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: rgba(56, 189, 248, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 8px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .card-body {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .card-body p {
+      margin-bottom: 8px;
+    }
+
+    .card-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Metric Highlight */
+    .metric-box {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 14px;
+      text-align: center;
+    }
+
+    .metric-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--accent-blue);
+      font-family: 'Consolas', monospace;
+    }
+
+    .metric-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Data Table Styling */
+    .table-container {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--accent-blue);
+      padding: 9px 12px;
+      font-weight: 700;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    td {
+      padding: 7px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .amount {
+      font-family: 'Consolas', monospace;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .positive { color: var(--accent-green); }
+    .negative { color: var(--accent-rose); }
+    .warning { color: var(--accent-amber); }
+
+    /* Team Member Tag */
+    .member-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      color: var(--text-main);
+    }
+
+    .member-pill .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-green);
+    }
+
+    /* Presenter Notes Modal */
+    #notes-drawer {
+      position: fixed;
+      bottom: 50px;
+      right: 24px;
+      width: 380px;
+      background: #1e293b;
+      border: 1px solid var(--accent-blue);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 12px;
+      color: var(--text-main);
+      display: none;
+      z-index: 200;
+    }
+
+    #notes-drawer.open {
+      display: block;
+    }
+
+    #notes-drawer h4 {
+      color: var(--accent-blue);
+      font-size: 13px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Bottom Control Bar */
+    footer {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      border-top: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.9);
+      font-size: 12px;
+      color: var(--text-muted);
+      z-index: 50;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        overflow: visible;
+        height: auto;
+        background: #fff;
+        color: #000;
+      }
+      header, footer, #progress-container, .btn, #notes-drawer {
+        display: none !important;
+      }
+      .slide {
+        position: relative !important;
+        opacity: 1 !important;
+        transform: none !important;
+        page-break-after: always;
+        height: 100vh;
+        padding: 40px !important;
+      }
+      .card {
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        color: #0f172a;
+      }
+      .slide-title { color: #0f172a; }
+      .slide-subtitle { color: #475569; }
+      .table-container { border: 1px solid #cbd5e1; background: #fff; }
+      th { color: #1e3a8a; background: #f1f5f9; border-bottom: 1px solid #cbd5e1; }
+      td { color: #1e293b; border-bottom: 1px solid #e2e8f0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Progress Bar -->
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      PANVIZ <span>| Control Económico en Salud Pública</span>
+    </div>
+    <div class="header-controls">
+      <div class="slide-counter" id="slide-num">Diapositiva 1 / 7</div>
+      <button class="btn" id="btn-notes" title="Activar Guión de Exposición (Tecla N)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        Guión (N)
+      </button>
+      <button class="btn" id="btn-fullscreen" title="Pantalla Completa (Tecla F)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+        Fullscreen (F)
+      </button>
+    </div>
+  </header>
+
+  <!-- Slide Viewport -->
+  <main id="slide-viewport">
+
+    <!-- SLIDE 1: Portada y Caso de Estudio -->
+    <section class="slide active" data-slide="1" data-speaker="Suclle Suca (Min 1)">
+      <div class="slide-badge">UNSA · EPIS · Gestión de Proyectos de Software</div>
+      <h1 class="slide-title">Control Económico y Viabilidad Financiera de PANVIZ</h1>
+      <p class="slide-subtitle">Vigilancia epidemiológica en salud pública: Del registro de partida doble a la toma de decisiones gerenciales estratégicas.</p>
+      
+      <div class="grid-2" style="margin-bottom: 20px;">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Contexto del Proyecto: Andes Software</span>
+          </div>
+          <div class="card-body">
+            <p><strong>Contrato Exclusivo:</strong> Puesta en marcha de la plataforma PANVIZ para una entidad de salud pública del Estado.</p>
+            <p><strong>Alcance Operativo:</strong> Ingesta de datos agregados y visualización de indicadores sanitarios (Hito 1 entregado y aceptado).</p>
+            <p><strong>Objetivo del Entregable 6:</strong> Aplicar la ecuación contable, validar la conciliación LibreOffice Calc vs. GnuCash y prevenir la crisis de caja del Hito 2.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Equipo de Trabajo (4 Integrantes)</span>
+          </div>
+          <div class="card-body" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="member-pill"><div class="dot"></div><strong>Chambilla Perca, Ricardo Mauricio:</strong> Catálogo, Diario, Mayor y Comprobación</div>
+            <div class="member-pill"><div class="dot"></div><strong>Gutiérrez Ccama, Juan Diego:</strong> Estados Financieros y Conciliación GnuCash</div>
+            <div class="member-pill"><div class="dot"></div><strong>Mollo Chuquicaña, Dolly Yadhira:</strong> Ratios, Presupuesto Quincenal y Estrés 45 días</div>
+            <div class="member-pill"><div class="dot"></div><strong>Suclle Suca, Michael Benjamin:</strong> Coordinación, Control 43 y Decisiones Estratégicas</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-4">
+        <div class="metric-box">
+          <div class="metric-value">S/ 24,000</div>
+          <div class="metric-label">Ingresos Devengados</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value">S/ 2,000</div>
+          <div class="metric-label">Utilidad Neta (8.33%)</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value">S/ 44,500</div>
+          <div class="metric-label">Caja Disponible en Bancos</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value" style="color:var(--accent-amber);">45 Días</div>
+          <div class="metric-label">Brecha de Cobro Pendiente</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: Control de Lectura 43 (Slide 43 PPTX) -->
+    <section class="slide" data-slide="2" data-speaker="Suclle Suca (Min 1)">
+      <div class="slide-badge">Marco Teórico · Slide 43 PPTX · Guim-Bustos et al. (2023)</div>
+      <h2 class="slide-title">Control de Lectura 43: Fundamentos Contables y Software</h2>
+      <p class="slide-subtitle">Resolución rigurosa de las tres interrogantes conceptuales formuladas en la sesión académica.</p>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">1. Propósito e Interpretación</span>
+          </div>
+          <div class="card-body">
+            <p><strong>Propósito:</strong> Brindar una visión sistemática y fidedigna de la situación económica, patrimonial y de liquidez para reducir la incertidumbre gerencial (pp. 152–154).</p>
+            <p><strong>Insuficiencia del Registro:</strong> La teneduría de libros es solo compilación histórica pasiva. Sin análisis e interpretación de ratios y flujos, la gerencia es incapaz de anticipar insolvencias o proyectar el capital de trabajo.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">2. Tres Componentes en Software</span>
+          </div>
+          <div class="card-body">
+            <p><strong>1. Activos:</strong> Hardware informático de cómputo (NIC 16) y software base capitalized.</p>
+            <p><strong>2. Pasivos:</strong> Anticipos de clientes por hitos futuros no ejecutados (NIIF 15) y deuda cloud devengada.</p>
+            <p><strong>3. Costos de Servicio:</strong> Remuneraciones directas de los desarrolladores y consumo de cómputo en nube imputables al contrato.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">3. Paradoja: Ganancias vs. Salarios</span>
+          </div>
+          <div class="card-body">
+            <p><strong>Estados a Revisar:</strong> Cotejo directo entre el <em>Estado de Resultados</em> (base devengo) y el <em>Estado de Flujos de Efectivo</em> (base caja).</p>
+            <p><strong>Diagnóstico:</strong> La ganancia refleja ingresos facturados pero no cobrados. Si los clientes deben a 45 días, la caja se agota antes del ciclo de nómina.</p>
+            <p><strong>Decisión Inmediata:</strong> Negociar factoring o adenda de pronto pago para fondear salarios.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: Catálogo, Partida Doble y Asientos OP01-OP11 -->
+    <section class="slide" data-slide="3" data-speaker="Chambilla Perca (Min 2)">
+      <div class="slide-badge">Teneduría Contable · NIIF / PCGE · Operaciones OP01 - OP11</div>
+      <h2 class="slide-title">Catálogo de Cuentas, Partida Doble y Balance de Sumas</h2>
+      <p class="slide-subtitle">Estructura de 14 cuentas maestras y consistencia matemática de los 11 asientos del periodo.</p>
+
+      <div class="grid-2">
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Cód.</th>
+                <th>Operación Realizada</th>
+                <th>Debe</th>
+                <th>Haber</th>
+                <th style="text-align:right;">Importe (S/)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>OP01</td><td>Aporte de capital de socios</td><td>1041</td><td>5011</td><td class="amount">40,000.00</td></tr>
+              <tr><td>OP02</td><td>Compra hardware (pago S/ 8k + deuda S/ 4k)</td><td>3361</td><td>1041 / 4212</td><td class="amount">12,000.00</td></tr>
+              <tr><td>OP03</td><td>Préstamo bancario recibido a 6 meses</td><td>1041</td><td>4511</td><td class="amount">10,000.00</td></tr>
+              <tr><td>OP04</td><td>Anticipo de salud pública (Hito 2 diferido)</td><td>1041</td><td>4699</td><td class="amount">9,000.00</td></tr>
+              <tr><td>OP05</td><td>Remuneraciones del equipo de desarrollo</td><td>6941</td><td>1041</td><td class="amount">15,000.00</td></tr>
+              <tr><td>OP06</td><td>Consumo de infraestructura cloud</td><td>6942</td><td>1041</td><td class="amount">2,000.00</td></tr>
+              <tr><td>OP07</td><td>Gastos administrativos operativos pagados</td><td>9411</td><td>1041</td><td class="amount">3,000.00</td></tr>
+              <tr><td>OP08</td><td>Hito 1 aceptado (cobro S/ 16k + CxC S/ 8k)</td><td>1041 / 1212</td><td>7041</td><td class="amount">24,000.00</td></tr>
+              <tr><td>OP09</td><td>Amortización deuda proveedor de hardware</td><td>4212</td><td>1041</td><td class="amount">2,000.00</td></tr>
+              <tr><td>OP10</td><td>Sueldos administrativos devengados cierre</td><td>9412</td><td>4111</td><td class="amount">1,500.00</td></tr>
+              <tr><td>OP11</td><td>Intereses devengados préstamo bancario</td><td>9711</td><td>1041</td><td class="amount">500.00</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Criterios Técnicos Normativos Clave</span>
+            </div>
+            <div class="card-body">
+              <p><strong>NIIF 15 (Anticipo OP04):</strong> Los S/ 9,000 no son ingresos; constituyen un pasivo exigible por obligación de desempeño pendiente.</p>
+              <p><strong>NIC 16 (Hardware OP02):</strong> Se reconoce como Activo Fijo (PPE) a costo histórico sin depreciación por delimitación académica.</p>
+              <p><strong>Devengo (OP10):</strong> El gasto administrativo de S/ 1,500 se reconoce en el periodo aun cuando quede pendiente de desembolso.</p>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="metric-box">
+              <div class="metric-value">S/ 119,000.00</div>
+              <div class="metric-label">Sumas del Diario (Debe = Haber)</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-value">S/ 86,500.00</div>
+              <div class="metric-label">Saldos Mayor (Deudor = Acreedor)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: Estado de Situación Financiera y Conciliación GnuCash -->
+    <section class="slide" data-slide="4" data-speaker="Gutiérrez Ccama (Min 3)">
+      <div class="slide-badge">Estados Financieros · Conciliación Calc vs. GnuCash</div>
+      <h2 class="slide-title">Estado de Situación Financiera (Balance General)</h2>
+      <p class="slide-subtitle">Equilibrio patrimonial perfecto al 30/11/2026 y verificación con el libro nativo PANVIZ.gnucash.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title" style="color:var(--accent-blue);">ACTIVO TOTAL: S/ 64,500.00</span>
+          </div>
+          <div class="card-body">
+            <table style="margin-top:4px;">
+              <tr><td>1041 Cuentas Corrientes Bancarias</td><td class="amount positive">S/ 44,500.00</td></tr>
+              <tr><td>1212 Clientes (Cobro a 45 días)</td><td class="amount positive">S/ 8,000.00</td></tr>
+              <tr style="font-weight:bold; background:rgba(255,255,255,0.03);"><td>Total Activo Corriente</td><td class="amount positive">S/ 52,500.00</td></tr>
+              <tr><td>3361 Equipos Informáticos (NIC 16)</td><td class="amount positive">S/ 12,000.00</td></tr>
+              <tr style="font-weight:bold; background:rgba(255,255,255,0.03);"><td>Total Activo No Corriente</td><td class="amount positive">S/ 12,000.00</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title" style="color:var(--accent-indigo);">PASIVO Y PATRIMONIO: S/ 64,500.00</span>
+          </div>
+          <div class="card-body">
+            <table style="margin-top:4px;">
+              <tr><td>4212 Proveedores (Equipos)</td><td class="amount">S/ 2,000.00</td></tr>
+              <tr><td>4511 Préstamos Bancarios Corto Plazo</td><td class="amount">S/ 10,000.00</td></tr>
+              <tr><td>4699 Anticipo de Salud Pública (NIIF 15)</td><td class="amount">S/ 9,000.00</td></tr>
+              <tr><td>4111 Remuneraciones por Pagar</td><td class="amount">S/ 1,500.00</td></tr>
+              <tr style="font-weight:bold; background:rgba(255,255,255,0.03);"><td>Total Pasivo Corriente</td><td class="amount negative">S/ 22,500.00</td></tr>
+              <tr><td>5011 Capital Social Aportado</td><td class="amount">S/ 40,000.00</td></tr>
+              <tr><td>5911 Utilidad Neta del Ejercicio</td><td class="amount positive">S/ 2,000.00</td></tr>
+              <tr style="font-weight:bold; background:rgba(255,255,255,0.03);"><td>Total Patrimonio Neto</td><td class="amount">S/ 42,000.00</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px;">
+        <div class="card-body" style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong>Conciliación Integral Calc vs. GnuCash:</strong>
+            <span style="color:var(--text-muted); margin-left:8px;">Bancos, Clientes, Equipos, Proveedores, Préstamo, Anticipo, Capital y Resultados verificados cuenta por cuenta.</span>
+          </div>
+          <div style="background:rgba(52, 211, 153, 0.15); color:var(--accent-green); padding:6px 14px; border-radius:6px; font-weight:700; border:1px solid rgba(52, 211, 153, 0.3);">
+            DIFERENCIA: S/ 0.00 (CONCILIADO)
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: Resultados vs Flujo de Efectivo -->
+    <section class="slide" data-slide="5" data-speaker="Gutiérrez Ccama (Min 3)">
+      <div class="slide-badge">Economía vs. Finanzas · NIC 1 · NIC 7</div>
+      <h2 class="slide-title">Estado de Resultados vs. Flujo de Efectivo Directo</h2>
+      <p class="slide-subtitle">La paradoja contable: La empresa genera una modesta ganancia pero ostenta una abultada liquidez inicial.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Estado de Resultados (Devengado)</span>
+          </div>
+          <div class="card-body">
+            <table>
+              <tr><td>Ventas de Software PANVIZ (7041)</td><td class="amount positive">S/ 24,000.00</td></tr>
+              <tr><td>(-) Costo: Nómina Desarrollo (6941)</td><td class="amount negative">(S/ 15,000.00)</td></tr>
+              <tr><td>(-) Costo: Infraestructura Nube (6942)</td><td class="amount negative">(S/ 2,000.00)</td></tr>
+              <tr style="font-weight:bold;"><td>UTILIDAD BRUTA (Margen 29.17%)</td><td class="amount positive">S/ 7,000.00</td></tr>
+              <tr><td>(-) Gastos Administrativos (9411+9412)</td><td class="amount negative">(S/ 4,500.00)</td></tr>
+              <tr style="font-weight:bold;"><td>UTILIDAD OPERATIVA (Margen 10.42%)</td><td class="amount positive">S/ 2,500.00</td></tr>
+              <tr><td>(-) Intereses Financieros (9711)</td><td class="amount negative">(S/ 500.00)</td></tr>
+              <tr style="font-weight:bold; font-size:14px; background:rgba(52,211,153,0.1);">
+                <td>UTILIDAD NETA (Margen 8.33%)</td><td class="amount positive">S/ 2,000.00</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Estado de Flujos de Efectivo (Método Directo)</span>
+          </div>
+          <div class="card-body">
+            <table>
+              <tr><td>Cobros Operativos (16k Hito 1 + 9k Anticipo)</td><td class="amount positive">S/ 25,000.00</td></tr>
+              <tr><td>Pagos Operativos (15k Dev + 2k Nube + 3k Adm + 0.5k Int)</td><td class="amount negative">(S/ 20,500.00)</td></tr>
+              <tr style="font-weight:bold;"><td>Flujo Neto de Actividades de Operación</td><td class="amount positive">+S/ 4,500.00</td></tr>
+              <tr><td>Flujo Neto de Actividades de Inversión (Equipos)</td><td class="amount negative">-S/ 10,000.00</td></tr>
+              <tr><td>Flujo Neto de Actividades de Financiación (Capital + Préstamo)</td><td class="amount positive">+S/ 50,000.00</td></tr>
+              <tr style="font-weight:bold; font-size:14px; background:rgba(56,189,248,0.1);">
+                <td>SALDO FINAL BANCOS (Caja Real)</td><td class="amount positive">S/ 44,500.00</td>
+              </tr>
+            </table>
+            <p style="font-size:11px; color:var(--accent-amber); margin-top:8px;">
+              * Advertencia: El 89.8% del efectivo proviene de financiamiento externo y aportes, no del ciclo operativo del software.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: Presupuesto Quincenal y la Trampa de Liquidez -->
+    <section class="slide" data-slide="6" data-speaker="Mollo Chuquicaña (Min 4)">
+      <div class="slide-badge">Presupuesto de Caja · Análisis de Estrés a 45 Días</div>
+      <h2 class="slide-title">Presupuesto Quincenal y la "Trampa de Liquidez"</h2>
+      <p class="slide-subtitle">La aparente tranquilidad a 15 días oculta un inminente déficit de caja entre los días 35 y 44.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Presupuesto Próximos 15 Días</span>
+          </div>
+          <div class="card-body">
+            <table>
+              <tr><td>Saldo Inicial en Bancos (Día 1)</td><td class="amount positive">S/ 44,500.00</td></tr>
+              <tr><td>(+) Cobros Proyectados Declarados</td><td class="amount">S/ 0.00</td></tr>
+              <tr><td>(-) Nómina de Desarrollo Proyectada</td><td class="amount negative">(S/ 18,000.00)</td></tr>
+              <tr><td>(-) Servicios Cloud Computing</td><td class="amount negative">(S/ 2,000.00)</td></tr>
+              <tr><td>(-) Deuda Proveedor Equipos (Cancelación)</td><td class="amount negative">(S/ 2,000.00)</td></tr>
+              <tr><td>(-) Sueldos Administrativos Pendientes</td><td class="amount negative">(S/ 1,500.00)</td></tr>
+              <tr style="font-weight:bold;"><td>Total Egresos Ineludibles (15 días)</td><td class="amount negative">S/ 23,500.00</td></tr>
+              <tr style="font-weight:bold; background:rgba(52,211,153,0.1);"><td>SALDO PROYECTADO DÍA 15 (Cobertura 1.89)</td><td class="amount positive">S/ 21,000.00</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title" style="color:var(--accent-rose);">Simulación de Estrés al Día 45</span>
+          </div>
+          <div class="card-body">
+            <table style="font-size:11.5px;">
+              <thead>
+                <tr><th>Ventana Temporal</th><th>Egresos</th><th>Cobros</th><th>Saldo Caja</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Día 1 – 15</td><td>S/ 23,500</td><td>S/ 0</td><td class="positive">S/ 21,000</td></tr>
+                <tr><td>Día 16 – 30 (Nómina 2 + Nube)</td><td>S/ 20,000</td><td>S/ 0</td><td class="warning">S/ 1,000</td></tr>
+                <tr style="background:rgba(244,63,94,0.15); font-weight:bold;">
+                  <td>Día 31 – 44 (Días Críticos)</td><td>S/ 3,500</td><td>S/ 0</td><td class="negative">-S/ 2,500 (DEFAULT)</td>
+                </tr>
+                <tr><td>Día 45 (Cobro Hito 1)</td><td>S/ 0</td><td>S/ 8,000</td><td class="positive">S/ 5,500</td></tr>
+              </tbody>
+            </table>
+            <div style="background:rgba(244, 63, 94, 0.1); border-left:3px solid var(--accent-rose); padding:8px; margin-top:10px; font-size:11.5px;">
+              <strong>Diagnóstico de Riesgo:</strong> La brecha de 45 días impuesta por el cliente público provocará una cesación de pagos temporal antes de poder cobrar los S/ 8,000 si no se toman medidas anticipadas.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: Tres Decisiones Estratégicas y Matriz del Equipo -->
+    <section class="slide" data-slide="7" data-speaker="Suclle Suca & Mollo Chuquicaña (Min 5)">
+      <div class="slide-badge">Gobierno del Proyecto · Continuidad del Servicio de Salud Pública</div>
+      <h2 class="slide-title">Tres Decisiones Estratégicas y Continuidad de PANVIZ</h2>
+      <p class="slide-subtitle">Soluciones gerenciales accionables para blindar la liquidez sin comprometer la vigilancia sanitaria.</p>
+
+      <div class="grid-3" style="margin-bottom:16px;">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">1. Factoring / Cobro Hito 1</span>
+          </div>
+          <div class="card-body">
+            <p><strong>Evidencia:</strong> Cta 1212 retiene S/ 8,000 a 45 días.</p>
+            <p><strong>Medida:</strong> Negociar descuento de factura o adenda de pronto pago al día 15 asumiendo una tasa del 2.5% (S/ 200).</p>
+            <p><strong>Impacto:</strong> Elimina el déficit de S/ 2,500 en el día 35 y blinda la nómina.</p>
+            <div style="font-size:11px; color:var(--accent-blue); margin-top:4px;"><strong>Responsable:</strong> Mollo Chuquicaña · Plazo: 7 días</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">2. Aceleración del Hito 2</span>
+          </div>
+          <div class="card-body">
+            <p><strong>Evidencia:</strong> Cta 4699 acumula S/ 9,000 de anticipo no devengado.</p>
+            <p><strong>Medida:</strong> Enfocar el sprint técnico en alertas y reportes para entregar en día 25 y facturar el saldo contractual.</p>
+            <p><strong>Impacto:</strong> Habilita la emisión del acta de conformidad y devengo legal (NIIF 15).</p>
+            <div style="font-size:11px; color:var(--accent-blue); margin-top:4px;"><strong>Responsable:</strong> Chambilla Perca · Plazo: 25 días</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">3. Reprogramación de Pasivos</span>
+          </div>
+          <div class="card-body">
+            <p><strong>Evidencia:</strong> Deuda hardware (S/ 2k) y cloud OPEX (S/ 2k).</p>
+            <p><strong>Medida:</strong> Diferir el pago de hardware a 30 días y configurar autoscaling / instancias reservadas en cloud (-20%).</p>
+            <p><strong>Impacto:</strong> Preserva S/ 2,400 de colchón y garantiza SLA 99.9% para epidemiología.</p>
+            <div style="font-size:11px; color:var(--accent-blue); margin-top:4px;"><strong>Responsable:</strong> Gutiérrez Ccama · Plazo: 10 días</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body" style="display:flex; justify-content:space-between; align-items:center; font-size:12px;">
+          <div>
+            <strong>Revisión Cruzada y Conformidad:</strong>
+            <span style="color:var(--text-muted); margin-left:8px;">Suclle revisa a Mollo · Chambilla revisa a Suclle · Gutiérrez revisa a Chambilla · Mollo revisa a Gutiérrez.</span>
+          </div>
+          <div style="color:var(--accent-green); font-weight:700;">
+            100% CUMPLIMIENTO (ENTREGABLE 6)
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Presenter Notes Drawer -->
+  <aside id="notes-drawer">
+    <h4>
+      <span>Guión de Exposición (5 Minutos)</span>
+      <span id="notes-timer">00:00</span>
+    </h4>
+    <div id="notes-content">
+      Selecciona una diapositiva para ver las notas del orador.
+    </div>
+  </aside>
+
+  <!-- Footer Controls -->
+  <footer>
+    <div style="display:flex; align-items:center; gap:16px;">
+      <span id="current-speaker" style="color:var(--accent-blue); font-weight:600;">Orador Asignado: Suclle Suca (Minuto 1)</span>
+      <span>|</span>
+      <span>Navegación: Flechas [←] [→] o Barra Espaciadora</span>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn" id="btn-prev" title="Diapositiva Anterior">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        Anterior
+      </button>
+      <button class="btn" id="btn-next" style="background:var(--accent-blue); color:#0f172a; border-color:var(--accent-blue);" title="Siguiente Diapositiva">
+        Siguiente
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </footer>
+
+  <script>
+    // Presenter Notes Content per Slide
+    const speakerNotes = {
+      1: "<strong>Minuto 1 - Suclle Suca:</strong><br>Buenos días profesor y compañeros. Presentamos el control económico de Andes Software en la implementación de PANVIZ para salud pública. Nuestro equipo de 4 integrantes ha modelado los 11 asientos del mes, conciliado GnuCash con LibreOffice Calc con diferencia cero y detectado el riesgo de caja derivado de la brecha de cobranza a 45 días.",
+      2: "<strong>Minuto 1 (cont.) - Suclle Suca:</strong><br>En el Control de Lectura 43 destacamos que los estados financieros existen para iluminar la toma de decisiones gerenciales. Registrar operaciones sin interpretarlas es como programar sin compilar: una teneduría ciega. Analizamos cómo los activos, pasivos y costos se aplican a software y por qué una empresa con ganancias en papel puede quebrar si no monitorea su flujo de efectivo.",
+      3: "<strong>Minuto 2 - Chambilla Perca:</strong><br>Yo custodié el Catálogo de Cuentas, el Libro Diario y el Balance de Comprobación. Procesamos 11 operaciones que totalizan exactamente S/ 119,000.00 en Debe y Haber. Aplicamos la NIIF 15 para registrar el anticipo de S/ 9,000 como pasivo, la NIC 16 para el hardware de S/ 12,000 y devengamos la planilla administrativa pendiente.",
+      4: "<strong>Minuto 3 - Gutiérrez Ccama:</strong><br>Presento el Estado de Situación Financiera. El Activo Total suma S/ 64,500.00, equilibrado a la perfección con la suma del Pasivo (S/ 22,500.00) y el Patrimonio (S/ 42,000.00). En la hoja Conciliación GnuCash verificamos que cada saldo en Calc coincide con el archivo nativo PANVIZ.gnucash con una discrepancia neta de S/ 0.00.",
+      5: "<strong>Minuto 3 (cont.) - Gutiérrez Ccama:</strong><br>Al contrastar el Estado de Resultados con el Flujo de Efectivo, descubrimos la paradoja contable: La Utilidad Neta es de S/ 2,000.00 (8.33% de margen), pero el saldo en bancos es de S/ 44,500.00. ¿Por qué tanta caja? Porque el 89.8% de los fondos provienen de aportes de capital y préstamos, no del negocio operativo.",
+      6: "<strong>Minuto 4 - Mollo Chuquicaña:</strong><br>Analicé la liquidez y tesorería. Para los próximos 15 días tenemos S/ 44,500 en bancos y requerimos pagar S/ 23,500, dejando un superávit de S/ 21,000. Sin embargo, en el análisis de estrés a 45 días descubrimos una trampa mortal: en la segunda quincena la nómina y la nube consumen S/ 20,000, reduciendo la caja a solo S/ 1,000 y generando un déficit de -S/ 2,500 entre los días 35 y 44 antes de poder cobrar los S/ 8,000.",
+      7: "<strong>Minuto 5 - Suclle & Mollo:</strong><br>Para evitar el colapso del servicio de salud pública tomamos 3 decisiones: 1) Factoring inmediato de la factura de S/ 8,000 para disponer de liquidez en día 15; 2) Entrega acelerada del Módulo 2 en el día 25 para devengar el anticipo de S/ 9,000; y 3) Reprogramación del proveedor de hardware y optimización cloud para salvaguardar un SLA del 99.9%."
+    };
+
+    let currentSlide = 1;
+    const totalSlides = 7;
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progress-bar');
+    const slideCounter = document.getElementById('slide-num');
+    const speakerLabel = document.getElementById('current-speaker');
+    const notesDrawer = document.getElementById('notes-drawer');
+    const notesContent = document.getElementById('notes-content');
+    const btnNotes = document.getElementById('btn-notes');
+    const btnFullscreen = document.getElementById('btn-fullscreen');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+
+    function updateSlide(newIndex) {
+      if (newIndex < 1 || newIndex > totalSlides) return;
+      
+      slides.forEach((slide, idx) => {
+        slide.classList.remove('active', 'prev');
+        if (idx + 1 === newIndex) {
+          slide.classList.add('active');
+        } else if (idx + 1 < newIndex) {
+          slide.classList.add('prev');
+        }
+      });
+
+      currentSlide = newIndex;
+      progressBar.style.width = `${(currentSlide / totalSlides) * 100}%`;
+      slideCounter.textContent = `Diapositiva ${currentSlide} / ${totalSlides}`;
+
+      const activeSlideElem = document.querySelector(`.slide[data-slide="${currentSlide}"]`);
+      if (activeSlideElem) {
+        speakerLabel.textContent = `Orador: ${activeSlideElem.getAttribute('data-speaker')}`;
+      }
+
+      notesContent.innerHTML = speakerNotes[currentSlide] || "Sin notas para esta diapositiva.";
+    }
+
+    btnPrev.addEventListener('click', () => updateSlide(currentSlide - 1));
+    btnNext.addEventListener('click', () => updateSlide(currentSlide + 1));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        updateSlide(currentSlide + 1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        updateSlide(currentSlide - 1);
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        updateSlide(1);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        updateSlide(totalSlides);
+      } else if (e.key === 'f' || e.key === 'F') {
+        e.preventDefault();
+        toggleFullscreen();
+      } else if (e.key === 'n' || e.key === 'N') {
+        e.preventDefault();
+        toggleNotes();
+      }
+    });
+
+    function toggleNotes() {
+      notesDrawer.classList.toggle('open');
+    }
+
+    btnNotes.addEventListener('click', toggleNotes);
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    btnFullscreen.addEventListener('click', toggleFullscreen);
+
+    // Presentation Timer
+    let seconds = 0;
+    setInterval(() => {
+      seconds++;
+      const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+      const s = String(seconds % 60).padStart(2, '0');
+      document.getElementById('notes-timer').textContent = `${m}:${s}`;
+    }, 1000);
+
+    // Initialize
+    updateSlide(1);
+  </script>
+</body>
+</html>
